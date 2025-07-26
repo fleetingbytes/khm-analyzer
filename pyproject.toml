@@ -1,0 +1,18 @@
+[project]
+name = "khm-analyzer"
+version = "0.1.0"
+description = "Parses linguistically annoted editions of Grimm's Fairy Tales"
+readme = "README.md"
+authors = [
+    { name = "fleetingbytes", email = "7075397+fleetingbytes@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+license = "BSD-2-Clause"
+dependencies = []
+
+[project.scripts]
+khm-analyzer = "khm_analyzer:main"
+
+[build-system]
+requires = ["uv_build>=0.8.3,<0.9.0"]
+build-backend = "uv_build"
