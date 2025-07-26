@@ -8,7 +8,9 @@ authors = [
 ]
 requires-python = ">=3.11"
 license = "BSD-2-Clause"
-dependencies = []
+dependencies = [
+    "lxml",
+]
 
 [project.scripts]
 khm-analyzer = "khm_analyzer:main"
