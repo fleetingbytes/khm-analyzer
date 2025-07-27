@@ -1,6 +1,7 @@
 import argparse
 from lxml import etree
 from .. import parser as khm_parser
+from ..tale import Tale
 
 arg_parser = argparse.ArgumentParser(
     prog="khm-analyzer",
@@ -13,4 +14,5 @@ arg_parser.add_argument("tale", type=int)
 def run() -> None:
     args = arg_parser.parse_args()
     root: etree.Element = khm_parser.parse(args.source_file)
-    tale: etree.Element = khm_parser.get_fairy_tale(root, args.tale)
+    tale: Tale = khm_parser.get_fairy_tale(root, args.tale)
+    breakpoint()
