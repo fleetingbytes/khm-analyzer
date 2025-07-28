@@ -1,7 +1,7 @@
 import argparse
 from lxml import etree
 from .. import parser as khm_parser
-from ..tale import Tale
+from ..elements import Tale
 
 arg_parser = argparse.ArgumentParser(
     prog="khm-analyzer",
