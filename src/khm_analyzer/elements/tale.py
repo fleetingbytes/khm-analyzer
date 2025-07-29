@@ -1,12 +1,16 @@
 from lxml import etree
 from collections.abc import Iterable
-from ..bases import TaleBase, HeadBase
+from ..bases import TaleBase, HeadBase, ParagraphBase
 
 
 class Tale(TaleBase):
     @property
-    def head(self) -> Iterable[HeadBase]:
-        return next(self.iter(tag="{*}head"))
+    def head(self) -> HeadBase:
+        return next(self.iter(tag=HeadBase.TAG))
+
     @property
     def paragraphs(self) -> Iterable[str]:
-        yield from self.iter(tag="{*}p")
+        yield from self.iter(tag=ParagraphBase.TAG)
+
+    def render(self) -> str:
+        return "here be tale"

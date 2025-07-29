@@ -15,4 +15,4 @@ def run() -> None:
     args = arg_parser.parse_args()
     root: etree.Element = khm_parser.parse(args.source_file)
     tale: Tale = khm_parser.get_fairy_tale(root, args.tale)
-    breakpoint()
+    print(tale.head.render())

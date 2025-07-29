@@ -5,7 +5,13 @@ class AbstractKHM(ABC):
     pass
 
 
-class AbstractTale(AbstractKHM):
+class Renderable(AbstractKHM):
+    @abstractmethod
+    def render(self):
+        ...
+
+
+class AbstractTale(Renderable):
     @property
     @abstractmethod
     def head(self):
@@ -17,7 +23,7 @@ class AbstractTale(AbstractKHM):
         ...
 
 
-class AbstractHead(AbstractKHM):
+class AbstractHead(Renderable):
     @property
     @abstractmethod
     def number(self):
@@ -27,3 +33,16 @@ class AbstractHead(AbstractKHM):
     @abstractmethod
     def head_text(self):
         ...
+
+
+class AbstractParagraph(Renderable):
+    ...
+
+
+class AbstractSentence(Renderable):
+    ...
+
+
+class AbstractWord(Renderable):
+    ...
+
