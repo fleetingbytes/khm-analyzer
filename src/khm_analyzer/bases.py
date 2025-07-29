@@ -26,8 +26,10 @@ class HeadBase(KHMElement, AbstractHead):
 class ParagraphBase(KHMElement, AbstractParagraph):
     TAG = any_namespace("p")
 
+
 class SentenceBase(KHMElement, AbstractSentence):
     TAG = any_namespace("s")
+
 
 class WordBase(KHMElement, AbstractWord):
     TAG = any_namespace("w")

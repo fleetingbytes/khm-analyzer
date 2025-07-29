@@ -25,11 +25,11 @@ class Word(WordBase):
 
     @property
     def needs_space_left(self) -> bool:
-        return not (self.join & Join.LEFT)
+        return not self.join & Join.LEFT
 
     @property
     def needs_space_right(self) -> bool:
-        return not (self.join & Join.RIGHT)
+        return not self.join & Join.RIGHT
 
     def remove_redundant_space_left(self, word: str) -> str:
         if not self.needs_space_left:
@@ -48,7 +48,7 @@ class Word(WordBase):
 
     def render(self) -> str:
         norm = self.get("norm", default="")
-        word = f" {norm} "
-        word = self.remove_redundant_spaces(word)
+        word_with_potentially_redundant_spaces = f" {norm} "
+        word = self.remove_redundant_spaces(word_with_potentially_redundant_spaces)
         return word
 
