@@ -1,5 +1,6 @@
 from ..bases import SentenceBase, WordBase
 from collections.abc import Iterable
+from io import StringIO
 
 
 class Sentence(SentenceBase):
@@ -7,11 +8,16 @@ class Sentence(SentenceBase):
     def words(self) -> Iterable[WordBase]:
         yield from self.iterdescendants(tag=WordBase.TAG)
 
-    @staticmethod
-    def sanitize_spaces(text: str) -> str:
-        return text.replace("  ", " ")
-
     def render(self) -> str:
-        sentence_with_double_spaces = "".join(word.render() for word in self.words)
-        sentence = self.sanitize_spaces(sentence_with_double_spaces)
-        return sentence.strip()
+        buffer = StringIO()
+
+        for word in self.words:
+            if not word.is_nth_part:
+                buffer.write(word.render())
+                if all((
+                        not word.is_last_in_sentence,
+                        not word.joins_word_right,
+                )):
+                    buffer.write(" ")
+
+        return buffer.getvalue()

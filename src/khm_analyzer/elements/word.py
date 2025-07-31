@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from ..bases import WordBase
 from lxml import etree
 from enum import Flag, auto
@@ -16,6 +17,8 @@ JOIN_MAP = {
     "both": Join.BOTH,
     None: Join.NONE,
 }
+
+
 class Word(WordBase):
     @property
     def join(self) -> Join:
@@ -24,31 +27,42 @@ class Word(WordBase):
         return result
 
     @property
-    def needs_space_left(self) -> bool:
-        return not self.join & Join.LEFT
+    def joins_word_left(self) -> bool:
+        return self.join & Join.LEFT
 
     @property
-    def needs_space_right(self) -> bool:
-        return not self.join & Join.RIGHT
+    def joins_word_right(self) -> bool:
+        return self.join & Join.RIGHT
 
-    def remove_redundant_space_left(self, word: str) -> str:
-        if not self.needs_space_left:
-            return word.lstrip()
-        return word
+    @property
+    def normalized_transcription(self) -> str:
+        normalized = self.get("norm", default="")
+        return normalized
 
-    def remove_redundant_space_right(self, word: str) -> str:
-        if not self.needs_space_right:
-            return word.rstrip()
-        return word
-
-    def remove_redundant_spaces(self, word: str) -> str:
-        word = self.remove_redundant_space_left(word)
-        word = self.remove_redundant_space_right(word)
-        return word
+    @staticmethod
+    def contract_final_es(transcribed_word: str) -> str:
+        if transcribed_word.endswith("_es"):
+            return transcribed_word.replace("_e", "")
+        return transcribed_word
 
     def render(self) -> str:
-        norm = self.get("norm", default="")
-        word_with_potentially_redundant_spaces = f" {norm} "
-        word = self.remove_redundant_spaces(word_with_potentially_redundant_spaces)
-        return word
+        norm = self.normalized_transcription
+        contracted = self.contract_final_es(norm)
+        return contracted
 
+    @property
+    def following_words(self) -> Iterable[WordBase]:
+        return self.itersiblings(tag=WordBase.TAG, preceding=False)
+
+    @property
+    def is_last_in_sentence(self) -> bool:
+        try:
+            _ = next(self.following_words)
+            return False
+        except StopIteration:
+            return True
+
+    @property
+    def is_nth_part(self) -> bool:
+        previous_word_id = self.get("prev", None)
+        return bool(previous_word_id)
