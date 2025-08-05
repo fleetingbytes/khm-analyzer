@@ -15,8 +15,8 @@ class Sentence(SentenceBase):
             if not word.is_nth_part:
                 buffer.write(word.render())
                 if all((
-                        not word.is_last_in_sentence,
                         not word.joins_word_right,
+                        not word.is_last_in_sentence,
                 )):
                     buffer.write(" ")
 

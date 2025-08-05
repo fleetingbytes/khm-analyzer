@@ -1,7 +1,7 @@
 [project]
 name = "khm-analyzer"
 version = "0.1.0"
-description = "Parses linguistically annoted editions of Grimm's Fairy Tales"
+description = "Parses linguistically annotated editions of Grimm's Fairy Tales"
 readme = "README.md"
 authors = [
     { name = "fleetingbytes", email = "7075397+fleetingbytes@users.noreply.github.com" }

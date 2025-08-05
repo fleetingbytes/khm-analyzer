@@ -12,26 +12,20 @@ class Renderable(AbstractKHM):
 
 
 class AbstractTale(Renderable):
-    @property
     @abstractmethod
-    def head(self):
+    def metadata(self, number: bool, title: bool) -> str:
         ...
 
-    @property
     @abstractmethod
-    def paragraphs(self):
+    def render(self, number: bool, title: bool) -> str:
         ...
+
 
 
 class AbstractHead(Renderable):
     @property
     @abstractmethod
     def number(self):
-        ...
-
-    @property
-    @abstractmethod
-    def head_text(self):
         ...
 
 
