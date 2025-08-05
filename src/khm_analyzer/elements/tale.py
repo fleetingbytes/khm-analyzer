@@ -13,14 +13,15 @@ class Tale(TaleBase):
     def paragraphs(self) -> Iterable[str]:
         yield from self.iter(tag=ParagraphBase.TAG)
 
-    def render(self, number: bool, title: bool) -> str:
+    def render(self, number: bool, title: bool, one_sentence_per_line: bool) -> str:
         buffer = StringIO()
 
         if metadata := self.metadata(number=number, title=title):
             buffer.write(metadata)
             buffer.write("\n\n")
 
-        rendered_paragraphs = "\n\n".join(paragraph.render() for paragraph in self.paragraphs)
+        sentence_separator = "\n" if one_sentence_per_line else " "
+        rendered_paragraphs = "\n\n".join(paragraph.render(sentence_separator) for paragraph in self.paragraphs)
         buffer.write(rendered_paragraphs)
 
         return buffer.getvalue()

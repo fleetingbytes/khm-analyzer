@@ -7,7 +7,7 @@ class AbstractKHM(ABC):
 
 class Renderable(AbstractKHM):
     @abstractmethod
-    def render(self):
+    def render(self) -> str:
         ...
 
 
@@ -17,7 +17,7 @@ class AbstractTale(Renderable):
         ...
 
     @abstractmethod
-    def render(self, number: bool, title: bool) -> str:
+    def render(self, number: bool, title: bool, one_sentence_per_line: bool) -> str:
         ...
 
 
@@ -30,7 +30,9 @@ class AbstractHead(Renderable):
 
 
 class AbstractParagraph(Renderable):
-    ...
+    @abstractmethod
+    def render(self, sentence_separator: str) -> str:
+        ...
 
 
 class AbstractSentence(Renderable):

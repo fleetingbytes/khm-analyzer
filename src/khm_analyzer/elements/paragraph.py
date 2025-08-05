@@ -7,6 +7,6 @@ class Paragraph(ParagraphBase):
     def sentences(self) -> Iterable[SentenceBase]:
         yield from self.iterdescendants(tag=SentenceBase.TAG)
 
-    def render(self) -> str:
-        paragraph = " ".join(sentence.render() for sentence in self.sentences)
+    def render(self, sentence_separator: str) -> str:
+        paragraph = sentence_separator.join(sentence.render() for sentence in self.sentences)
         return paragraph
