@@ -14,15 +14,6 @@ arg_parser.add_argument("-n", "--include-tale-number", action="store_true")
 arg_parser.add_argument("-t", "--include-tale-title", action="store_true")
 arg_parser.add_argument("-s", "--one-sentence-per-line", action="store_true")
 
-def render_tale_number_or_title(tale: Tale, args: argparse.ArgumentParser) -> None:
-    if args.include_tale_number:
-        print(f"{tale.number}.")
-    if args.include_tale_title:
-        print(tale.render_head())
-    if args.include_tale_number or args.include_tale_title:
-        print()
-
-
 def run() -> None:
     args = arg_parser.parse_args()
     root: etree.Element = khm_parser.parse(args.source_file)
