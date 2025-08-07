@@ -1,5 +1,5 @@
 from .tale import Tale
-from .head import Head
+from .title import Title
 from .paragraph import Paragraph
 from .sentence import Sentence
 from .word import Word
@@ -7,7 +7,7 @@ from .word import Word
 
 ELEMENTS_MAP = {
     "div": Tale,
-    "head": Head,
+    "head": Title,
     "p": Paragraph,
     "s": Sentence,
     "w": Word,

@@ -1,9 +1,9 @@
-from ..bases import HeadBase, SentenceBase
+from ..bases import TitleBase, SentenceBase
 from lxml import etree
 from collections.abc import Iterable
 
 
-class Head(HeadBase):
+class Title(TitleBase):
     @property
     def _sentences(self) -> Iterable[SentenceBase]:
         yield from self.iterdescendants(tag=SentenceBase.TAG)
@@ -26,5 +26,5 @@ class Head(HeadBase):
         meaningful_sentences = list(self._sentences)
         if self._first_sentence_is_a_number:
             meaningful_sentences = meaningful_sentences[1:]
-        head = "\n".join(sentence.render() for sentence in meaningful_sentences)
-        return head
+        title = "\n".join(sentence.render() for sentence in meaningful_sentences)
+        return title

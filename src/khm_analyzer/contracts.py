@@ -1,4 +1,6 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 
 
 class AbstractKHM(ABC):
@@ -8,6 +10,12 @@ class AbstractKHM(ABC):
 class Renderable(AbstractKHM):
     @abstractmethod
     def render(self) -> str:
+        ...
+
+class Splittable(AbstractKHM):
+    @property
+    @abstractmethod
+    def has_a_following_part(self) -> bool:
         ...
 
 
@@ -21,8 +29,7 @@ class AbstractTale(Renderable):
         ...
 
 
-
-class AbstractHead(Renderable):
+class AbstractTitle(Renderable):
     @property
     @abstractmethod
     def number(self):
@@ -34,11 +41,32 @@ class AbstractParagraph(Renderable):
     def render(self, sentence_separator: str) -> str:
         ...
 
+    @property
+    @abstractmethod
+    def sentences(self) -> Iterable[AbstractSentence]:
+        ...
 
-class AbstractSentence(Renderable):
-    ...
+
+class AbstractSentence(Renderable, Splittable):
+    @property
+    @abstractmethod
+    def words(self) -> Iterable[AbstractWord]:
+        ...
 
 
-class AbstractWord(Renderable):
-    ...
+class AbstractWord(Renderable, Splittable):
+    @property
+    @abstractmethod
+    def is_nth_part(self) -> bool:
+        ...
+
+    @property
+    @abstractmethod
+    def joins_word_right(self) -> bool:
+        ...
+
+    @property
+    @abstractmethod
+    def is_last_in_sentence(self) -> bool:
+        ...
 

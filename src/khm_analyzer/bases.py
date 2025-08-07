@@ -1,4 +1,4 @@
-from .contracts import AbstractTale, AbstractHead, AbstractParagraph, AbstractSentence, AbstractWord
+from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractSentence, AbstractWord
 from lxml import etree
 from abc import abstractmethod
 from .namespace import any_namespace
@@ -19,7 +19,7 @@ class TaleBase(KHMElement, AbstractTale):
     TAG = any_namespace("div")
 
 
-class HeadBase(KHMElement, AbstractHead):
+class TitleBase(KHMElement, AbstractTitle):
     TAG = any_namespace("head")
 
 

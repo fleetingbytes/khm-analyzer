@@ -66,3 +66,8 @@ class Word(WordBase):
     def is_nth_part(self) -> bool:
         previous_word_id = self.get("prev", None)
         return bool(previous_word_id)
+
+    @property
+    def has_a_following_part(self) -> bool:
+        following_part = self.get("next", None)
+        return bool(following_part)

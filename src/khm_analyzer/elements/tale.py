@@ -1,13 +1,13 @@
 from lxml import etree
 from collections.abc import Iterable
-from ..bases import TaleBase, HeadBase, ParagraphBase
+from ..bases import TaleBase, TitleBase, ParagraphBase
 from io import StringIO
 
 
 class Tale(TaleBase):
     @property
-    def head(self) -> HeadBase:
-        return next(self.iter(tag=HeadBase.TAG))
+    def title(self) -> TitleBase:
+        return next(self.iter(tag=TitleBase.TAG))
 
     @property
     def paragraphs(self) -> Iterable[str]:
@@ -26,12 +26,12 @@ class Tale(TaleBase):
 
         return buffer.getvalue()
 
-    def render_head(self) -> str:
-        return self.head.render()
+    def render_title(self) -> str:
+        return self.title.render()
 
     @property
     def number(self) -> int:
-        return self.head.number
+        return self.title.number
 
     def metadata(self, number: bool, title: bool) -> str:
         buffer = StringIO()
@@ -39,6 +39,6 @@ class Tale(TaleBase):
         if number:
             buffer.write(f"{self.number}. ")
         if title:
-            buffer.write(self.render_head())
+            buffer.write(self.render_title())
 
         return buffer.getvalue()
