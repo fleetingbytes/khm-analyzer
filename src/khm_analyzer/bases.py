@@ -1,4 +1,5 @@
 from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractSentence, AbstractWord
+from .namespace import xml_namespace
 from lxml import etree
 from abc import abstractmethod
 from .namespace import any_namespace
@@ -15,6 +16,13 @@ class KHMElement(etree.ElementBase):
         print(xml, end="")
 
 
+class HasXmlId:
+    @property
+    def xmlid(self) -> str:
+        xml_id = self.get(xml_namespace("id"), "")
+        return xml_id
+
+
 class TaleBase(KHMElement, AbstractTale):
     TAG = any_namespace("div")
 
@@ -27,9 +35,9 @@ class ParagraphBase(KHMElement, AbstractParagraph):
     TAG = any_namespace("p")
 
 
-class SentenceBase(KHMElement, AbstractSentence):
+class SentenceBase(KHMElement, HasXmlId, AbstractSentence):
     TAG = any_namespace("s")
 
 
-class WordBase(KHMElement, AbstractWord):
+class WordBase(KHMElement, HasXmlId, AbstractWord):
     TAG = any_namespace("w")

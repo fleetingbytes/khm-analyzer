@@ -1,5 +1,6 @@
 from collections.abc import Iterable
 from ..bases import WordBase
+from ..namespace import tei_namespace
 from lxml import etree
 from enum import Flag, auto
 
@@ -71,3 +72,14 @@ class Word(WordBase):
     def has_a_following_part(self) -> bool:
         following_part = self.get("next", None)
         return bool(following_part)
+
+    @property
+    def is_a_part_before_page_break(self) -> bool:
+        if self.has_a_following_part:
+            try:
+                following_element = next(self.itersiblings())
+                following_element_is_a_page_break = following_element.tag == tei_namespace("pb")
+                return following_element_is_a_page_break
+            except StopIteration:
+                return False
+        return False
