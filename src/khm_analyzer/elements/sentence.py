@@ -21,17 +21,8 @@ class Sentence(SentenceBase):
         return xml_id
 
     @property
-    def dtaid(self) -> int:
-        root = self.getroottree()
-        xpath = f".//ns:idno[@type='DTAID']"
-        results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
-        idno_element = next(iter(results)) if results else None
-        dta_id = idno_element.text
-        return int(dta_id)
-
-    @property
     def correction_id(self) -> CorrectionId:
-        return CorrectionId(self.dtaid, self.xmlid)
+        return CorrectionId(self.DTAID, self.xmlid)
 
 
     def make_arbitrary_correction(self, buffer: StringIO) -> StringIO:

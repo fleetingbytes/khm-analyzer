@@ -1,3 +1,4 @@
+from ..bases import KHMElement
 from .tale import Tale
 from .title import Title
 from .paragraph import Paragraph
@@ -12,3 +13,9 @@ ELEMENTS_MAP = {
     "s": Sentence,
     "w": Word,
 }
+
+def get_class_with_dtaid(tag_name: str, dtaid: int, default: None = None) -> KHMElement | None:
+    cls = ELEMENTS_MAP.get(tag_name, default)
+    if cls is not default:
+        cls.DTAID = dtaid
+    return cls
