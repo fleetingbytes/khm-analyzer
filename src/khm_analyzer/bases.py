@@ -1,4 +1,4 @@
-from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractSentence, AbstractWord
+from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentence, AbstractWord
 from .namespace import xml_namespace
 from lxml import etree
 from abc import abstractmethod
@@ -33,6 +33,14 @@ class TitleBase(KHMElement, AbstractTitle):
 
 class ParagraphBase(KHMElement, AbstractParagraph):
     TAG = any_namespace("p")
+
+
+class LineGroupBase(KHMElement, AbstractLineGroup):
+    TAG = any_namespace("lg")
+
+
+class LineBase(KHMElement, AbstractLine):
+    TAG = any_namespace("l")
 
 
 class SentenceBase(KHMElement, HasXmlId, AbstractSentence):

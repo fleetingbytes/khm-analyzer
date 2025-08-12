@@ -15,4 +15,6 @@ def add_space_at_the_end(buffer: StringIO):
 corrections = {
     CorrectionId(KHM_ED1_VOL1, "s112"): add_space_at_the_end,
     CorrectionId(KHM_ED1_VOL1, "s112_2"): add_space_at_the_end,
+    CorrectionId(KHM_ED1_VOL1, "s939"): add_space_at_the_end,
+    CorrectionId(KHM_ED1_VOL1, "s939_2"): add_space_at_the_end,
 }

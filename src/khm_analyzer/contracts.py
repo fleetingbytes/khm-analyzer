@@ -6,7 +6,6 @@ from collections.abc import Iterable
 class AbstractKHM(ABC):
     pass
 
-
 class Renderable(AbstractKHM):
     @abstractmethod
     def render(self) -> str:
@@ -41,10 +40,16 @@ class AbstractParagraph(Renderable):
     def render(self, sentence_separator: str) -> str:
         ...
 
+
+class AbstractLineGroup(Renderable):
     @property
     @abstractmethod
-    def sentences(self) -> Iterable[AbstractSentence]:
+    def lines(self) -> Iterable[AbstractLine]:
         ...
+
+
+class AbstractLine(Renderable):
+    ...
 
 
 class AbstractSentence(Renderable, Splittable):
@@ -57,12 +62,7 @@ class AbstractSentence(Renderable, Splittable):
 class AbstractWord(Renderable, Splittable):
     @property
     @abstractmethod
-    def is_nth_part(self) -> bool:
-        ...
-
-    @property
-    @abstractmethod
-    def joins_word_right(self) -> bool:
+    def is_a_part_before_page_break(self) -> bool:
         ...
 
     @property
@@ -70,3 +70,12 @@ class AbstractWord(Renderable, Splittable):
     def is_last_in_sentence(self) -> bool:
         ...
 
+    @property
+    @abstractmethod
+    def is_nth_part(self) -> bool:
+        ...
+
+    @property
+    @abstractmethod
+    def joins_word_right(self) -> bool:
+        ...

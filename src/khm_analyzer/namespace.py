@@ -5,7 +5,11 @@ ANY_NAMESPACE = "*"
 TEI_NAMESPACE = "http://www.tei-c.org/ns/1.0" 
 XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"
 
-NAMESPACE_MAP = { "ns": TEI_NAMESPACE }
+NAMESPACE_MAP = {
+    "any": ANY_NAMESPACE,
+    "ns": TEI_NAMESPACE,
+    "xml": XML_NAMESPACE,
+}
 
 parentheses = ("{", "}")
 flatten = chain.from_iterable
