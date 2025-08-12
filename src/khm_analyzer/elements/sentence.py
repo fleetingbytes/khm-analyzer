@@ -24,7 +24,7 @@ class Sentence(SentenceBase):
             buffer = correction_function(buffer)
         return buffer
 
-    def render(self) -> str:
+    def render(self, **kwargs) -> str:
         buffer = StringIO()
 
         for word in self.words:

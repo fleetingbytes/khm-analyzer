@@ -1,8 +1,8 @@
 from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentence, AbstractWord
-from .namespace import xml_namespace
 from lxml import etree
 from abc import abstractmethod
 from .namespace import any_namespace
+from io import StringIO
 
 
 class KHMElement(etree.ElementBase):
@@ -10,17 +10,6 @@ class KHMElement(etree.ElementBase):
     @abstractmethod
     def TAG(cls):
         ...
-
-    def prettyprint(self, **kwargs) -> None:
-        xml = etree.tostring(self, pretty_print=True, encoding="unicode", **kwargs)
-        print(xml, end="")
-
-
-class HasXmlId:
-    @property
-    def xmlid(self) -> str:
-        xml_id = self.get(xml_namespace("id"), "")
-        return xml_id
 
 
 class TaleBase(KHMElement, AbstractTale):
@@ -43,9 +32,9 @@ class LineBase(KHMElement, AbstractLine):
     TAG = any_namespace("l")
 
 
-class SentenceBase(KHMElement, HasXmlId, AbstractSentence):
+class SentenceBase(KHMElement, AbstractSentence):
     TAG = any_namespace("s")
 
 
-class WordBase(KHMElement, HasXmlId, AbstractWord):
+class WordBase(KHMElement, AbstractWord):
     TAG = any_namespace("w")
