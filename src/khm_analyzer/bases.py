@@ -1,11 +1,49 @@
+from __future__ import annotations
 from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentence, AbstractWord
 from lxml import etree
 from abc import abstractmethod
-from .namespace import any_namespace
+from collections.abc import Iterable
+from .namespace import any_namespace, xml_namespace
 from io import StringIO
 
 
-class KHMElement(etree.ElementBase):
+class PrettyPrintMixin:
+    def prettyprint(self, **kwargs) -> None:
+        xml = etree.tostring(self, pretty_print=True, encoding="unicode", **kwargs)
+        print(xml, end="")
+
+
+class XmlIdMixin:
+    @property
+    def xmlid(self) -> str:
+        xml_id = self.get(xml_namespace("id"), "")
+        return xml_id
+
+
+class HasSentencesMixin:
+    @property
+    def sentences(self) -> Iterable[SentenceBase]:
+        yield from self.iterdescendants(tag=SentenceBase.TAG)
+
+    def add_space_after_sentence(self, sentence: SentenceBase, separator: str, buffer: StringIO) -> StringIO:
+        if not sentence.has_a_following_part:
+            buffer.write(separator)
+        return buffer
+
+
+class HasTrailingSpaceMixin:
+    def strip_trailing_space(self, start_of_trailing_space_after_last_element: int, buffer: StringIO) -> StringIO:
+        buffer.seek(start_of_trailing_space_after_last_element)
+        buffer.truncate()
+        return buffer
+
+    def write_element(self, element: SentenceBase | LineGroupBase | LineBase, sentence_separator: str, buffer: StringIO) -> int:
+        buffer.write(element.render(sentence_separator=sentence_separator))
+        cookie = buffer.tell()
+        return cookie
+
+
+class KHMElement(PrettyPrintMixin, etree.ElementBase):
     @property
     @abstractmethod
     def TAG(cls):
@@ -20,21 +58,21 @@ class TitleBase(KHMElement, AbstractTitle):
     TAG = any_namespace("head")
 
 
-class ParagraphBase(KHMElement, AbstractParagraph):
+class ParagraphBase(KHMElement, HasSentencesMixin, HasTrailingSpaceMixin, AbstractParagraph):
     TAG = any_namespace("p")
 
 
-class LineGroupBase(KHMElement, AbstractLineGroup):
+class LineGroupBase(KHMElement, HasTrailingSpaceMixin, AbstractLineGroup):
     TAG = any_namespace("lg")
 
 
-class LineBase(KHMElement, AbstractLine):
+class LineBase(KHMElement, HasSentencesMixin, AbstractLine):
     TAG = any_namespace("l")
 
 
-class SentenceBase(KHMElement, AbstractSentence):
+class SentenceBase(KHMElement, XmlIdMixin, AbstractSentence):
     TAG = any_namespace("s")
 
 
-class WordBase(KHMElement, AbstractWord):
+class WordBase(KHMElement, XmlIdMixin, AbstractWord):
     TAG = any_namespace("w")

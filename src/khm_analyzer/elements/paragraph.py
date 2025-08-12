@@ -7,10 +7,6 @@ from string import whitespace
 
 class Paragraph(ParagraphBase):
     @property
-    def sentences(self) -> Iterable[SentenceBase]:
-        yield from self.iterdescendants(tag=SentenceBase.TAG)
-
-    @property
     def sentences_and_linegroups(self) -> Iterable[SentenceBase | LineGroupBase]:
         xpath = ".//ns:s[not(ancestor::ns:lg)] | .//ns:lg"
         yield from self.xpath(xpath, namespaces=NAMESPACE_MAP)
@@ -33,11 +29,6 @@ class Paragraph(ParagraphBase):
         buffer = self.strip_trailing_space(start_of_trailing_space_after_last_element, buffer)
 
         return buffer.getvalue()
-
-    def write_element(self, element: SentenceBase | LineGroupBase, sentence_separator: str, buffer: StringIO) -> int:
-        buffer.write(element.render(sentence_separator=sentence_separator))
-        cookie = buffer.tell()
-        return cookie
 
     def create_or_adjust_space_before_linegroup(self, start_of_trailing_space_after_last_element: int, buffer: StringIO) -> StringIO:
         buffer = self.strip_trailing_space(start_of_trailing_space_after_last_element, buffer)

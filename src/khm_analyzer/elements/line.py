@@ -10,7 +10,3 @@ class Line(LineBase):
             buffer.write(sentence.render())
             self.add_space_after_sentence(sentence, sentence_separator, buffer)
         return buffer.getvalue()
-
-    @property
-    def sentences(self) -> Iterable[SentenceBase]:
-        yield from self.iterdescendants(tag=SentenceBase.TAG)

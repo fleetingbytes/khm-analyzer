@@ -13,17 +13,12 @@ class LineGroup(LineGroupBase):
 
         for line in self.lines:
             start_of_trailing_space_after_last_line = self.write_element(line, sentence_separator, buffer)
-            buffer = self.add_space_after_line(line, buffer)
+            buffer = self.add_space_after_line(buffer)
 
         buffer = self.strip_trailing_space(start_of_trailing_space_after_last_line, buffer)
 
         return buffer.getvalue()
 
-    def write_element(self, element: LineBase, sentence_separator: str, buffer: StringIO) -> int:
-        buffer.write(element.render(sentence_separator=sentence_separator))
-        cookie = buffer.tell()
-        return cookie
-
-    def add_space_after_line(self, line: LineBase, buffer: StringIO) -> StringIO:
+    def add_space_after_line(self, buffer: StringIO) -> StringIO:
         buffer.write("\n")
         return buffer
