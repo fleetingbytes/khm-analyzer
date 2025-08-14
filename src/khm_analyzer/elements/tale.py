@@ -13,7 +13,7 @@ class Tale(TaleBase):
     def paragraphs(self) -> Iterable[str]:
         yield from self.iter(tag=ParagraphBase.TAG)
 
-    def render(self, number: bool, title: bool, one_sentence_per_line: bool) -> str:
+    def render(self, number: bool=False, title: bool=False, one_sentence_per_line: bool=False, **kwargs) -> str:
         buffer = StringIO()
 
         if metadata := self.metadata(number=number, title=title):
@@ -21,7 +21,7 @@ class Tale(TaleBase):
             buffer.write("\n\n")
 
         sentence_separator = "\n" if one_sentence_per_line else " "
-        rendered_paragraphs = "\n\n".join(paragraph.render(sentence_separator) for paragraph in self.paragraphs)
+        rendered_paragraphs = "\n\n".join(paragraph.render(sentence_separator=sentence_separator, **kwargs) for paragraph in self.paragraphs)
         buffer.write(rendered_paragraphs)
 
         return buffer.getvalue()
@@ -41,4 +41,4 @@ class Tale(TaleBase):
         if title:
             buffer.write(self.render_title())
 
-        return buffer.getvalue()
+        return buffer.getvalue().rstrip()

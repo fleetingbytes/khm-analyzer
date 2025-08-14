@@ -16,12 +16,17 @@ arg_parser.add_argument("-s", "--one-sentence-per-line", action="store_true")
 
 def run() -> None:
     args = arg_parser.parse_args()
-    root: etree.Element = khm_parser.parse(args.source_file)
-    tale: Tale = khm_parser.get_fairy_tale(root, args.tale)
-    print(
-        tale.render(
-            number=args.include_tale_number,
-            title=args.include_tale_title,
-            one_sentence_per_line=args.one_sentence_per_line,
-        )
-    )
+
+    source_file = args.source_file
+    tale_number = args.tale
+
+    root: etree.Element = khm_parser.parse(source_file)
+    tale: Tale = khm_parser.get_fairy_tale(root, tale_number)
+
+    kwargs = {
+        "number": args.include_tale_number,
+        "title": args.include_tale_title,
+        "one_sentence_per_line": args.one_sentence_per_line,
+    }
+
+    print(tale.render(**kwargs))

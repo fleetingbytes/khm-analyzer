@@ -7,7 +7,7 @@ class LineGroup(LineGroupBase):
     def lines(self):
         yield from self.iterdescendants(tag=LineBase.TAG)
 
-    def render(self, sentence_separator: str) -> str:
+    def render(self, sentence_separator: str, **kwargs) -> str:
         buffer = StringIO()
         start_of_trailing_space_after_last_line: int = buffer.tell()
 

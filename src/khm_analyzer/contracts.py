@@ -8,7 +8,7 @@ class AbstractKHM(ABC):
 
 class Renderable(AbstractKHM):
     @abstractmethod
-    def render(self) -> str:
+    def render(self, **kwargs) -> str:
         ...
 
 class Splittable(AbstractKHM):
@@ -20,11 +20,7 @@ class Splittable(AbstractKHM):
 
 class AbstractTale(Renderable):
     @abstractmethod
-    def metadata(self, number: bool, title: bool) -> str:
-        ...
-
-    @abstractmethod
-    def render(self, number: bool, title: bool, one_sentence_per_line: bool) -> str:
+    def metadata(self, **kwargs) -> str:
         ...
 
 class AbstractTitle(Renderable):
@@ -34,9 +30,7 @@ class AbstractTitle(Renderable):
         ...
 
 class AbstractParagraph(Renderable):
-    @abstractmethod
-    def render(self, sentence_separator: str) -> str:
-        ...
+    ...
 
 class AbstractLineGroup(Renderable):
     @property
