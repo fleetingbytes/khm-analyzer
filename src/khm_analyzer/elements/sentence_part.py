@@ -1,13 +1,13 @@
-from ..bases import SentenceBase, WordBase
+from ..bases import SentencePartBase, WordPartBase
 from ..corrections import corrections, CorrectionId
 from collections.abc import Iterable
 from io import StringIO
 
 
-class Sentence(SentenceBase):
+class SentencePart(SentencePartBase):
     @property
-    def words(self) -> Iterable[WordBase]:
-        yield from self.iterdescendants(tag=WordBase.TAG)
+    def words(self) -> Iterable[WordPartBase]:
+        yield from self.iterdescendants(tag=WordPartBase.TAG)
 
     @property
     def has_a_following_part(self) -> bool:

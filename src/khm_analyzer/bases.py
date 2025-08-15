@@ -1,5 +1,5 @@
 from __future__ import annotations
-from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentence, AbstractWord
+from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentencePart, AbstractWordPart
 from lxml import etree
 from abc import abstractmethod
 from collections.abc import Iterable
@@ -22,10 +22,10 @@ class XmlIdMixin:
 
 class HasSentencesMixin:
     @property
-    def sentences(self) -> Iterable[SentenceBase]:
-        yield from self.iterdescendants(tag=SentenceBase.TAG)
+    def sentences(self) -> Iterable[SentencePartBase]:
+        yield from self.iterdescendants(tag=SentencePartBase.TAG)
 
-    def add_space_after_sentence(self, sentence: SentenceBase, separator: str, buffer: StringIO) -> StringIO:
+    def add_space_after_sentence(self, sentence: SentencePartBase, separator: str, buffer: StringIO) -> StringIO:
         if not sentence.has_a_following_part:
             buffer.write(separator)
         return buffer
@@ -37,7 +37,7 @@ class HasTrailingSpaceMixin:
         buffer.truncate()
         return buffer
 
-    def write_element(self, element: SentenceBase | LineGroupBase | LineBase, sentence_separator: str, buffer: StringIO) -> int:
+    def write_element(self, element: SentencePartBase | LineGroupBase | LineBase, sentence_separator: str, buffer: StringIO) -> int:
         buffer.write(element.render(sentence_separator=sentence_separator))
         cookie = buffer.tell()
         return cookie
@@ -70,9 +70,9 @@ class LineBase(KHMElement, HasSentencesMixin, AbstractLine):
     TAG = any_namespace("l")
 
 
-class SentenceBase(KHMElement, XmlIdMixin, AbstractSentence):
+class SentencePartBase(KHMElement, XmlIdMixin, AbstractSentencePart):
     TAG = any_namespace("s")
 
 
-class WordBase(KHMElement, XmlIdMixin, AbstractWord):
+class WordPartBase(KHMElement, XmlIdMixin, AbstractWordPart):
     TAG = any_namespace("w")

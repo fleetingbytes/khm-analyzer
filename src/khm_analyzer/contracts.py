@@ -41,13 +41,13 @@ class AbstractLineGroup(Renderable):
 class AbstractLine(Renderable):
     ...
 
-class AbstractSentence(Renderable, Splittable):
+class AbstractSentencePart(Renderable, Splittable):
     @property
     @abstractmethod
     def words(self) -> Iterable[AbstractWord]:
         ...
 
-class AbstractWord(Renderable, Splittable):
+class AbstractWordPart(Renderable, Splittable):
     @property
     @abstractmethod
     def is_a_part_before_page_break(self) -> bool:

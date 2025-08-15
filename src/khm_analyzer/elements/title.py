@@ -1,12 +1,12 @@
-from ..bases import TitleBase, SentenceBase
+from ..bases import TitleBase, SentencePartBase
 from lxml import etree
 from collections.abc import Iterable
 
 
 class Title(TitleBase):
     @property
-    def _sentences(self) -> Iterable[SentenceBase]:
-        yield from self.iterdescendants(tag=SentenceBase.TAG)
+    def _sentences(self) -> Iterable[SentencePartBase]:
+        yield from self.iterdescendants(tag=SentencePartBase.TAG)
 
     @property
     def number(self) -> int | None:

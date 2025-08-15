@@ -1,4 +1,4 @@
-from ..bases import ParagraphBase, SentenceBase, LineGroupBase
+from ..bases import ParagraphBase, SentencePartBase, LineGroupBase
 from ..namespace import NAMESPACE_MAP
 from collections.abc import Iterable
 from io import StringIO
@@ -7,7 +7,7 @@ from string import whitespace
 
 class Paragraph(ParagraphBase):
     @property
-    def sentences_and_linegroups(self) -> Iterable[SentenceBase | LineGroupBase]:
+    def sentences_and_linegroups(self) -> Iterable[SentencePartBase | LineGroupBase]:
         xpath = ".//ns:s[not(ancestor::ns:lg)] | .//ns:lg"
         yield from self.xpath(xpath, namespaces=NAMESPACE_MAP)
 
@@ -16,7 +16,7 @@ class Paragraph(ParagraphBase):
         start_of_trailing_space_after_last_element: int = buffer.tell()
 
         for sentence_or_linegroup in self.sentences_and_linegroups:
-            if isinstance(sentence_or_linegroup, SentenceBase):
+            if isinstance(sentence_or_linegroup, SentencePartBase):
                 sentence = sentence_or_linegroup
                 start_of_trailing_space_after_last_element = self.write_element(sentence, sentence_separator, buffer)
                 buffer = self.add_space_after_sentence(sentence, sentence_separator, buffer)

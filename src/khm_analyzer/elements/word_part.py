@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from ..bases import WordBase
+from ..bases import WordPartBase
 from ..namespace import tei_namespace
 from lxml import etree
 from enum import Flag, auto
@@ -20,7 +20,7 @@ JOIN_MAP = {
 }
 
 
-class Word(WordBase):
+class WordPart(WordPartBase):
     @property
     def join(self) -> Join:
         value = self.get("join")
@@ -52,8 +52,8 @@ class Word(WordBase):
         return contracted
 
     @property
-    def following_words(self) -> Iterable[WordBase]:
-        return self.itersiblings(tag=WordBase.TAG, preceding=False)
+    def following_words(self) -> Iterable[WordPartBase]:
+        return self.itersiblings(tag=WordPartBase.TAG, preceding=False)
 
     @property
     def is_last_in_sentence(self) -> bool:
