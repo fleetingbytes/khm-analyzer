@@ -32,7 +32,7 @@ class SentencePart(SentencePartBase):
                 buffer.write(word.render())
                 if all((
                         not word.joins_word_right,
-                        not word.is_last_in_sentence,
+                        not word.is_last_in_sentencepart,
                         not word.has_a_following_part,
                 )):
                     buffer.write(" ")

@@ -56,7 +56,7 @@ class WordPart(WordPartBase):
         return self.itersiblings(tag=WordPartBase.TAG, preceding=False)
 
     @property
-    def is_last_in_sentence(self) -> bool:
+    def is_last_in_sentencepart(self) -> bool:
         try:
             _ = next(self.following_words)
             return False

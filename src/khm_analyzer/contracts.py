@@ -55,7 +55,7 @@ class AbstractWordPart(Renderable, Splittable):
 
     @property
     @abstractmethod
-    def is_last_in_sentence(self) -> bool:
+    def is_last_in_sentencepart(self) -> bool:
         ...
 
     @property
