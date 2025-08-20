@@ -1,5 +1,5 @@
 from __future__ import annotations
-from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentencePart, AbstractWordPart
+from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentencePart, AbstractWordPart, Renderable
 from lxml import etree
 from abc import abstractmethod
 from collections.abc import Iterable
@@ -74,5 +74,14 @@ class SentencePartBase(KHMElement, XmlIdMixin, AbstractSentencePart):
     TAG = any_namespace("s")
 
 
+class WordBase(Renderable):
+        ...
+
+
 class WordPartBase(KHMElement, XmlIdMixin, AbstractWordPart):
     TAG = any_namespace("w")
+
+    @property
+    @abstractmethod
+    def is_the_final_part(self) -> bool:
+        ...

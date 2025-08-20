@@ -3,14 +3,11 @@ from io import TextIOWrapper
 from .lookup import Lookup
 from .namespace import NAMESPACE_MAP
 from .errors import DtaidNotFoundError
+from .utils import set_stream_position_to_the_start
 import re
 
 
-DTAID_REGEX = re.compile("""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
-
-
-def go_to_beginning_of_the_file(fd: TextIOWrapper) -> None:
-    fd.seek(0)
+DTAID_REGEX = re.compile(r"""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
 
 
 def get_dtaid(fd: TextIOWrapper) -> int:
@@ -22,7 +19,7 @@ def get_dtaid(fd: TextIOWrapper) -> int:
     """
     for line in fd:
         if match := DTAID_REGEX.search(line):
-            go_to_beginning_of_the_file(fd)
+            set_stream_position_to_the_start(fd)
             dtaid = int(match.group("dtaid"))
             return dtaid
     raise DtaidNotFoundError

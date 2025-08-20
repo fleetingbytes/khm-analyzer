@@ -1,32 +1,54 @@
-import argparse
-from lxml import etree
-from .. import parser as khm_parser
-from ..elements import Tale
+from argparse import ArgumentParser, FileType
+from pathlib import Path
+from .display import display
+from .validate import validate
+from .download_source import download_source
+from .download_all_sources import download_all_sources
+from logging import getLogger
+import logging.config
+from ..logging_conf import create_dict_config
+from platformdirs import user_log_dir
 
-arg_parser = argparse.ArgumentParser(
+logging_dir = Path(user_log_dir("khm-analyzer"))
+logging_dir.mkdir(parents=True, exist_ok=True)
+logging.config.dictConfig(create_dict_config(logging_dir, "debug.log", "info.log", "error.log"))
+
+logger = getLogger(__name__)
+
+arg_parser = ArgumentParser(
     prog="khm-analyzer",
     description="Parses linguistically annotated editions of Grimm's Fairy Tales",
 )
 
-arg_parser.add_argument("source_file", type=argparse.FileType("r", encoding="UTF-8"))
-arg_parser.add_argument("tale", type=int)
-arg_parser.add_argument("-n", "--include-tale-number", action="store_true")
-arg_parser.add_argument("-t", "--include-tale-title", action="store_true")
-arg_parser.add_argument("-s", "--one-sentence-per-line", action="store_true")
+
+subparsers = arg_parser.add_subparsers(title="subcommands", help="sub-command help", required=True)
+display_parser = subparsers.add_parser("display", help="show text of tales")
+display_parser.set_defaults(subcommand_function=display)
+validate_parser = subparsers.add_parser("validate", help="validate source xml")
+validate_parser.set_defaults(subcommand_function=validate)
+download_source_parser = subparsers.add_parser("download-source", help="download a source document")
+download_source_parser.set_defaults(subcommand_function=download_source)
+download_all_sources_parser = subparsers.add_parser("download-all-sources", help="download all source documents")
+download_all_sources_parser.set_defaults(subcommand_function=download_all_sources)
+
+display_parser.add_argument("source_file", type=FileType("r", encoding="UTF-8"))
+display_parser.add_argument("tale", type=int)
+display_parser.add_argument("-n", "--include-tale-number", action="store_true")
+display_parser.add_argument("-t", "--include-tale-title", action="store_true")
+display_parser.add_argument("-s", "--one-sentence-per-line", action="store_true")
+
+validate_parser.add_argument("-d", "--directory", action="store_true", help="validate all files in one or more directories")
+validate_parser.add_argument("-c", "--try-to-correct", action="store_true", help="try to correct invalid XML")
+validate_parser.add_argument("path", type=Path, nargs="+", help="validate one or more files")
+
+download_source_parser.add_argument("edition", type=int, help="edition number (1-7)")
+download_source_parser.add_argument("volume", type=int, help="volume number (1-2)")
+download_source_parser.add_argument("file", type=FileType("wb"), help="output file")
+
+download_all_sources_parser.add_argument("path_pattern", type=Path, help="path pattern, e.g. \"~/grimm/khm.xml\", \"-edX-volY\" will be attached to the file stem.")
+
 
 def run() -> None:
+    logger.debug("Parsing arguments")
     args = arg_parser.parse_args()
-
-    source_file = args.source_file
-    tale_number = args.tale
-
-    root: etree.Element = khm_parser.parse(source_file)
-    tale: Tale = khm_parser.get_fairy_tale(root, tale_number)
-
-    kwargs = {
-        "number": args.include_tale_number,
-        "title": args.include_tale_title,
-        "one_sentence_per_line": args.one_sentence_per_line,
-    }
-
-    print(tale.render(**kwargs))
+    args.subcommand_function(args)

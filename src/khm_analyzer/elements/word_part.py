@@ -52,6 +52,12 @@ class WordPart(WordPartBase):
         return contracted
 
     @property
+    def is_the_final_part(self) -> bool:
+        if self.joins_word_right or self.has_a_following_part:
+            return False
+        return True
+
+    @property
     def following_words(self) -> Iterable[WordPartBase]:
         return self.itersiblings(tag=WordPartBase.TAG, preceding=False)
 
