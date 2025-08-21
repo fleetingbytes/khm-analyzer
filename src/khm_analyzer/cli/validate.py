@@ -7,7 +7,7 @@ logger = getLogger(__name__)
 
 
 def validate(args: Namespace) -> None:
-    logger.debug("running validate")
+    logger.debug("running validate subcommand")
     correction_wanted = args.try_to_correct
     with catch_warnings(record=True) as w:
         if args.directory:
