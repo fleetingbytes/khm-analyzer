@@ -51,13 +51,13 @@ def create_dict_config(directory: Path, logfile_name: str) -> dict:
     }
 
     root_file_formatter_conf = {
-        "format": f"[ROOT LOG] {custom_file_formatter_conf["format"]},
+        "format": f'[ROOT LOG] {custom_file_formatter_conf["format"]}',
         "style": "{",
         "datefmt": "%a %H:%M:%S",
     }
 
     root_console_formatter_conf = {
-        "format": f"[ROOT LOG] {custom_console_formatter_conf["format"]},
+        "format": f'[ROOT LOG] {custom_console_formatter_conf["format"]}',
         "style": "{",
         "datefmt": "%a %H:%M:%S",
     }
