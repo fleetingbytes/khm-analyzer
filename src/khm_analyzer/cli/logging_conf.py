@@ -1,43 +1,13 @@
-"""
-This is to easily set the logfile name for the root logger's
-file handler from the module where logging_conf
-is imported. Like this:
-
-    from logging import getLogger
-    from logging.config import dictConfig as configure_logging
-    from platformdirs import user_log_dir
-
-    from ..logging_conf import create_dict_config
-
-
-    logging_dir = Path(user_log_dir("khm-analyzer"))
-    logger_configuration = create_dict_config(logging_dir, "debug.log")
-    configure_logging(logger_configuration)
-
-    logger = getLogger(__name__)
-
-
-If you want an additional custom logger, get it like this:
-
-    logger = logging.getLogger("custom_logger")
-
-The custom logger is configured to propagate its log records to the root logger
-"""
-
-
 from pathlib import Path
+from platformdirs import user_log_dir
 
 
-def create_dict_config(directory: Path, logfile_name: str) -> dict:
-    """
-    Creates a logging configuration with path to logfiles set as
-    given by the arguments
-    """
-    directory = Path(directory)
-    directory.mkdir(parents=True, exist_ok=True)
-    logfile = directory / logfile_name
+logging_dir = Path(user_log_dir("khm-analyzer"))
+logging_dir.mkdir(parents=True, exist_ok=True)
+logfile = logging_dir / "debug.log"
 
 
+def create_dict_config(logfile: Path) -> dict:
     custom_file_formatter_conf = {
         "format": "{message:<50s} {levelname:>9s} {asctime}.{msecs:03.0f} {module}({lineno}) {funcName}",
         "style": "{",
@@ -135,3 +105,5 @@ def create_dict_config(directory: Path, logfile_name: str) -> dict:
     }
     return dict_config
 
+
+logging_configuration = create_dict_config(logfile)
