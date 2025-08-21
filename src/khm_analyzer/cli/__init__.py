@@ -5,13 +5,13 @@ from .validate import validate
 from .download_source import download_source
 from .download_all_sources import download_all_sources
 from logging import getLogger
-import logging.config
+from logging.config import dictConfig as configure_logging
 from ..logging_conf import create_dict_config
 from platformdirs import user_log_dir
 
 logging_dir = Path(user_log_dir("khm-analyzer"))
-logging_dir.mkdir(parents=True, exist_ok=True)
-logging.config.dictConfig(create_dict_config(logging_dir, "debug.log", "info.log", "error.log"))
+logger_configuration = create_dict_config(logging_dir, "debug.log")
+configure_logging(logger_configuration)
 
 logger = getLogger(__name__)
 
