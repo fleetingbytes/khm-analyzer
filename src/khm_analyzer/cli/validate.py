@@ -1,13 +1,11 @@
 from argparse import Namespace
 from ..validation import validate_directories, validate_paths
 from warnings import catch_warnings
-from logging import getLogger
-
-logger = getLogger(__name__)
+from ..utils import debug_in
 
 
+@debug_in
 def validate(args: Namespace) -> None:
-    logger.debug("running validate subcommand")
     correction_wanted = args.try_to_correct
     with catch_warnings(record=True) as w:
         if args.directory:

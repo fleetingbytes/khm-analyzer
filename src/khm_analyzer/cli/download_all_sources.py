@@ -1,8 +1,10 @@
 from argparse import Namespace
 from itertools import product
-from .download_source import EDITION_RANGE, VOLUME_RANGE, get_source_document_as_raw_bytes
+from ..download import EDITION_RANGE, VOLUME_RANGE, get_source_document_as_raw_bytes
+from ..utils import debug_in
 
 
+@debug_in
 def download_all_sources(args: Namespace):
     pattern = args.path_pattern
 
