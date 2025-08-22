@@ -1,5 +1,4 @@
 from ..bases import TitleBase, SentencePartBase
-from lxml import etree
 from collections.abc import Iterable
 
 

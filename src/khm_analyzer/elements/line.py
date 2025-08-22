@@ -1,5 +1,4 @@
 from ..bases import LineBase
-from collections.abc import Iterable
 from io import StringIO
 
 

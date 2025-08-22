@@ -1,7 +1,6 @@
 from collections.abc import Iterable
 from ..bases import WordPartBase
 from ..namespace import tei_namespace
-from lxml import etree
 from enum import Flag, auto
 
 

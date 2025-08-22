@@ -1,4 +1,3 @@
-from lxml import etree
 from collections.abc import Iterable
 from ..bases import TaleBase, TitleBase, ParagraphBase
 from io import StringIO

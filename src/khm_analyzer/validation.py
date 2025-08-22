@@ -5,7 +5,7 @@ from lxml import etree
 from .utils import set_stream_position_to_the_start, get_file_name_from_buffer, debug
 from .warnings import InvalidXmlCorrectedWarning, FileNotCorrectedWarning
 from warnings import warn
-from logging import getLogger, disable as disable_logging, NOTSET
+from logging import getLogger
 
 logger = getLogger(__name__)
 

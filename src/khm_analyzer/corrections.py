@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .dtaids import KHM_ED1_VOL1, KHM_ED1_VOL2, KHM_ED2_VOL1, KHM_ED2_VOL2, KHM_ED3_VOL1, KHM_ED3_VOL2
+from .dtaids import KHM_ED1_VOL1
 from io import StringIO
 
 
