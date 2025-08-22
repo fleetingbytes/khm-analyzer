@@ -1,0 +1,11 @@
+line-length = 108
+
+[format]
+docstring-code-format = true
+line-ending = "lf"
+
+[lint]
+preview = true
+
+[lint.mccabe]
+max-complexity = 5
