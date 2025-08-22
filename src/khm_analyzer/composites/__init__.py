@@ -1,1 +1,3 @@
-from .word import Word as Word
+from .word import Word
+
+__all__ = ("Word",)
