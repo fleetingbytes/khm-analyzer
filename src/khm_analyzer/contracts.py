@@ -1,7 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from .composites import Word
 
 
 class AbstractKHM(ABC):
@@ -45,7 +44,7 @@ class AbstractLine(Renderable): ...
 class AbstractSentencePart(Renderable, Splittable):
     @property
     @abstractmethod
-    def words(self) -> Iterable[Word]: ...
+    def words(self) -> Iterable[Renderable]: ...
 
 
 class AbstractWordPart(Renderable, Splittable):
