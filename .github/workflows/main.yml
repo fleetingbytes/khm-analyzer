@@ -85,7 +85,8 @@ jobs:
           release: "14.3"
           usesh: true
           prepare: |
-            pkg install -y python311 py311-pip
-            python -m pip install --upgrade pip
-          run:
-            python -c "print('hello world')"
+            pkg install -y python312 rust
+            cargo install --git https://github.com/astral-sh/uv uv
+          run: |
+            echo "print('hello uv')" > script.py
+            uv run script.py
