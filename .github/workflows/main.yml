@@ -85,7 +85,7 @@ jobs:
           release: "14.3"
           usesh: true
           prepare: |
-            pkg install -y python311 py311pip
+            pkg install -y python311 py311-pip
             python -m pip install --upgrade pip
           run:
             python -c "print('hello world')"
