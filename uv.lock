@@ -74,15 +74,6 @@ wheels = [
 ]
 
 [[package]]
-name = "human-regex"
-version = "0.1.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a0/d9/8be3f25f6346c8f37e8922d1fb7c91e0e9ff4283df7829a2e3432acc7b67/human_regex-0.1.1.tar.gz", hash = "sha256:fe25ca15b32458f895a6e1d3895825e385da102b4928d087688c0448fc438c59", size = 13856, upload-time = "2024-04-10T12:40:25.599Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/52/e5/8d90c53eccb603ca8b64298c7e1447a104b5304647e2ce9fccb56a7a895e/human_regex-0.1.1-py3-none-any.whl", hash = "sha256:81b7358cf03cd02afce943b6c39a8e5e00617866d9b66e34812cc7b779969943", size = 10987, upload-time = "2024-04-10T12:40:17.527Z" },
-]
-
-[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -105,7 +96,6 @@ name = "khm-analyzer"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "human-regex" },
     { name = "lxml" },
     { name = "platformdirs" },
 ]
@@ -119,7 +109,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "human-regex", specifier = ">=0.1.1" },
     { name = "lxml" },
     { name = "platformdirs", specifier = ">=4.3.8" },
 ]

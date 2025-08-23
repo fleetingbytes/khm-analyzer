@@ -1,6 +1,5 @@
 from io import TextIOWrapper, BytesIO
 from pathlib import Path
-from human_regex import StringRegex
 from lxml import etree
 from .utils import set_stream_position_to_the_start, get_file_name_from_buffer, debug
 from .warnings import InvalidXmlCorrectedWarning, FileNotCorrectedWarning
@@ -33,7 +32,7 @@ class CorrectionData:
     @property
     def wrong_xmlid(self) -> str:
         if self._wrong_xmlid is None:
-            xmlid_regex = StringRegex(r"\S").one_or_more.named("xmlid").preceded_by("ID ")
+            xmlid_regex = r"(?<=ID )(?P<xmlid>\S+)"
             match = xmlid_regex.search(self.err.msg)
             assert match, "Cannot find wrong xml:id in error message"
             xmlid = match.group("xmlid")
@@ -55,6 +54,7 @@ def validate_directories(directories: list[Path], correction_wanted: bool) -> No
         files_in_directory = filter(lambda file: file.is_file, paths_in_directory)
         validate_paths(sorted(files_in_directory), correction_wanted)
 
+
 @debug
 def validate_paths(paths: list[Path], correction_wanted: bool) -> None:
     for path in paths:
@@ -67,9 +67,11 @@ def validate_paths(paths: list[Path], correction_wanted: bool) -> None:
         if (not is_valid) and correction_wanted and correction_data.correction_possible:
             correct_file_in_path(path, correction_data)
 
+
 def correct_file_in_path(path: Path, correction_data: CorrectionData) -> None:
     corrected_buffer = try_to_correct_buffer(path, correction_data)
     write_buffer_to_path(corrected_buffer, path)
+
 
 @debug
 def try_to_correct_buffer(path: Path, correction_data: CorrectionData) -> TextIOWrapper:
@@ -85,10 +87,12 @@ def try_to_correct_buffer(path: Path, correction_data: CorrectionData) -> TextIO
         warn(FileNotCorrectedWarning(path))
     return corrected_buffer
 
+
 @debug
 def write_buffer_to_path(buffer: TextIOWrapper, path: Path) -> None:
     with path.open("w", encoding="UTF-8") as corrected_file:
         corrected_file.write(buffer.read())
+
 
 def correct_buffer(buffer: TextIOWrapper, correction_data: CorrectionData) -> TextIOWrapper:
     corrected_buffer = BytesIO()
@@ -103,10 +107,15 @@ def correct_buffer(buffer: TextIOWrapper, correction_data: CorrectionData) -> Te
     set_stream_position_to_the_start(corrected_wrapper)
     return corrected_wrapper
 
+
 def correct_line(line: str, data: CorrectionData) -> str:
     corrected_line = line.replace(data.wrong_substring, data.corrected_substring)
-    warn(InvalidXmlCorrectedWarning(data.wrong_substring, data.corrected_substring, data.wrong_line_number), stacklevel=1)
+    warn(
+        InvalidXmlCorrectedWarning(data.wrong_substring, data.corrected_substring, data.wrong_line_number),
+        stacklevel=1,
+    )
     return corrected_line
+
 
 def check_xml(buffer: TextIOWrapper | BytesIO) -> tuple[bool, CorrectionData | None]:
     try:
@@ -119,6 +128,7 @@ def check_xml(buffer: TextIOWrapper | BytesIO) -> tuple[bool, CorrectionData | N
     set_stream_position_to_the_start(buffer)
 
     return buffer_is_valid, correction_data
+
 
 def calculate_and_log_buffer_validity(buffer: TextIOWrapper, data: CorrectionData) -> bool:
     buffer_is_valid = not bool(data)
