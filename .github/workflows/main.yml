@@ -61,13 +61,13 @@ jobs:
           path: khm-sources
 
       - name: Test the Presence of Artifacts
-        if: runner.os == "Linux"
+        if: runner.os == 'Linux'
         run: |
           [ 1 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
           cat file_list.txt && rm file_list.txt
 
       - name: Test the Presence of Artifacts
-        if: runner.os == "Windows"
+        if: runner.os == 'Windows'
         shell: pwsh
         run: |
           $fileList = Get-ChildItem -File -Recurse -Filter "khm-*" | Sort-Object FullName
