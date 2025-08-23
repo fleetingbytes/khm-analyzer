@@ -31,7 +31,7 @@ jobs:
           path: khm-sources
 
   test:
-    needs: Download files
+    needs: download-files
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
