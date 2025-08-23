@@ -9,12 +9,13 @@ jobs:
     steps:
       - name: Check out project
         uses: actions/checkout@v4
+
       - name: Run ruff
         uses: astral-sh/ruff-action@v3
 
 
-  create-artifacts:
-    name: Download files
+  upload-artifacts:
+    name: Upload KHM Source Texts as Artifacts
     runs-on: ubuntu-latest
     steps:
       - name: Check out project
@@ -41,58 +42,56 @@ jobs:
           name: artifacts
           path: khm-sources
 
-  #test:
-    #needs: upload-artifacts
-    #strategy:
-      #matrix:
-        #os: [ubuntu-latest, windows-latest, macos-latest]
-        #python-version: [3.11, 3.12, 3.13]
-    #runs-on: ${{ matrix.os }}
+  test:
+    needs: upload-artifacts
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.11, 3.12, 3.13]
+    runs-on: ${{ matrix.os }}
 
-    #steps:
-      #- name: Check out project
-        #uses: actions/checkout@v4
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
 
-      #- name: Download shared files
-        #uses: actions/download-artifact@v5
-        #with:
-          #name: artifacts
-          #path: khm-sources
+      - name: Download Artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: artifacts
+          path: khm-sources
 
-      #- name: Test the presence of shared files
-        #run: |
+      - name: Test the Presence of Artifacts
+        run: |
           #[ 14 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
-          #cat file_list.txt && rm file_list.txt
+          [ 1 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
+          cat file_list.txt && rm file_list.txt
 
-      #- name: Set up Python
-        #uses: actions/setup-python@v5
-        #with:
-          #python-version: ${{ matrix.python-version }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
 
-      #- name: Install uv
-        #uses: astral-sh/setup-uv@v6
-        #with:
-          #python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
 
-      #- name: Install the project
-        #run: uv sync --locked --group test
+      - name: Install the project
+        run: uv sync --locked --group test
 
-      #- name: Lint
-        #run: uv run ruff check
-
-      #- name: Test
-        #run: uv run pytest -v
+      - name: Test
+        run: uv run pytest -v
 
   test-freebsd:
-    needs: create-artifacts
+    needs: upload-artifacts
     runs-on: ubuntu-latest
 
-    name: Run FreeBSD in VM
+    name: Test on FreeBSD in VM
     steps:
       - name: Check out project
         uses: actions/checkout@v4
 
-      - name: Download shared files
+      - name: Download Artifacts
         uses: actions/download-artifact@v5
         with:
           name: artifacts
@@ -104,6 +103,7 @@ jobs:
           release: "14.3"
           usesh: true
           sync: ".,khm-sources"
+          copyback: false
           prepare: |
             pkg install -y libxml2 libxslt python311 rust uv
           run: |
