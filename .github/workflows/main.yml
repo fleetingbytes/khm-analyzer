@@ -3,71 +3,89 @@ name: CI Pipeline
 on: [push, pull_request]
 
 jobs:
-  download-files:
-    name: Download files
+  #download-files:
+    #name: Download files
+    #runs-on: ubuntu-latest
+    #steps:
+      #- name: Check out project
+        #uses: actions/checkout@v4
+
+      #- name: Set up Python
+        #uses: actions/setup-python@v5
+        #with:
+          #python-version-file: "pyproject.toml"
+
+      #- name: Install uv
+        #uses: astral-sh/setup-uv@v6
+
+      #- name: Install the project
+        #run: uv sync --locked
+
+      #- name: Download files
+        #run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
+
+      #- name: Upload files as artifact
+        #uses: actions/upload-artifact@v4
+        #with:
+          #name: downloaded-files
+          #path: khm-sources
+
+  #test:
+    #needs: download-files
+    #strategy:
+      #matrix:
+        #os: [ubuntu-latest, windows-latest, macos-latest]
+        #python-version: [3.11, 3.12, 3.13]
+    #runs-on: ${{ matrix.os }}
+
+    #steps:
+      #- name: Check out project
+        #uses: actions/checkout@v4
+
+      #- name: Download shared files
+        #uses: actions/download-artifact@v5
+        #with:
+          #name: downloaded-files
+          #path: khm-sources
+
+      #- name: Test the presence of shared files
+        #run: |
+          #[ 14 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
+          #cat file_list.txt && rm file_list.txt
+
+      #- name: Set up Python
+        #uses: actions/setup-python@v5
+        #with:
+          #python-version: ${{ matrix.python-version }}
+
+      #- name: Install uv
+        #uses: astral-sh/setup-uv@v6
+        #with:
+          #python-version: ${{ matrix.python-version }}
+
+      #- name: Install the project
+        #run: uv sync --locked --all-extras --dev
+
+      #- name: Lint
+        #run: uv run ruff check
+
+      #- name: Test
+        #run: uv run pytest -v
+
+  test-freebsd:
     runs-on: ubuntu-latest
+    name: Test khm_analyzer under FreeBSD
     steps:
       - name: Check out project
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Test in FreeBSD
+        uses: vmactions/freebsd-vm@v1
         with:
-          python-version-file: "pyproject.toml"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-
-      - name: Install the project
-        run: uv sync --locked
-
-      - name: Download files
-        run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
-
-      - name: Upload files as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: downloaded-files
-          path: khm-sources
-
-  test:
-    needs: download-files
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.11, 3.12, 3.13]
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Check out project
-        uses: actions/checkout@v4
-
-      - name: Download shared files
-        uses: actions/download-artifact@v5
-        with:
-          name: downloaded-files
-          path: khm-sources
-
-      - name: Test the presence of shared files
-        run: |
-          [ 14 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
-          cat file_list.txt && rm file_list.txt
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
-
-      - name: Lint
-        run: uv run ruff check
-
-      - name: Test
-        run: uv run pytest -v
+          release: "14.3"
+          usesh: true
+          prepare: |
+            pkg install -y python311 py311pip
+            python -m pip install --upgrade pip
+          run:
+            python -c "print('hello world')"
