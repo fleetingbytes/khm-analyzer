@@ -1,0 +1,2 @@
+./.venv/lib/python3.11/site-packages/khm_analyzer.pth
+./.venv/bin/khm-analyzer

@@ -50,8 +50,8 @@ jobs:
 
       - name: Test the presence of shared files
         run: |
-          find . -type f -name "khm-*"
-          head khm-sources/khm-ed1-vol1.xml
+          [ 14 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
+          cat file_list.txt && rm file_list.txt
 
       - name: Set up Python
         uses: actions/setup-python@v5
