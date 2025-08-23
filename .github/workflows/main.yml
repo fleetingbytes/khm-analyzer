@@ -29,7 +29,7 @@ jobs:
         uses: astral-sh/setup-uv@v6
 
       - name: Install the project
-        run: uv sync --locked --extra lint
+        run: uv sync --locked --group lint
 
       - name: Download files from the DTA server
         #run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
@@ -75,7 +75,7 @@ jobs:
           #python-version: ${{ matrix.python-version }}
 
       #- name: Install the project
-        #run: uv sync --locked --extra testing
+        #run: uv sync --locked --group test
 
       #- name: Lint
         #run: uv run ruff check
@@ -112,6 +112,6 @@ jobs:
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Install the project ====="
-            uv sync --locked --extra test
+            uv sync --locked --group test
             echo "===== Test the code ====="
             uv run pytest -v
