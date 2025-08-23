@@ -96,7 +96,7 @@ jobs:
     needs: upload-artifacts
     strategy:
       matrix:
-        freebsd-release: [14.3, 15.0]
+        freebsd-release: ['14.3', '15.0']
         python-pkg: [python311, python312]
     runs-on: ubuntu-latest
 
