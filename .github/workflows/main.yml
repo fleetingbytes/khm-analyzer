@@ -94,6 +94,10 @@ jobs:
 
   test-freebsd:
     needs: upload-artifacts
+    strategy:
+      matrix:
+        freebsd-version: [14.3, 15.0]
+        python-pkg: [python311, python312]
     runs-on: ubuntu-latest
 
     name: Test on FreeBSD in VM
@@ -110,12 +114,12 @@ jobs:
       - name: Test in FreeBSD
         uses: vmactions/freebsd-vm@v1
         with:
-          release: "14.3"
+          release: matrix.freebsd-release
           usesh: true
           sync: ".,khm-sources"
           copyback: false
           prepare: |
-            pkg install -y libxml2 libxslt python311 rust uv
+            pkg install -y libxml2 libxslt ${{ matrix.python-pkg }} rust uv
           run: |
             echo "===== Test the presence of artifacts ====="
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
