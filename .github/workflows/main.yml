@@ -50,8 +50,7 @@ jobs:
 
       - name: Test the presence of shared files
         run: |
-          ls -RAl khm-sources
-          stat -f "%R" *
+          find . -type f -name "khm-*"
           head khm-sources/khm-ed1-vol1.xml
 
       - name: Set up Python
