@@ -6,7 +6,7 @@ from .download_source import download_source
 from .download_all_sources import download_all_sources
 from logging import getLogger
 from logging.config import dictConfig as configure_logging
-from .logging_conf import logging_configuration
+from ..logging_conf import logging_configuration
 
 configure_logging(logging_configuration)
 
@@ -49,7 +49,7 @@ validate_parser.add_argument("path", type=Path, nargs="+", help="validate one or
 
 download_source_parser.add_argument("edition", type=int, help="edition number (1-7)")
 download_source_parser.add_argument("volume", type=int, help="volume number (1-2)")
-download_source_parser.add_argument("file", type=FileType("wb"), help="output file")
+download_source_parser.add_argument("file", type=Path, help="output file")
 
 download_all_sources_parser.add_argument(
     "path_pattern",
