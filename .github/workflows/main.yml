@@ -61,10 +61,20 @@ jobs:
           path: khm-sources
 
       - name: Test the Presence of Artifacts
+        if: runner.os == "Linux"
         run: |
-          #[ 14 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
           [ 1 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
           cat file_list.txt && rm file_list.txt
+
+      - name: Test the Presence of Artifacts
+        if: runner.os == "Windows"
+        shell: pwsh
+        run: |
+          $fileList = Get-ChildItem -File -Recurse -Filter "khm-*" | Sort-Object FullName
+          $fileList.FullName | Out-File -FilePath file_list.txt -Encoding utf8
+          $isEqual = ($fileList.Count -eq 1)
+          Get-Content file_list.txt
+          Remove-Item file_list.txt
 
       - name: Set up Python
         uses: actions/setup-python@v5
