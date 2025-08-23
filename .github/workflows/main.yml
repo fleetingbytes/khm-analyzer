@@ -85,8 +85,6 @@ jobs:
           release: "14.3"
           usesh: true
           prepare: |
-            pkg install -y python312 rust
-            cargo install --git https://github.com/astral-sh/uv uv
+            pkg install -y python312 uv
           run: |
-            echo "print('hello uv')" > script.py
-            uv run script.py
+            echo "print('hello uv')" | uv run --no-project
