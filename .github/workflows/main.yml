@@ -22,7 +22,7 @@ jobs:
         run: uv sync --locked
 
       - name: Download files
-        run: uv run khm_analyzes download-all-sources "khm-sources/khm.xml"
+        run: uv run khm_analyzer download-all-sources "khm-sources/khm.xml"
 
       - name: Upload files as artifact
         uses: actions/upload-artifact@v4
