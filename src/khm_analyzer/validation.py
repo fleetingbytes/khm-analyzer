@@ -4,6 +4,7 @@ from lxml import etree
 from .utils import set_stream_position_to_the_start, get_file_name_from_buffer, debug
 from .warnings import InvalidXmlCorrectedWarning, FileNotCorrectedWarning
 from warnings import warn
+from re import compile
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -32,7 +33,7 @@ class CorrectionData:
     @property
     def wrong_xmlid(self) -> str:
         if self._wrong_xmlid is None:
-            xmlid_regex = r"(?<=ID )(?P<xmlid>\S+)"
+            xmlid_regex = compile(r"(?<=ID )(?P<xmlid>\S+)")
             match = xmlid_regex.search(self.err.msg)
             assert match, "Cannot find wrong xml:id in error message"
             xmlid = match.group("xmlid")

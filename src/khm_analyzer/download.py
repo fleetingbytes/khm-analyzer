@@ -6,8 +6,7 @@ EDITION_RANGE = range(1, MAX_EDITION + 1)
 VOLUME_RANGE = range(1, MAX_VOLUME + 1)
 
 
-def get_source_document_as_raw_bytes(edition: int, volume: int) -> bytes:
-    url = get_download_link(edition, volume)
+def get_source_document_as_raw_bytes(url: str) -> bytes:
     response = requests.get(url)
     assert response.ok, f"Got response {response.status_code}"
     return response.content

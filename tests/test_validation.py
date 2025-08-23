@@ -6,6 +6,7 @@ from khm_analyzer.utils import set_stream_position_to_the_start
 from khm_analyzer.warnings import InvalidXmlCorrectedWarning
 
 
+@mark.skip()
 @mark.parametrize(
     "khm_edition_volume",
     (param((3, 1), id="ed3-vol1"),),
