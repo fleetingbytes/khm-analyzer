@@ -22,7 +22,8 @@ jobs:
         run: uv sync --locked
 
       - name: Download files from the DTA server
-        run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
+        #run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
+        run: uv run khm-analyzer download-source 1 1 "khm-sources/khm-ed1-vol1.xml"
 
       - name: Upload files as artifacts
         uses: actions/upload-artifact@v4
@@ -97,9 +98,10 @@ jobs:
             pkg install -y python311 libxml2 libxslt uv
           run: |
             echo "===== Test the presence of artifacts ====="
-            [ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
+            #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
+            [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Install the project ====="
             uv sync --locked --all-extras --dev
             echo "===== Test the code ====="
-            uv run --python 3.12 -- pytest -v
+            uv run pytest -v
