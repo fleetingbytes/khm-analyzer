@@ -3,6 +3,15 @@ name: CI Pipeline
 on: [push, pull_request]
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+        uses: astral-sh/ruff-action@v3
+
+
   create-artifacts:
     name: Download files
     runs-on: ubuntu-latest
@@ -19,7 +28,7 @@ jobs:
         uses: astral-sh/setup-uv@v6
 
       - name: Install the project
-        run: uv sync --locked
+        run: uv sync --locked --extra lint
 
       - name: Download files from the DTA server
         #run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
@@ -65,7 +74,7 @@ jobs:
           #python-version: ${{ matrix.python-version }}
 
       #- name: Install the project
-        #run: uv sync --locked --all-extras --dev
+        #run: uv sync --locked --extra testing
 
       #- name: Lint
         #run: uv run ruff check
@@ -95,13 +104,13 @@ jobs:
           usesh: true
           sync: ".,khm-sources"
           prepare: |
-            pkg install -y cmake gmake libxml2 libxslt python311 rust uv
+            pkg install -y libxml2 libxslt python311 rust uv
           run: |
             echo "===== Test the presence of artifacts ====="
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Install the project ====="
-            uv sync --locked --all-extras --dev
+            uv sync --locked --extra test
             echo "===== Test the code ====="
             uv run pytest -v

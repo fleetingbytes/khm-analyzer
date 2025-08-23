@@ -102,9 +102,11 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
-dev = [
-    { name = "pytest" },
+lint = [
     { name = "ruff" },
+]
+test = [
+    { name = "pytest" },
 ]
 
 [package.metadata]
@@ -115,10 +117,8 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [
-    { name = "pytest", specifier = ">=8.4.1" },
-    { name = "ruff", specifier = ">=0.12.10" },
-]
+lint = [{ name = "ruff", specifier = ">=0.12.10" }]
+test = [{ name = "pytest", specifier = ">=8.4.1" }]
 
 [[package]]
 name = "lxml"
