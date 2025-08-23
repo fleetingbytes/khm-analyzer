@@ -94,12 +94,12 @@ jobs:
           usesh: true
           sync: ".,khm-sources"
           prepare: |
-            pkg install -y python312 uv
+            pkg install -y python311 libxml2 libxslt uv
           run: |
-            echo "Test the presence of artifacts"
+            echo "===== Test the presence of artifacts ====="
             [ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
-            echo "Install the project"
+            echo "===== Install the project ====="
             uv sync --locked --all-extras --dev
-            echo "Test the code"
-            uv run pytest -v
+            echo "===== Test the code ====="
+            uv run --python 3.12 -- pytest -v
