@@ -17,7 +17,8 @@ This tool helps to analyze the different editions of the fairy tales. It uses th
 ### Dependencies
 
 khm_analyzer uses [lxml][lxml] to parse XML. To be able to build the lxml dependency on FreeBSD you will need _libxml2_ and _libxslt_ installed on the system.
-For formatting, this project uses [ruff][ruff]. To build ruff, you will need cmake installed on the system.
+
+For formatting, this project uses [ruff][ruff]. To build ruff, you will need _gmake_ installed on the system.
 
 [khm-1-1]: https://deutschestextarchiv.de/book/show/grimm_maerchen01_1812
 [khm-2-1]: https://deutschestextarchiv.de/book/show/grimm_maerchen02_1815
