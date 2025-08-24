@@ -44,6 +44,7 @@ jobs:
 
   test:
     needs: upload-artifacts
+    name: Test
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -92,9 +93,21 @@ jobs:
       - name: Test
         run: uv run pytest -v
 
+  python-pkg-and-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      py-data: ${{ steps.define-python-data.outputs.data }}
+    steps:
+      - name: Set Python Data
+        id: define-python-data
+        run: |
+          echo 'data=[{"pkg":"python311","version":"3.11"},{"pkg":"python312","version":"3.12"}]' >> $GITHUB_OUTPUT
+
   test-freebsd:
-    needs: upload-artifacts
-    name: Test on FreeBSD in VM
+    needs:
+      - upload-artifacts
+      - python-pkg-and-versions
+    name: Test-BSD
     runs-on: ubuntu-latest
     env:
       UV_LOCKED: true
@@ -102,8 +115,7 @@ jobs:
     strategy:
       matrix:
         freebsd-release: ['14.2', '14.3', ]
-        python-pkg: [python311, python312]
-
+        python-data: $ {{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
       - name: Check out project
         uses: actions/checkout@v4
@@ -123,13 +135,13 @@ jobs:
           sync: ".,khm-sources"
           copyback: false
           prepare: |
-            pkg install -y gmake libxml2 libxslt ${{ matrix.python-pkg }} rust uv
+            pkg install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
           run: |
             echo "===== Test the presence of artifacts ====="
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Install the project ====="
-            uv sync --group test --group lint
+            uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
             uv run pytest -v
