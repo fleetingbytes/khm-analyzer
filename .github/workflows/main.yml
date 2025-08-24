@@ -130,6 +130,6 @@ jobs:
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Install the project ====="
-            uv sync --extra test --extra lint
+            uv sync --group test --group lint
             echo "===== Test the code ====="
             uv run pytest -v
