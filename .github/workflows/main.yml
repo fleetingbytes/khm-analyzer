@@ -94,13 +94,16 @@ jobs:
 
   test-freebsd:
     needs: upload-artifacts
+    name: Test on FreeBSD in VM
+    runs-on: ubuntu-latest
+    env:
+      UV_LOCKED: true
+      UV_NO_MANAGED_PYTHON: true
     strategy:
       matrix:
         freebsd-release: ['14.2', '14.3', ]
         python-pkg: [python311, python312]
-    runs-on: ubuntu-latest
 
-    name: Test on FreeBSD in VM
     steps:
       - name: Check out project
         uses: actions/checkout@v4
@@ -115,6 +118,7 @@ jobs:
         uses: vmactions/freebsd-vm@v1
         with:
           release: ${{ matrix.freebsd-release }}
+          envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON'
           usesh: true
           sync: ".,khm-sources"
           copyback: false
@@ -126,6 +130,6 @@ jobs:
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Install the project ====="
-            uv sync --locked --all-extras
+            uv sync --extra test --extra lint
             echo "===== Test the code ====="
             uv run pytest -v
