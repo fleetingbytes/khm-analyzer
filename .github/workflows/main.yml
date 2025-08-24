@@ -115,7 +115,7 @@ jobs:
     strategy:
       matrix:
         freebsd-release: ['14.2', '14.3', ]
-        python-data: $ {{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
+        python-data: ${{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
       - name: Check out project
         uses: actions/checkout@v4
