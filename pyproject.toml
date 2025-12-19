@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "fleetingbytes", email = "7075397+fleetingbytes@users.noreply.github.com" }
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 license = "BSD-2-Clause"
 dependencies = [
     "lxml",
@@ -18,13 +18,13 @@ dependencies = [
 khm-analyzer = "khm_analyzer:main"
 
 [build-system]
-requires = ["uv_build>=0.8.3,<0.9.0"]
+requires = ["uv_build>=0.9.0,<0.10.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
 lint = [
-    "ruff>=0.12.10",
+    "ruff>=0.14",
 ]
 test = [
-    "pytest>=8.4.1",
+    "pytest>=9",
 ]

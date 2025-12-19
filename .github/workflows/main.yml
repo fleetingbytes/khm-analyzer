@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.11, 3.12, 3.13]
+        python-version: [3.11, 3.12, 3.13, 3.14]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -101,7 +101,7 @@ jobs:
       - name: Set Python Data
         id: define-python-data
         run: |
-          echo 'data=[{"pkg":"python311","version":"3.11"},{"pkg":"python312","version":"3.12"}]' >> $GITHUB_OUTPUT
+          echo 'data=[{"pkg":"python313","version":"3.13"},{"pkg":"python314","version":"3.14"}]' >> $GITHUB_OUTPUT
 
   test-freebsd:
     needs:
@@ -114,7 +114,7 @@ jobs:
       UV_NO_MANAGED_PYTHON: true
     strategy:
       matrix:
-        freebsd-release: ['14.2', '14.3', ]
+        freebsd-release: ['14.2', '14.3', '15.0']
         python-data: ${{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
       - name: Check out project
