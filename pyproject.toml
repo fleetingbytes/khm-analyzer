@@ -12,6 +12,7 @@ dependencies = [
     "lxml",
     "platformdirs>=4.3.8",
     "requests>=2.32.5",
+    "readylog",
 ]
 
 [project.scripts]

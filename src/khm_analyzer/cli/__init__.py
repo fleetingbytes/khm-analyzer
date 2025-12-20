@@ -6,9 +6,17 @@ from .download_source import download_source
 from .download_all_sources import download_all_sources
 from logging import getLogger
 from logging.config import dictConfig as configure_logging
-from ..logging_conf import logging_configuration
+from readylog import create_dict_config
+from platformdirs import user_log_dir
 
-configure_logging(logging_configuration)
+app_name = "khm-analyzer"
+author = "fleetingbytes"
+
+log_dir = Path(user_log_dir(app_name, author))
+log_dir.mkdir(exist_ok=True)
+
+logging_config = create_dict_config(log_dir / "debug.log", app_name)
+configure_logging(logging_config)
 
 logger = getLogger(__name__)
 

@@ -86,6 +86,7 @@ source = { editable = "." }
 dependencies = [
     { name = "lxml" },
     { name = "platformdirs" },
+    { name = "readylog" },
     { name = "requests" },
 ]
 
@@ -101,6 +102,7 @@ test = [
 requires-dist = [
     { name = "lxml" },
     { name = "platformdirs", specifier = ">=4.3.8" },
+    { name = "readylog" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 
@@ -220,6 +222,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d1/db/7ef3487e0fb0049ddb5ce41d3a49c235bf9ad299b6a25d5780a89f19230f/pytest-9.0.2.tar.gz", hash = "sha256:75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11", size = 1568901, upload-time = "2025-12-06T21:30:51.014Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/ab/b3226f0bd7cdcf710fbede2b3548584366da3b19b5021e74f5bde2a8fa3f/pytest-9.0.2-py3-none-any.whl", hash = "sha256:711ffd45bf766d5264d487b917733b453d917afd2b0ad65223959f59089f875b", size = 374801, upload-time = "2025-12-06T21:30:49.154Z" },
+]
+
+[[package]]
+name = "readylog"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/c1/551e953c4098987d6bfbc0f1cbe6d115e79ea561bd46b1d6c1d50c0938b3/readylog-0.2.0.tar.gz", hash = "sha256:d3040b79a0903f707cb949a976b7eaf39dd603087cd0b27393d86d0139a63af8", size = 2613, upload-time = "2025-10-28T15:52:13.178Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9b/8c/9671d555f2ea93d99ffd5d296a23e767a2bfcd93b2358a9455ba77d4d7ed/readylog-0.2.0-py3-none-any.whl", hash = "sha256:9d35b52e858bc9447d322bb42fca1755eea6034c0fc204757794b4c99162a242", size = 3557, upload-time = "2025-10-28T15:52:11.786Z" },
 ]
 
 [[package]]
