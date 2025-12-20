@@ -4,6 +4,14 @@ MAX_EDITION = 7
 MAX_VOLUME = 2
 EDITION_RANGE = range(1, MAX_EDITION + 1)
 VOLUME_RANGE = range(1, MAX_VOLUME + 1)
+EDITION_TO_YEAR_MAP = {
+    2: 1819,
+    3: 1837,
+    4: 1840,
+    5: 1843,
+    6: 1850,
+    7: 1857,
+}
 
 
 def get_source_document_as_raw_bytes(url: str) -> bytes:
@@ -39,12 +47,4 @@ def edition_one_publication_year(volume: int) -> int:
 
 
 def edition_two_and_later_publication_year(edition: int) -> int:
-    EDITION_TO_YEAR_MAP = {
-        2: 1819,
-        3: 1837,
-        4: 1840,
-        5: 1843,
-        6: 1850,
-        7: 1857,
-    }
     return EDITION_TO_YEAR_MAP[edition]
