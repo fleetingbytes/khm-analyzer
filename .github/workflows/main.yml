@@ -114,7 +114,7 @@ jobs:
       UV_NO_MANAGED_PYTHON: true
     strategy:
       matrix:
-        freebsd-release: ['14.2', '14.3', '15.0']
+        freebsd-release: ['14.3', '15.0']
         python-data: ${{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
       - name: Check out project
