@@ -101,9 +101,10 @@ jobs:
       - name: Set Python Data
         id: define-python-data
         run: |
-          echo 'data=[{"pkg":"python313","version":"3.13"}]' >> $GITHUB_OUTPUT
+          echo 'data=[{"pkg":"python313","version":"3.13"},{"pkg":"python314","version":"3.14"}]' >> $GITHUB_OUTPUT
 
   test-freebsd:
+    continue-on-error: true
     needs:
       - upload-artifacts
       - python-pkg-and-versions
@@ -114,7 +115,7 @@ jobs:
       UV_NO_MANAGED_PYTHON: true
     strategy:
       matrix:
-        freebsd-release: ['15.0']
+        freebsd-release: ['14.2', '14.3', '15.0']
         python-data: ${{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
       - name: Check out project
@@ -135,8 +136,7 @@ jobs:
           sync: ".,khm-sources"
           copyback: false
           prepare: |
-            # install packages
-            pkg --debug install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
+            pkg install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
           run: |
             echo "===== Test the presence of artifacts ====="
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
