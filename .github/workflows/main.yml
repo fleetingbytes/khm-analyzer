@@ -114,7 +114,7 @@ jobs:
       UV_NO_MANAGED_PYTHON: true
     strategy:
       matrix:
-        freebsd-release: ['14.3', '15.0']
+        freebsd-release: ['15.0']
         python-data: ${{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
       - name: Check out project
@@ -135,10 +135,6 @@ jobs:
           sync: ".,khm-sources"
           copyback: false
           prepare: |
-            # track latest Ports Branches
-            mkdir -p /usr/local/etc/pkg/repos
-            echo 'FreeBSD: { url: "pkg+https://pkg.FreeBSD.org/${ABI}/latest" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
-            pkg update -f
             # install packages
             pkg install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
           run: |
