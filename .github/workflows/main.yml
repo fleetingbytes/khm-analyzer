@@ -135,6 +135,11 @@ jobs:
           sync: ".,khm-sources"
           copyback: false
           prepare: |
+            # track latest Ports Branches
+            mkdir -p /usr/local/etc/pkg/repos
+            echo 'FreeBSD: { url: "pkg+https://pkg.FreeBSD.org/${ABI}/latest" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
+            pkg update -f
+            # install packages
             pkg install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
           run: |
             echo "===== Test the presence of artifacts ====="
