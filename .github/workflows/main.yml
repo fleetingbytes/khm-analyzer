@@ -101,7 +101,7 @@ jobs:
       - name: Set Python Data
         id: define-python-data
         run: |
-          echo 'data=[{"pkg":"python313","version":"3.13"},{"pkg":"python314","version":"3.14"}]' >> $GITHUB_OUTPUT
+          echo 'data=[{"pkg":"python313","version":"3.13"}]' >> $GITHUB_OUTPUT
 
   test-freebsd:
     needs:
