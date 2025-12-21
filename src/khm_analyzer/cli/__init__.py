@@ -9,7 +9,7 @@ from logging.config import dictConfig as configure_logging
 from readylog import create_dict_config
 from platformdirs import user_log_dir
 
-app_name = "khm-analyzer"
+app_name = "khm_analyzer"
 author = "fleetingbytes"
 
 log_dir = Path(user_log_dir(app_name, author))
