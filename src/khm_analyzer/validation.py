@@ -1,4 +1,5 @@
 from io import TextIOWrapper, BytesIO
+from sys import stderr
 from pathlib import Path
 from lxml import etree
 from .utils import set_stream_position_to_the_start, get_file_name_from_buffer, debug
@@ -61,10 +62,8 @@ def validate_paths(paths: list[Path], correction_wanted: bool) -> None:
     for path in paths:
         with path.open(mode="r", encoding="UTF-8") as file:
             is_valid, correction_data = check_xml(file)
-            if is_valid:
-                print(path, "is valid XML")
-            else:
-                print(path, "is invalid XML", correction_data.error_message)
+            if not is_valid:
+                print(path, "is invalid:", correction_data.error_message, file=stderr)
         if (not is_valid) and correction_wanted and correction_data.correction_possible:
             correct_file_in_path(path, correction_data)
 
