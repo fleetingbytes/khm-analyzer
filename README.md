@@ -4,6 +4,22 @@
 
 KHM is the common abbreviation for Kinder- und Hausmärchen which is the German title of Grimm's Fairy Tales. The fairy tales exist in many editions which can be downloaded from Deutches Textarchiv (DTA).
 
+### Autocompletions
+
+Scripts to generate autocompletions are provided in the _scripts_ directory. Run them and redirect their output to a file. You will need to source that file when you shell starts to provide autocompletions.
+
+#### Example for zsh
+
+Generate the completion script
+```sh
+./scripts/generate-zsh-autocompletions.sh > "$ZDOTDIR/completions/.khm-analyzer-complete.zsh"
+```
+
+Then source the generated script, e.g. add this to your _.zshrc_ and restart your shell:
+```sh
+. "$ZDOTDIR/completions/.khm-analyzer-complete.zsh"
+```
+
 ### Source Texts
 
 First edition: [KHM vol. 1][khm-1-1], [KHM vol. 2][khm-2-1]

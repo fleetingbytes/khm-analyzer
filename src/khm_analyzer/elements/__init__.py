@@ -18,6 +18,7 @@ ELEMENTS_MAP = {
     "w": WordPart,
 }
 
+
 def get_class_with_dtaid(tag_name: str, dtaid: int, default: None = None) -> KHMElement | None:
     cls = ELEMENTS_MAP.get(tag_name, default)
     if cls is not default:

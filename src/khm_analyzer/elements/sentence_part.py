@@ -35,7 +35,7 @@ class SentencePart(SentencePartBase):
             buffer = correction_function(buffer)
         return buffer
 
-    def render(self, word_separator: str=" ", **kwargs) -> str:
+    def render(self, word_separator: str = " ", **kwargs) -> str:
         buffer = StringIO()
 
         for word, next_word in pairwise(self.words):

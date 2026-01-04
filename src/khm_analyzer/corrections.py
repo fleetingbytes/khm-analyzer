@@ -8,9 +8,11 @@ class CorrectionId:
     dtaid: int
     xmlid: str
 
+
 def add_space_at_the_end(buffer: StringIO):
     buffer.write(" ")
     return buffer
+
 
 corrections = {
     CorrectionId(KHM_ED1_VOL1, "s112"): add_space_at_the_end,

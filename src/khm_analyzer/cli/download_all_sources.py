@@ -1,15 +1,23 @@
-from argparse import Namespace
+from __future__ import annotations
+
 from itertools import product
-from ..download import EDITION_RANGE, VOLUME_RANGE, get_download_link, get_source_document_as_raw_bytes
+from typing import TYPE_CHECKING
+
+from khm_analyzer.download import get_download_link, get_source_document_as_raw_bytes
+from khm_analyzer.enums import Edition, Volume
+
 from ..utils import debug_in
 from .download_source import create_parent_dir_if_not_exists
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @debug_in
-def download_all_sources(args: Namespace):
-    pattern = args.path_pattern
+def download_all_sources(directory: Path):
+    pattern = directory / "khm.xml"
 
-    for edition, volume in product(EDITION_RANGE, VOLUME_RANGE):
+    for edition, volume in product(tuple(Edition), tuple(Volume)):
         path = pattern.with_stem(f"{pattern.stem}-ed{edition}-vol{volume}")
 
         link = get_download_link(edition, volume)

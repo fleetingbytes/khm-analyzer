@@ -13,6 +13,7 @@ dependencies = [
     "platformdirs>=4.3.8",
     "requests>=2.32.5",
     "readylog",
+    "click>=8.3.1",
 ]
 
 [project.scripts]

@@ -1,5 +1,14 @@
 from __future__ import annotations
-from .contracts import AbstractTale, AbstractTitle, AbstractParagraph, AbstractLineGroup, AbstractLine, AbstractSentencePart, AbstractWordPart, Renderable
+from .contracts import (
+    AbstractTale,
+    AbstractTitle,
+    AbstractParagraph,
+    AbstractLineGroup,
+    AbstractLine,
+    AbstractSentencePart,
+    AbstractWordPart,
+    Renderable,
+)
 from lxml import etree
 from abc import abstractmethod
 from collections.abc import Iterable
@@ -25,19 +34,28 @@ class HasSentencesMixin:
     def sentences(self) -> Iterable[SentencePartBase]:
         yield from self.iterdescendants(tag=SentencePartBase.TAG)
 
-    def add_space_after_sentence(self, sentence: SentencePartBase, separator: str, buffer: StringIO) -> StringIO:
+    def add_space_after_sentence(
+        self, sentence: SentencePartBase, separator: str, buffer: StringIO
+    ) -> StringIO:
         if not sentence.has_a_following_part:
             buffer.write(separator)
         return buffer
 
 
 class HasTrailingSpaceMixin:
-    def strip_trailing_space(self, start_of_trailing_space_after_last_element: int, buffer: StringIO) -> StringIO:
+    def strip_trailing_space(
+        self, start_of_trailing_space_after_last_element: int, buffer: StringIO
+    ) -> StringIO:
         buffer.seek(start_of_trailing_space_after_last_element)
         buffer.truncate()
         return buffer
 
-    def write_element(self, element: SentencePartBase | LineGroupBase | LineBase, sentence_separator: str, buffer: StringIO) -> int:
+    def write_element(
+        self,
+        element: SentencePartBase | LineGroupBase | LineBase,
+        sentence_separator: str,
+        buffer: StringIO,
+    ) -> int:
         buffer.write(element.render(sentence_separator=sentence_separator))
         cookie = buffer.tell()
         return cookie
@@ -46,8 +64,7 @@ class HasTrailingSpaceMixin:
 class KHMElement(PrettyPrintMixin, etree.ElementBase):
     @property
     @abstractmethod
-    def TAG(cls):
-        ...
+    def TAG(cls): ...
 
 
 class TaleBase(KHMElement, AbstractTale):
@@ -74,8 +91,7 @@ class SentencePartBase(KHMElement, XmlIdMixin, AbstractSentencePart):
     TAG = any_namespace("s")
 
 
-class WordBase(Renderable):
-        ...
+class WordBase(Renderable): ...
 
 
 class WordPartBase(KHMElement, XmlIdMixin, AbstractWordPart):
@@ -83,5 +99,4 @@ class WordPartBase(KHMElement, XmlIdMixin, AbstractWordPart):
 
     @property
     @abstractmethod
-    def is_the_final_part(self) -> bool:
-        ...
+    def is_the_final_part(self) -> bool: ...

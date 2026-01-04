@@ -1,18 +1,17 @@
-from pytest import fixture
-from os import getenv
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from argparse import ArgumentParser
+
+CLI_FLAG_FOR_XML_DOWNLOAD = "--download-xml-source"
 
 
-def get_source_document_as_raw_bytes(edition: int, volume: int) -> bytes:
-    content = getenv(f"KHM_ED{edition}_VOL{volume}", default="")
-    return content.encode("UTF-8")
-
-
-@fixture
-def khm_edition_volume(request, pytestconfig):
-    """
-    Returns KHM source XML as bytes string,
-    preferably from pytest cache.
-    """
-    edition, volume = request.param
-    content = get_source_document_as_raw_bytes(edition, volume)
-    return content
+def pytest_addoption(parser: ArgumentParser):
+    parser.addoption(
+        CLI_FLAG_FOR_XML_DOWNLOAD,
+        action="store_true",
+        default=False,
+        help="Run expensive XML download and validity tests",
+    )

@@ -1,72 +1,73 @@
-from argparse import ArgumentParser, FileType
-from pathlib import Path
-from .display import display
-from .validate import validate
-from .download_source import download_source
-from .download_all_sources import download_all_sources
+from __future__ import annotations
+
 from logging import getLogger
-from logging.config import dictConfig as configure_logging
-from readylog import create_dict_config
-from platformdirs import user_log_dir
+from pathlib import Path
+from typing import TYPE_CHECKING
 
-app_name = "khm_analyzer"
-author = "fleetingbytes"
+from click import File, argument, group, option, version_option
+from click import Path as ClickPath
+from readylog.decorators import debug_in
 
-log_dir = Path(user_log_dir(app_name, author))
-log_dir.mkdir(parents=True, exist_ok=True)
+from khm_analyzer.cli.callbacks import to_edition, to_volume
+from khm_analyzer.cli.display import display
+from khm_analyzer.cli.download_all_sources import download_all_sources as download_all_sources
+from khm_analyzer.cli.download_source import download_source as download_source
+from khm_analyzer.cli.setup_logging import setup_logging
+from khm_analyzer.cli.validate import validate
 
-logging_config = create_dict_config(log_dir / "debug.log", app_name)
-configure_logging(logging_config)
+if TYPE_CHECKING:
+    from khm_analyzer.enums import Edition, Volume
+
+MAX_HELP_CONTENT_WIDTH = 108
 
 logger = getLogger(__name__)
+setup_logging()
 
-arg_parser = ArgumentParser(
-    prog="khm-analyzer",
-    description="Parses linguistically annotated editions of Grimm's Fairy Tales",
+
+@group(
+    context_settings={"show_default": True, "max_content_width": MAX_HELP_CONTENT_WIDTH},
 )
+@version_option()
+def cli() -> None:
+    pass
 
 
-subparsers = arg_parser.add_subparsers(title="subcommands", help="sub-command help", required=True)
-display_parser = subparsers.add_parser("display", help="show text of tales")
-display_parser.set_defaults(subcommand_function=display)
-validate_parser = subparsers.add_parser("validate", help="validate source xml")
-validate_parser.set_defaults(subcommand_function=validate)
-download_source_parser = subparsers.add_parser("download-source", help="download a source document")
-download_source_parser.set_defaults(subcommand_function=download_source)
-download_all_sources_parser = subparsers.add_parser(
-    "download-all-sources", help="download all source documents"
-)
-download_all_sources_parser.set_defaults(subcommand_function=download_all_sources)
-
-display_parser.add_argument("source_file", type=FileType("r", encoding="UTF-8"))
-display_parser.add_argument("tale", type=int)
-display_parser.add_argument("-n", "--include-tale-number", action="store_true")
-display_parser.add_argument("-t", "--include-tale-title", action="store_true")
-display_parser.add_argument("-s", "--one-sentence-per-line", action="store_true")
-
-validate_parser.add_argument(
-    "-d",
-    "--directory",
-    action="store_true",
-    help="validate all files in one or more directories",
-)
-validate_parser.add_argument(
-    "-c", "--try-to-correct", action="store_true", help="try to correct invalid XML"
-)
-validate_parser.add_argument("path", type=Path, nargs="+", help="validate one or more files")
-
-download_source_parser.add_argument("edition", type=int, help="edition number (1-7)")
-download_source_parser.add_argument("volume", type=int, help="volume number (1-2)")
-download_source_parser.add_argument("file", type=Path, help="output file")
-
-download_all_sources_parser.add_argument(
-    "path_pattern",
-    type=Path,
-    help='path pattern, e.g. "~/grimm/khm.xml", "-edX-volY" will be attached to the file stem.',
-)
+@cli.command("display", short_help="show text of tales")
+@argument("source_file", type=File())
+@argument("tale", type=int)
+@option("-n", "--include-tale-number", is_flag=True)
+@option("-t", "--include-tale-title", is_flag=True)
+@option("-s", "--one-sentence-per-line", is_flag=True)
+def display_cli(
+    source_file: File,
+    tale: int,
+    include_tale_number: bool,
+    include_tale_title: bool,
+    one_sentence_per_line: bool,
+) -> None:
+    display(source_file, tale, include_tale_number, include_tale_title, one_sentence_per_line)
 
 
+@cli.command("validate", short_help="validate source xml")
+@argument("paths", type=File(), required=True, nargs=-1)
+def validate_cli(paths: tuple[File]) -> None:
+    validate(paths)
+
+
+@cli.command("download-source", short_help="download a source document")
+@argument("edition", type=int, callback=to_edition)
+@argument("volume", type=int, callback=to_volume)
+@argument("file_path", type=ClickPath(allow_dash=True, path_type=Path))
+def download_source_cli(edition: Edition, volume: Volume, file_path: Path) -> None:
+    download_source(edition, volume, file_path)
+
+
+@cli.command("download-all-sources", short_help="download all source documents")
+@argument("directory", type=ClickPath(path_type=Path))
+def download_all_sources_cli(directory: Path) -> None:
+    download_all_sources(directory)
+
+
+@debug_in
 def run() -> None:
-    logger.debug("Parsing arguments")
-    args = arg_parser.parse_args()
-    args.subcommand_function(args)
+    cli()

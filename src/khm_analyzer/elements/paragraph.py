@@ -17,19 +17,27 @@ class Paragraph(ParagraphBase):
         for sentence_or_linegroup in self.sentences_and_linegroups:
             if isinstance(sentence_or_linegroup, SentencePartBase):
                 sentence = sentence_or_linegroup
-                start_of_trailing_space_after_last_element = self.write_element(sentence, sentence_separator, buffer)
+                start_of_trailing_space_after_last_element = self.write_element(
+                    sentence, sentence_separator, buffer
+                )
                 buffer = self.add_space_after_sentence(sentence, sentence_separator, buffer)
             else:
                 linegroup = sentence_or_linegroup
-                buffer = self.create_or_adjust_space_before_linegroup(start_of_trailing_space_after_last_element, buffer)
-                start_of_trailing_space_after_last_element = self.write_element(linegroup, sentence_separator, buffer)
+                buffer = self.create_or_adjust_space_before_linegroup(
+                    start_of_trailing_space_after_last_element, buffer
+                )
+                start_of_trailing_space_after_last_element = self.write_element(
+                    linegroup, sentence_separator, buffer
+                )
                 buffer = self.add_space_after_linegroup(buffer)
 
         buffer = self.strip_trailing_space(start_of_trailing_space_after_last_element, buffer)
 
         return buffer.getvalue()
 
-    def create_or_adjust_space_before_linegroup(self, start_of_trailing_space_after_last_element: int, buffer: StringIO) -> StringIO:
+    def create_or_adjust_space_before_linegroup(
+        self, start_of_trailing_space_after_last_element: int, buffer: StringIO
+    ) -> StringIO:
         buffer = self.strip_trailing_space(start_of_trailing_space_after_last_element, buffer)
         buffer.write("\n\n")
         return buffer

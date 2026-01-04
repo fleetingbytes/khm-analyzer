@@ -1,50 +1,39 @@
-import requests
+from requests import Response, get
 
-MAX_EDITION = 7
-MAX_VOLUME = 2
-EDITION_RANGE = range(1, MAX_EDITION + 1)
-VOLUME_RANGE = range(1, MAX_VOLUME + 1)
-EDITION_TO_YEAR_MAP = {
-    2: 1819,
-    3: 1837,
-    4: 1840,
-    5: 1843,
-    6: 1850,
-    7: 1857,
-}
+from khm_analyzer.constants import (
+    DOWNLOAD_LINK_BASE,
+    EDITION_ONE_VOLUME_ONE_PUBLICATION_YEAR,
+    EDITION_ONE_VOLUME_TWO_PUBLICATION_YEAR,
+    EDITION_TO_PUBLICATION_YEAR_MAP,
+)
+from khm_analyzer.enums import Edition, Volume
 
 
 def get_source_document_as_raw_bytes(url: str) -> bytes:
-    response = requests.get(url)
+    response: Response = get(url)
     assert response.ok, f"Got response {response.status_code}"
     return response.content
 
 
-def get_download_link(edition: int, volume: int) -> str:
-    assert edition in EDITION_RANGE, f"Only edition 1 through {MAX_EDITION} is available"
-    assert volume in VOLUME_RANGE, f"Only volume 1 or {MAX_VOLUME} is available"
-
-    link_base = "https://deutschestextarchiv.de/book/download_lingxml/grimm_maerchen0"
+def get_download_link(edition: Edition, volume: Volume) -> str:
     year = publication_year(edition, volume)
-
-    link = f"{link_base}{volume}_{year}"
-
+    link = f"{DOWNLOAD_LINK_BASE}{volume}_{year}"
     return link
 
 
-def publication_year(edition: int, volume: int) -> int:
-    if edition == 1:
+def publication_year(edition: Edition, volume: Volume) -> int:
+    if edition is Edition.ONE:
         return edition_one_publication_year(volume)
     else:
         return edition_two_and_later_publication_year(edition)
 
 
-def edition_one_publication_year(volume: int) -> int:
-    if volume == 1:
-        return 1812
+def edition_one_publication_year(volume: Volume) -> int:
+    if volume is Volume.ONE:
+        return EDITION_ONE_VOLUME_ONE_PUBLICATION_YEAR
     else:
-        return 1815
+        return EDITION_ONE_VOLUME_TWO_PUBLICATION_YEAR
 
 
-def edition_two_and_later_publication_year(edition: int) -> int:
-    return EDITION_TO_YEAR_MAP[edition]
+def edition_two_and_later_publication_year(edition: Edition) -> int:
+    return EDITION_TO_PUBLICATION_YEAR_MAP[edition]
