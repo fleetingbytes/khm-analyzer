@@ -141,7 +141,7 @@ jobs:
             echo "===== Set correct time zone ====="
             cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
             echo "===== Set current timestamp for files ====="
-            find ~ -exec touch -a {} \; 2>/dev/null || true
+            find "$GITHUB_WORKSPACE" -exec touch -mac {} \; 2>/dev/null || true
             echo "===== Switch to the Latest Ports Branch, Disable SRV Mirror Types ====="
             mkdir -p /usr/local/etc/pkg/repos
             cat > /usr/local/etc/pkg/repos/FreeBSD.conf <<'EOF'
