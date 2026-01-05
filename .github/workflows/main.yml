@@ -113,6 +113,7 @@ jobs:
     env:
       UV_LOCKED: true
       UV_NO_MANAGED_PYTHON: true
+      UV_NO_CACHE: true  # avoids cache-serialization problems with pre-epoch timestamps on VMs
     strategy:
       matrix:
         freebsd-release: ['14.2', '14.3', '15.0']
