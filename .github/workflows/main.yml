@@ -113,6 +113,7 @@ jobs:
     env:
       UV_LOCKED: true
       UV_NO_MANAGED_PYTHON: true
+      UV_NO_CACHE: true
     strategy:
       matrix:
         freebsd-release: ['14.2', '14.3', '15.0']
@@ -131,7 +132,7 @@ jobs:
         uses: vmactions/freebsd-vm@v1
         with:
           release: ${{ matrix.freebsd-release }}
-          envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON'
+          envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON UV_NO_CACHE'
           usesh: true
           sync: ".,khm-sources"
           copyback: false
@@ -165,6 +166,6 @@ jobs:
             echo "===== Find offending files ====="
             find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 30
             echo "===== Install the project ====="
-            uv sync --no-cache --group test --python ${{ matrix.python-data.version }}
+            uv sync --debug --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
             uv run --python ${{ matrix.python-data.version }} -- pytest -v
