@@ -137,6 +137,7 @@ jobs:
           copyback: false
           prepare: |
             echo "===== Switch to the Latest Ports Branch, Disable SRV Mirror Types ====="
+            mkdir -p /usr/local/etc/pkg/repos
             cat > /usr/local/etc/pkg/repos/FreeBSD.conf <<'EOF'
             FreeBSD: {
               url: "https://pkg.FreeBSD.org/${ABI}/latest",
