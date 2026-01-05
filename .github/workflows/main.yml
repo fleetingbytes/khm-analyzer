@@ -136,6 +136,12 @@ jobs:
           sync: ".,khm-sources"
           copyback: false
           prepare: |
+            echo "===== Fix Clock ====="
+            ntpd -gq -s pool.ntp.org || true
+            echo "===== Set correct time zone ====="
+            cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+            echo "===== Set current timestamp for files ====="
+            find ~ -exec touch -a {} \; 2>/dev/null || true
             echo "===== Switch to the Latest Ports Branch, Disable SRV Mirror Types ====="
             mkdir -p /usr/local/etc/pkg/repos
             cat > /usr/local/etc/pkg/repos/FreeBSD.conf <<'EOF'
@@ -156,8 +162,6 @@ jobs:
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
-            echo "===== Workaround Pre-Epoch Timestamps ====="
-            find . -type f -exec touch -t 202001010000 {} \;
             echo "===== Install the project ====="
             uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
