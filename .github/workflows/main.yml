@@ -162,6 +162,8 @@ jobs:
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
+            echo "===== Find offending files ====="
+            find "$GITHUB_WORKSPACE" -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 30
             echo "===== Install the project ====="
             uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
