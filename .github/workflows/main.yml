@@ -147,6 +147,7 @@ jobs:
             }
             EOF
             pkg update -f
+            pkg upgrade -y
             echo "===== Install Packages ====="
             pkg --debug install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
           run: |
