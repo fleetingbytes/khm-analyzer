@@ -1,11 +1,12 @@
-from lxml import etree
+import re
 from io import TextIOWrapper
+
+from lxml import etree
+
+from .errors import DtaidNotFoundError
 from .lookup import Lookup
 from .namespace import NAMESPACE_MAP
-from .errors import DtaidNotFoundError
 from .utils import set_stream_position_to_the_start
-import re
-
 
 DTAID_REGEX = re.compile(r"""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
 

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from .dtaids import KHM_ED1_VOL1
 from io import StringIO
+
+from .dtaids import KHM_ED1_VOL1
 
 
 @dataclass(frozen=True, eq=True)

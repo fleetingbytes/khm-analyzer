@@ -1,6 +1,5 @@
 from itertools import chain
 
-
 ANY_NAMESPACE = "*"
 TEI_NAMESPACE = "http://www.tei-c.org/ns/1.0"
 XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"

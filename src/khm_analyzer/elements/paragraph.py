@@ -1,7 +1,8 @@
-from ..bases import ParagraphBase, SentencePartBase, LineGroupBase
-from ..namespace import NAMESPACE_MAP
 from collections.abc import Iterable
 from io import StringIO
+
+from ..bases import LineGroupBase, ParagraphBase, SentencePartBase
+from ..namespace import NAMESPACE_MAP
 
 
 class Paragraph(ParagraphBase):

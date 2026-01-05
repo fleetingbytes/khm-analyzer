@@ -1,4 +1,5 @@
 from lxml import etree
+
 from .elements import get_class_with_dtaid
 
 

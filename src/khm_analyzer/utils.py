@@ -1,9 +1,8 @@
 from functools import wraps
 from io import IOBase, TextIOWrapper
+from logging import DEBUG, getLogger
 from os import SEEK_SET
 from pathlib import Path
-from logging import getLogger, DEBUG
-
 
 logger = getLogger(__name__)
 

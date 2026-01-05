@@ -1,9 +1,10 @@
-from ..bases import SentencePartBase, WordPartBase, WordBase
-from ..composites import Word
-from ..corrections import corrections, CorrectionId
 from collections.abc import Iterable
 from io import StringIO
 from itertools import pairwise
+
+from ..bases import SentencePartBase, WordBase, WordPartBase
+from ..composites import Word
+from ..corrections import CorrectionId, corrections
 
 
 class SentencePart(SentencePartBase):

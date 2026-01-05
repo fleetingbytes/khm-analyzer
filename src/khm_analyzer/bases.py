@@ -1,19 +1,25 @@
 from __future__ import annotations
+
+from abc import abstractmethod
+from typing import TYPE_CHECKING
+
+from lxml import etree
+
 from .contracts import (
+    AbstractLine,
+    AbstractLineGroup,
+    AbstractParagraph,
+    AbstractSentencePart,
     AbstractTale,
     AbstractTitle,
-    AbstractParagraph,
-    AbstractLineGroup,
-    AbstractLine,
-    AbstractSentencePart,
     AbstractWordPart,
     Renderable,
 )
-from lxml import etree
-from abc import abstractmethod
-from collections.abc import Iterable
 from .namespace import any_namespace, xml_namespace
-from io import StringIO
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from io import StringIO
 
 
 class PrettyPrintMixin:
@@ -34,8 +40,9 @@ class HasSentencesMixin:
     def sentences(self) -> Iterable[SentencePartBase]:
         yield from self.iterdescendants(tag=SentencePartBase.TAG)
 
+    @classmethod
     def add_space_after_sentence(
-        self, sentence: SentencePartBase, separator: str, buffer: StringIO
+        cls, sentence: SentencePartBase, separator: str, buffer: StringIO
     ) -> StringIO:
         if not sentence.has_a_following_part:
             buffer.write(separator)
@@ -43,15 +50,17 @@ class HasSentencesMixin:
 
 
 class HasTrailingSpaceMixin:
+    @classmethod
     def strip_trailing_space(
-        self, start_of_trailing_space_after_last_element: int, buffer: StringIO
+        cls, start_of_trailing_space_after_last_element: int, buffer: StringIO
     ) -> StringIO:
         buffer.seek(start_of_trailing_space_after_last_element)
         buffer.truncate()
         return buffer
 
+    @classmethod
     def write_element(
-        self,
+        cls,
         element: SentencePartBase | LineGroupBase | LineBase,
         sentence_separator: str,
         buffer: StringIO,
@@ -64,7 +73,7 @@ class HasTrailingSpaceMixin:
 class KHMElement(PrettyPrintMixin, etree.ElementBase):
     @property
     @abstractmethod
-    def TAG(cls): ...
+    def TAG(self): ...
 
 
 class TaleBase(KHMElement, AbstractTale):

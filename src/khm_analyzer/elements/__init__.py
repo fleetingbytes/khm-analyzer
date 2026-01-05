@@ -1,12 +1,11 @@
 from ..bases import KHMElement
+from .line import Line
+from .linegroup import LineGroup
+from .paragraph import Paragraph
+from .sentence_part import SentencePart
 from .tale import Tale
 from .title import Title
-from .paragraph import Paragraph
-from .linegroup import LineGroup
-from .line import Line
-from .sentence_part import SentencePart
 from .word_part import WordPart
-
 
 ELEMENTS_MAP = {
     "div": Tale,

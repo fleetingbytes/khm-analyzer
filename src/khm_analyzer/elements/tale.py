@@ -1,6 +1,7 @@
 from collections.abc import Iterable
-from ..bases import TaleBase, TitleBase, ParagraphBase
 from io import StringIO
+
+from ..bases import ParagraphBase, TaleBase, TitleBase
 
 
 class Tale(TaleBase):

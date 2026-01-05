@@ -1,5 +1,6 @@
-from ..bases import LineBase
 from io import StringIO
+
+from ..bases import LineBase
 
 
 class Line(LineBase):

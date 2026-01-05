@@ -1,7 +1,8 @@
 from collections.abc import Iterable
+from enum import Flag, auto
+
 from ..bases import WordPartBase
 from ..namespace import tei_namespace
-from enum import Flag, auto
 
 
 class Join(Flag):

@@ -1,5 +1,6 @@
-from pathlib import Path
 from logging.config import dictConfig as configure_logging
+from pathlib import Path
+
 from platformdirs import user_log_dir
 from readylog import create_dict_config
 

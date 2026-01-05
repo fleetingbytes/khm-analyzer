@@ -1,5 +1,6 @@
-from ..bases import TitleBase, SentencePartBase
 from collections.abc import Iterable
+
+from ..bases import SentencePartBase, TitleBase
 
 
 class Title(TitleBase):

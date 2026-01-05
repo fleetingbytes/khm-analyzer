@@ -1,5 +1,6 @@
-from ..bases import WordBase
 from io import StringIO
+
+from ..bases import WordBase
 
 
 class Word(WordBase):
