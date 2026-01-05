@@ -166,6 +166,6 @@ jobs:
             echo "===== Find offending files ====="
             find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 30
             echo "===== Install the project ====="
-            uv sync --debug --group test --python ${{ matrix.python-data.version }}
+            RUST_LOG=debug uv sync --verbose --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
             uv run --python ${{ matrix.python-data.version }} -- pytest -v
