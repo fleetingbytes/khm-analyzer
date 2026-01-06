@@ -113,7 +113,6 @@ jobs:
     env:
       UV_LOCKED: true
       UV_NO_MANAGED_PYTHON: true
-      UV_NO_CACHE: true
     strategy:
       matrix:
         freebsd-release: ['14.2', '14.3', '15.0']
@@ -132,7 +131,7 @@ jobs:
         uses: vmactions/freebsd-vm@v1
         with:
           release: ${{ matrix.freebsd-release }}
-          envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON UV_NO_CACHE'
+          envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON'
           usesh: true
           sync: ".,khm-sources"
           copyback: false
@@ -141,6 +140,7 @@ jobs:
             ntpd -gq -s pool.ntp.org || true
             echo "===== Set correct time zone ====="
             cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+            echo "Current date: $(date)"
             echo "===== Set current timestamp for files ====="
             find "$GITHUB_WORKSPACE" -exec touch -mac {} \; 2>/dev/null || true
             echo "===== Switch to the Latest Ports Branch, Disable SRV Mirror Types ====="
@@ -168,6 +168,6 @@ jobs:
             echo "===== Find offending directories ====="
             find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 30
             echo "===== Install the project ====="
-            uv sync --verbose --group test --python ${{ matrix.python-data.version }}
+            RUST_LOG=trace uv sync --verbose --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
             uv run --python ${{ matrix.python-data.version }} -- pytest -v
