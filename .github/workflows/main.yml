@@ -128,7 +128,7 @@ jobs:
           path: khm-sources
 
       - name: Test in FreeBSD
-        uses: vmactions/freebsd-vm@v1
+        uses: vmactions/freebsd-vm@v1.3.7
         with:
           release: ${{ matrix.freebsd-release }}
           envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON'
