@@ -143,9 +143,23 @@ jobs:
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
             echo "===== Find offending files ====="
-            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 30
+            echo "st_mtime"
+            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
+            echo "st_atime"
+            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sa %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
+            echo "st_ctime"
+            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sc %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
+            echo "st_birthtime"
+            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
             echo "===== Find offending directories ====="
-            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 30
+            echo "st_mtime"
+            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
+            echo "st_atime"
+            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sa %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
+            echo "st_ctime"
+            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sc %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
+            echo "st_birthtime"
+            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
             echo "===== Install the project ====="
             RUST_LOG=debug uv sync --verbose --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
