@@ -38,7 +38,7 @@ extend-safe-fixes = [
     "TC003",  # typing-only-standard-library-import
 ]
 
-[per-file-ignores]
+[lint.per-file-ignores]
 "src/khm_analyzer/cli/setup_logging.py" = [
     "N813",  # camelcase-imported-as-lowercase
 ]
