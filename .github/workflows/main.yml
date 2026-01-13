@@ -133,7 +133,7 @@ jobs:
           release: ${{ matrix.freebsd-release }}
           envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON'
           usesh: true
-          sync: ".,khm-sources"
+          sync: rsync
           copyback: false
           prepare: |
             pkg install -y libxml2 libxslt ${{ matrix.python-data.pkg }} rust uv
@@ -161,6 +161,6 @@ jobs:
             echo "st_birthtime"
             find "$GITHUB_WORKSPACE" -type d -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
             echo "===== Install the project ====="
-            RUST_LOG=debug uv sync --verbose --group test --python ${{ matrix.python-data.version }}
+            uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
             uv run --python ${{ matrix.python-data.version }} -- pytest -v
