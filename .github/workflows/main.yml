@@ -128,7 +128,7 @@ jobs:
           path: khm-sources
 
       - name: Test in FreeBSD
-        uses: vmactions/freebsd-vm@v1.3.7
+        uses: vmactions/freebsd-vm@v1
         with:
           release: ${{ matrix.freebsd-release }}
           envs: 'UV_LOCKED UV_NO_MANAGED_PYTHON'
@@ -142,24 +142,6 @@ jobs:
             #[ 14 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             [ 1 -eq $(find khm-sources -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
             cat file_list.txt && rm file_list.txt
-            echo "===== Find offending files ====="
-            echo "st_mtime"
-            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "st_atime"
-            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sa %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "st_ctime"
-            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%Sc %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "st_birthtime"
-            find "$GITHUB_WORKSPACE" -type fl -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "===== Find offending directories ====="
-            echo "st_mtime"
-            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "st_atime"
-            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sa %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "st_ctime"
-            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%Sc %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
-            echo "st_birthtime"
-            find "$GITHUB_WORKSPACE" -type d -exec stat -f "%SB %N" -t "%Y-%m-%d %H:%M:%S" {} +  | sort -n | head -n 5
             echo "===== Install the project ====="
             uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
