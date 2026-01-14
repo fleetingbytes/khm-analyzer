@@ -36,6 +36,7 @@ extend-safe-fixes = [
     "TC001",  # typing-only-first-party-import
     "TC002",  # typing-only-third-party-import
     "TC003",  # typing-only-standard-library-import
+    "TC004",  # runtime-import-in-type-checking-block
 ]
 
 [lint.per-file-ignores]
