@@ -20,6 +20,7 @@ class LineGroup(LineGroupBase):
 
         return buffer.getvalue()
 
-    def add_space_after_line(self, buffer: StringIO) -> StringIO:
+    @staticmethod
+    def add_space_after_line(buffer: StringIO) -> StringIO:
         buffer.write("\n")
         return buffer

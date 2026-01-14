@@ -7,16 +7,12 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-class AbstractKHM(ABC):
-    pass
-
-
-class Renderable(AbstractKHM):
+class Renderable(ABC):
     @abstractmethod
     def render(self, **kwargs) -> str: ...
 
 
-class Splittable(AbstractKHM):
+class Splittable(ABC):
     @property
     @abstractmethod
     def has_a_following_part(self) -> bool: ...

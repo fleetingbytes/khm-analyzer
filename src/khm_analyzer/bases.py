@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from abc import abstractmethod
-from typing import TYPE_CHECKING
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, ClassVar
 
 from lxml import etree
 
@@ -70,10 +70,8 @@ class HasTrailingSpaceMixin:
         return cookie
 
 
-class KHMElement(PrettyPrintMixin, etree.ElementBase):
-    @property
-    @abstractmethod
-    def TAG(self): ...
+class KHMElement(PrettyPrintMixin, etree.ElementBase, ABC):
+    TAG: ClassVar[str] = abstractmethod(lambda cls: NotImplementedError)
 
 
 class TaleBase(KHMElement, AbstractTale):

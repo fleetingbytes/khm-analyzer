@@ -43,6 +43,7 @@ class Paragraph(ParagraphBase):
         buffer.write("\n\n")
         return buffer
 
-    def add_space_after_linegroup(self, buffer: StringIO) -> StringIO:
+    @staticmethod
+    def add_space_after_linegroup(buffer: StringIO) -> StringIO:
         buffer.write("\n\n")
         return buffer

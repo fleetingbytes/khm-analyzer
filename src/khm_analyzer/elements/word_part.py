@@ -53,9 +53,7 @@ class WordPart(WordPartBase):
 
     @property
     def is_the_final_part(self) -> bool:
-        if self.joins_word_right or self.has_a_following_part:
-            return False
-        return True
+        return self.joins_word_right or self.has_a_following_part
 
     @property
     def following_words(self) -> Iterable[WordPartBase]:
