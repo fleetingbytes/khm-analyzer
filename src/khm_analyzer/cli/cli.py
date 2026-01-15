@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from importlib.metadata import version as get_version
 from logging import getLogger
 from pathlib import Path
+from sys import modules
 from typing import TYPE_CHECKING
 
 from click import File, argument, group, option, version_option
 from click import Path as ClickPath
-from readylog.decorators import debug_in
 
 from khm_analyzer.cli.callbacks import to_edition, to_volume
 from khm_analyzer.cli.display import display
@@ -49,7 +50,7 @@ def display_cli(
 
 
 @cli.command("validate", short_help="validate source xml")
-@argument("paths", type=File(), required=True, nargs=-1)
+@argument("paths", type=File(mode="r", encoding="utf-8"), required=True, nargs=-1)
 def validate_cli(paths: tuple[File]) -> None:
     validate(paths)
 
@@ -68,6 +69,8 @@ def download_all_sources_cli(directory: Path) -> None:
     download_all_sources(directory)
 
 
-@debug_in
 def run() -> None:
+    app_name = next(iter(modules[__name__].__spec__.parent.split(".")))
+    version = get_version(app_name)
+    logger.debug("Running %s version %s", app_name, version)
     cli()
