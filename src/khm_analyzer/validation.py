@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING
 from click import Path as ClickPath
 from click import echo, open_file
 from lxml import etree
-
-from .utils import debug
+from readylog.decorators import debug
 
 if TYPE_CHECKING:
     from io import BytesIO, TextIOWrapper

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from functools import wraps
-from logging import DEBUG, getLogger
+from logging import getLogger
 from os import SEEK_SET
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from .constants import ELEMENTS_MAP
+from khm_analyzer.constants import ELEMENTS_MAP
 
 if TYPE_CHECKING:
     from io import IOBase, TextIOWrapper
@@ -33,43 +32,3 @@ def get_file_name_from_buffer(buffer: TextIOWrapper) -> str:
         return Path(buffer.name).name
     except AttributeError:
         return f"{buffer} Id: {id(buffer)}"
-
-
-def log_io(level: int = DEBUG, enter: bool = False, exit: bool = False):
-    """
-    Decorator factory that logs function input arguments and return values
-    at the specified logging level.
-
-    Usage:
-        debug = @log_io(logging.DEBUG, enter=True, exit=True)
-
-        @debug
-        def my_func(...):
-            ...
-    """
-
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if enter:
-                logger.log(
-                    level,
-                    "Calling %s with args=%s, kwargs=%s",
-                    func.__name__,
-                    args,
-                    kwargs,
-                    stacklevel=2,
-                )
-            result = func(*args, **kwargs)
-            if exit:
-                logger.log(level, "%s returned %r", func.__name__, result, stacklevel=2)
-            return result
-
-        return wrapper
-
-    return decorator
-
-
-debug = log_io(DEBUG, enter=True, exit=True)
-debug_in = log_io(DEBUG, enter=True)
-debug_out = log_io(DEBUG, exit=True)

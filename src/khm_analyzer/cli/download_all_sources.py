@@ -3,11 +3,11 @@ from __future__ import annotations
 from itertools import product
 from typing import TYPE_CHECKING
 
+from readylog.decorators import debug_in
+
+from khm_analyzer.cli.download_source import create_parent_dir_if_not_exists
 from khm_analyzer.download import get_download_link, get_source_document_as_raw_bytes
 from khm_analyzer.enums import Edition, Volume
-
-from ..utils import debug_in
-from .download_source import create_parent_dir_if_not_exists
 
 if TYPE_CHECKING:
     from pathlib import Path
