@@ -145,4 +145,4 @@ jobs:
             echo "===== Install the project ====="
             uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
-            uv run --python ${{ matrix.python-data.version }} -- pytest -v
+            uv run --python ${{ matrix.python-data.version }} -- pytest -v --capture=tee-sys
