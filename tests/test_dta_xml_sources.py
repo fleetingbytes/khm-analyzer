@@ -8,7 +8,7 @@ from khm_analyzer.download import get_download_link, get_source_document_as_raw_
 from khm_analyzer.enums import Edition, Volume
 from khm_analyzer.validation import check_xml
 
-from ..markers import xml_download
+from .markers import xml_download
 
 
 @xml_download

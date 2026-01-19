@@ -43,6 +43,10 @@ extend-safe-fixes = [
 "src/khm_analyzer/cli/setup_logging.py" = [
     "N813",  # camelcase-imported-as-lowercase
 ]
+"tests/cli/test_validate.py" = [
+    "PLR0913",  # too-many-arguments-in-function-definition
+    "PLR0917",  # too-many-positional-arguments
+]
 
 [lint.mccabe]
 max-complexity = 5

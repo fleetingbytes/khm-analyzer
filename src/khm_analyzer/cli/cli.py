@@ -6,7 +6,7 @@ from pathlib import Path
 from sys import modules
 from typing import TYPE_CHECKING
 
-from click import File, argument, group, option, version_option
+from click import Context, File, argument, group, option, pass_context, version_option
 from click import Path as ClickPath
 
 from khm_analyzer.cli.callbacks import to_edition, to_volume
@@ -15,6 +15,7 @@ from khm_analyzer.cli.download_all_sources import download_all_sources
 from khm_analyzer.cli.download_source import download_source
 from khm_analyzer.cli.setup_logging import setup_logging
 from khm_analyzer.cli.validate import validate
+from khm_analyzer.return_code import ReturnCode
 
 if TYPE_CHECKING:
     from khm_analyzer.enums import Edition, Volume
@@ -51,8 +52,12 @@ def display_cli(
 
 @cli.command("validate", short_help="validate source xml")
 @argument("paths", type=File(mode="r", encoding="utf-8"), required=True, nargs=-1)
-def validate_cli(paths: tuple[File]) -> None:
-    validate(paths)
+@pass_context
+def validate_cli(ctx: Context, paths: tuple[File]) -> ReturnCode:
+    result: ReturnCode = validate(paths)
+
+    if result != ReturnCode.OK:
+        ctx.exit(result.value)
 
 
 @cli.command("download-source", short_help="download a source document")
