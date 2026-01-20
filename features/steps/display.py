@@ -36,7 +36,9 @@ def check_presence_of_source_files(directory: Path) -> None:
     file_names = tuple(map(str, file_names_with_parent_dir))
 
     for ed, vol in product(Edition, Volume):
-        assert f"khm-ed{ed.value}-vol{vol.value}.xml" in file_names
+        assert f"khm-ed{ed.value}-vol{vol.value}.xml" in file_names, (
+            f"Cannot find source documents in {directory.absolute()}, only {file_names}"
+        )
 
 
 def get_source_path(directory: Path, edition: Edition, volume: Volume) -> Path:
