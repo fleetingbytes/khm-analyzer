@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from behave import given, register_type, then, use_step_matcher, when
-from behave.api.pending_step import StepNotImplementedError
 
+from khm_analyzer.api import render_tale
 from khm_analyzer.enums import Edition, Volume
 
 if TYPE_CHECKING:
@@ -39,6 +39,11 @@ def check_presence_of_source_files(directory: Path) -> None:
         assert f"khm-ed{ed.value}-vol{vol.value}.xml" in file_names
 
 
+def get_source_path(directory: Path, edition: Edition, volume: Volume) -> Path:
+    path = directory / f"khm-ed{edition.value}-vol{volume.value}.xml"
+    return path
+
+
 use_step_matcher("parse")
 
 MATCHING_TYPES: dict[str, Callable[[str], Any]] = dict(
@@ -59,9 +64,14 @@ def source_docuents_in_directory(context: Context, directory: Path) -> None:
 
 @when("I display the tale {tale:d} from edition {edition:Edition}, volume {volume:Volume}")
 def display_tale(context: Context, tale: int, edition: Edition, volume: Volume) -> None:
-    raise StepNotImplementedError
+    path = get_source_path(context.source_directory, edition, volume)
+    with path.open(mode="r") as file:
+        context.displayed_tale: str = render_tale(file, tale)
 
 
 @then("the output starts with {out:Rest}")
 def output_starts_with(context: Context, out: str) -> None:
-    raise StepNotImplementedError
+    assert context.displayed_tale.startswith(out), (
+        f'expected the displayed tale to start with "{out}", '
+        f'but found "{context.displayed_tale[: len(out)]}"'
+    )

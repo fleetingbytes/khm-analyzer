@@ -2,7 +2,6 @@ Feature: Dislpay Tale
 
     Rule: Tale is from the specified source file
         Background:
-
             Given source documents in directory khm-sources
 
         Scenario Outline:
