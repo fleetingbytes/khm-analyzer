@@ -1,10 +1,15 @@
-from collections.abc import Iterable
-from io import StringIO
-from itertools import pairwise
+from __future__ import annotations
 
-from ..bases import SentencePartBase, WordBase, WordPartBase
+from io import StringIO
+from typing import TYPE_CHECKING
+
+from ..bases import SentencePartBase, WordPartBase
 from ..composites import Word
 from ..corrections import CorrectionId, corrections
+from ..separators import DEFAULT_WORD_SEPARATOR
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Iterable
 
 
 class SentencePart(SentencePartBase):
@@ -13,13 +18,17 @@ class SentencePart(SentencePartBase):
         yield from self.iterdescendants(tag=WordPartBase.TAG)
 
     @property
-    def words(self) -> Iterable[WordBase]:
+    def words(self) -> Generator[Word]:
         parts = list()
         for word_part in self.word_parts:
             parts.append(word_part)
             if word_part.is_the_final_part:
                 yield Word(*parts)
                 parts.clear()
+
+    @property
+    def is_the_final_part(self) -> bool:
+        return not self.has_a_following_part
 
     @property
     def has_a_following_part(self) -> bool:
@@ -36,13 +45,11 @@ class SentencePart(SentencePartBase):
             buffer = correction_function(buffer)
         return buffer
 
-    def render(self, word_separator: str = " ", **kwargs) -> str:
-        buffer = StringIO()
+    def render(self, word_separator: str | None = None, **kwargs) -> str:
+        if word_separator is None:
+            word_separator = DEFAULT_WORD_SEPARATOR
 
-        for word, next_word in pairwise(self.words):
-            buffer.write(word.render())
-            if next_word:
-                buffer.write(word_separator)
+        buffer = StringIO(word_separator.join(map(lambda word: word.render(**kwargs), self.words)))
 
         corrected_buffer = self.make_arbitrary_correction(buffer)
 

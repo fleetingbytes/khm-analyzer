@@ -1,63 +1,20 @@
 from __future__ import annotations
 
-from itertools import product
-from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
-from behave import given, register_type, then, use_step_matcher, when
+from behave import given, register_type, then, when
+from behave4khm_analyzer.matching_types import MATCHING_TYPES
+from behave4khm_analyzer.utils import check_presence_of_source_files, get_source_path
 
 from khm_analyzer.api import render_tale
-from khm_analyzer.enums import Edition, Volume
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from pathlib import Path
 
     from behave.runner import Context
 
+    from khm_analyzer.enums import Edition, Volume
 
-def parse_to_path(text: str) -> Path:
-    return Path(text.strip())
-
-
-def parse_to_edition(n: str) -> Edition:
-    return Edition(int(n))
-
-
-def parse_to_volume(n: str) -> Volume:
-    return Volume(int(n))
-
-
-def parse_rest_of_line(s: str) -> str:
-    return s.strip()
-
-
-def check_presence_of_source_files(directory: Path) -> None:
-    file_names_with_parent_dir = map(lambda path: path.name, directory.glob("*.xml"))
-    file_names = tuple(map(str, file_names_with_parent_dir))
-
-    found_at_least_one_document = False
-
-    for ed, vol in product(Edition, Volume):
-        if f"khm-ed{ed.value}-vol{vol.value}.xml" in file_names:
-            found_at_least_one_document = True
-            break
-
-    assert found_at_least_one_document, f"Cannot find any source documents in {directory.absolute()}"
-
-
-def get_source_path(directory: Path, edition: Edition, volume: Volume) -> Path:
-    path = directory / f"khm-ed{edition.value}-vol{volume.value}.xml"
-    return path
-
-
-use_step_matcher("parse")
-
-MATCHING_TYPES: dict[str, Callable[[str], Any]] = dict(
-    Path=parse_to_path,
-    Edition=parse_to_edition,
-    Volume=parse_to_volume,
-    Rest=parse_rest_of_line,
-)
 
 register_type(**MATCHING_TYPES)
 
@@ -71,8 +28,22 @@ def source_documents_in_directory(context: Context, directory: Path) -> None:
 @when("I display the tale {tale:d} from edition {edition:Edition}, volume {volume:Volume}")
 def display_tale(context: Context, tale: int, edition: Edition, volume: Volume) -> None:
     path = get_source_path(context.source_directory, edition, volume)
+    show_number: bool = getattr(context, "show_tale_number", False)
+    show_title: bool = getattr(context, "show_tale_title", False)
     with path.open(mode="r") as file:
-        context.displayed_tale: str = render_tale(file, tale)
+        context.displayed_tale: str = render_tale(
+            file, tale, show_number=show_number, show_title=show_title
+        )
+
+
+@when("I select the option to show the tale number")
+def display_tale_number(context: Context) -> None:
+    context.show_tale_number = True
+
+
+@when("I select the option to show the tale title")
+def display_tale_title(context: Context) -> None:
+    context.show_tale_title = True
 
 
 @then("the output starts with {out:Rest}")

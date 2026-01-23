@@ -12,10 +12,14 @@ class Renderable(ABC):
     def render(self, **kwargs) -> str: ...
 
 
-class Splittable(ABC):
+class CompositePart(ABC):
     @property
     @abstractmethod
     def has_a_following_part(self) -> bool: ...
+
+    @property
+    @abstractmethod
+    def is_the_final_part(self) -> bool: ...
 
 
 class AbstractTale(Renderable):
@@ -41,13 +45,13 @@ class AbstractLineGroup(Renderable):
 class AbstractLine(Renderable): ...
 
 
-class AbstractSentencePart(Renderable, Splittable):
+class AbstractSentencePart(Renderable, CompositePart):
     @property
     @abstractmethod
     def words(self) -> Iterable[Renderable]: ...
 
 
-class AbstractWordPart(Renderable, Splittable):
+class AbstractWordPart(Renderable, CompositePart):
     @property
     @abstractmethod
     def is_a_part_before_page_break(self) -> bool: ...

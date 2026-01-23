@@ -39,20 +39,5 @@ extend-safe-fixes = [
     "TC004",  # runtime-import-in-type-checking-block
 ]
 
-[lint.per-file-ignores]
-"src/khm_analyzer/cli/setup_logging.py" = [
-    "N813",  # camelcase-imported-as-lowercase
-]
-"tests/cli/test_validate.py" = [
-    "PLR0913",  # too-many-arguments-in-function-definition
-    "PLR0917",  # too-many-positional-arguments
-]
-"src/khm_analyzer/elements/tale.py" = [
-    "PLR0913",  # too-many-arguments-in-function-definition
-]
-"src/khm_analyzer/api/render_tale.py" = [
-    "PLR0913",  # too-many-arguments-in-function-definition
-]
-
 [lint.mccabe]
 max-complexity = 5

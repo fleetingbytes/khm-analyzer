@@ -47,13 +47,13 @@ class WordPart(WordPartBase):
         return transcribed_word
 
     def render(self) -> str:
-        norm = self.normalized_transcription
-        contracted = self.contract_final_es(norm)
+        normalized = self.normalized_transcription
+        contracted = self.contract_final_es(normalized)
         return contracted
 
     @property
     def is_the_final_part(self) -> bool:
-        return self.joins_word_right or self.has_a_following_part
+        return not self.joins_word_right or not self.has_a_following_part
 
     @property
     def following_words(self) -> Iterable[WordPartBase]:
