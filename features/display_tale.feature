@@ -31,7 +31,7 @@ Feature: Dislpay Tale
             Then the output starts with <incipit>
 
             Examples:
-                | tale | edition | volume | incipit      |
+                | tale | edition | volume | incipit        |
                 | 53   | 1       | 1      | Schneewittchen |
 
 
@@ -42,6 +42,6 @@ Feature: Dislpay Tale
             Then the output starts with <incipit>
 
             Examples:
-                | tale | edition | volume | incipit          |
+                | tale | edition | volume | incipit            |
                 | 53   | 1       | 1      | 53. Schneewittchen |
 
