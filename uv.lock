@@ -6,6 +6,7 @@ requires-python = ">=3.13"
 members = [
     "behave4khm-analyzer",
     "khm-analyzer",
+    "khm-parser",
 ]
 
 [[package]]
@@ -175,6 +176,11 @@ test = [
     { name = "behave4khm-analyzer", editable = "packages/behave4khm-analyzer" },
     { name = "pytest", specifier = ">=9" },
 ]
+
+[[package]]
+name = "khm-parser"
+version = "0.1.0"
+source = { editable = "packages/khm-parser" }
 
 [[package]]
 name = "lxml"
