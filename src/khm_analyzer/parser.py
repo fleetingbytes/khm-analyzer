@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from lxml import etree
 
-from .errors import DtaidNotFoundError
+from .errors import DtaIdNotFoundError
 from .lookup import Lookup
 from .namespace import NAMESPACE_MAP
 from .utils import set_stream_position_to_the_start
@@ -20,7 +20,7 @@ def get_dtaid(fd: BufferedReader) -> int:
     """
     Get the DTAID from the XML file before it is parsed.
 
-    This is much faster than to looking up the document's DTAID
+    This is much faster than looking up the document's DTAID
     after parsing from within every element tag which needs it.
     """
     for line in fd:
@@ -28,7 +28,7 @@ def get_dtaid(fd: BufferedReader) -> int:
             set_stream_position_to_the_start(fd)
             dtaid = int(match.group("dtaid"))
             return dtaid
-    raise DtaidNotFoundError
+    raise DtaIdNotFoundError
 
 
 def parse(fd: BufferedReader) -> etree.Element:

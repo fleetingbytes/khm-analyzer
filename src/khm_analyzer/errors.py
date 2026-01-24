@@ -1,6 +1,6 @@
-class KHMError(Exception):
+class KhmError(Exception):
     pass
 
 
-class DtaidNotFoundError(KHMError):
+class DtaIdNotFoundError(KhmError):
     pass
