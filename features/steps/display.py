@@ -31,9 +31,7 @@ def display_tale(context: Context, tale: int, edition: Edition, volume: Volume) 
     show_number: bool = getattr(context, "show_tale_number", False)
     show_title: bool = getattr(context, "show_tale_title", False)
     with path.open(mode="rb") as file:
-        context.displayed_tale: str = render_tale(
-            file, tale, show_number=show_number, show_title=show_title
-        )
+        context.output: str = render_tale(file, tale, show_number=show_number, show_title=show_title)
 
 
 @when("I select the option to show the tale number")
@@ -48,7 +46,6 @@ def display_tale_title(context: Context) -> None:
 
 @then("the output starts with {out:Rest}")
 def output_starts_with(context: Context, out: str) -> None:
-    assert context.displayed_tale.startswith(out), (
-        f'expected the displayed tale to start with "{out}", '
-        f'but found "{context.displayed_tale[: len(out)]}"'
+    assert context.output.startswith(out), (
+        f'expected the displayed tale to start with "{out}", but found "{context.output[: len(out)]}"'
     )

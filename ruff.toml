@@ -50,7 +50,7 @@ extend-safe-fixes = [
 "src/khm_analyzer/elements/tale.py" = [
     "PLR0913",  # too-many-arguments-in-function-definition
 ]
-"src/khm_analyzer/api/render_tale.py" = [
+"src/khm_analyzer/api/*.py" = [
     "PLR0913",  # too-many-arguments-in-function-definition
 ]
 
