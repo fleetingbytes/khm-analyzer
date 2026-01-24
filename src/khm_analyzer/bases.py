@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
+from typing import TYPE_CHECKING, ClassVar
 
 from lxml import etree
 
@@ -94,10 +94,7 @@ class LineBase(KHMElement, HasSentencesMixin, AbstractLine):
     TAG = any_namespace("l")
 
 
-PartT = TypeVar("PartT")
-
-
-class CompositeBase(Generic[PartT], Renderable):
+class CompositeBase[PartT](Renderable):
     def __init__(self, *args: PartT) -> None:
         self.parts: tuple[PartT, ...] = tuple(args)
 
