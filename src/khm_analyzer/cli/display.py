@@ -7,20 +7,22 @@ from click import echo
 from khm_analyzer.api import render_tale
 
 if TYPE_CHECKING:
-    from click import File
+    from io import TextIOWrapper
 
 
 def display(
-    source_file: File,
+    source_file: TextIOWrapper,
     tale_number: int,
     include_tale_number: bool,
     include_tale_title: bool,
     one_sentence_per_line: bool,
 ) -> None:
+    sentence_separator = "\n" if one_sentence_per_line else " "
+
     kwargs = {
-        "number": include_tale_number,
-        "title": include_tale_title,
-        "one_sentence_per_line": one_sentence_per_line,
+        "show_number": include_tale_number,
+        "show_title": include_tale_title,
+        "sentence_separator": sentence_separator,
     }
 
     text: str = render_tale(source_file, tale_number, **kwargs)

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import re
-from io import TextIOWrapper
+from typing import TYPE_CHECKING
 
 from lxml import etree
 
@@ -8,10 +10,13 @@ from .lookup import Lookup
 from .namespace import NAMESPACE_MAP
 from .utils import set_stream_position_to_the_start
 
-DTAID_REGEX = re.compile(r"""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
+if TYPE_CHECKING:
+    from io import BufferedReader
+
+DTAID_REGEX = re.compile(rb"""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
 
 
-def get_dtaid(fd: TextIOWrapper) -> int:
+def get_dtaid(fd: BufferedReader) -> int:
     """
     Get the DTAID from the XML file before it is parsed.
 
@@ -26,7 +31,7 @@ def get_dtaid(fd: TextIOWrapper) -> int:
     raise DtaidNotFoundError
 
 
-def parse(fd: TextIOWrapper) -> etree.Element:
+def parse(fd: BufferedReader) -> etree.Element:
     parser = etree.XMLParser()
     dtaid = get_dtaid(fd)
     Lookup.DTAID = dtaid

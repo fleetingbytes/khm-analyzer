@@ -35,7 +35,7 @@ def cli() -> None:
 
 
 @cli.command("display", short_help="show text of tales")
-@argument("source_file", type=File())
+@argument("source_file", type=File(mode="rb"))
 @argument("tale", type=int)
 @option("-n", "--include-tale-number", is_flag=True)
 @option("-t", "--include-tale-title", is_flag=True)

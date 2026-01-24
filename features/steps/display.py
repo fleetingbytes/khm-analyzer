@@ -30,7 +30,7 @@ def display_tale(context: Context, tale: int, edition: Edition, volume: Volume) 
     path = get_source_path(context.source_directory, edition, volume)
     show_number: bool = getattr(context, "show_tale_number", False)
     show_title: bool = getattr(context, "show_tale_title", False)
-    with path.open(mode="r") as file:
+    with path.open(mode="rb") as file:
         context.displayed_tale: str = render_tale(
             file, tale, show_number=show_number, show_title=show_title
         )

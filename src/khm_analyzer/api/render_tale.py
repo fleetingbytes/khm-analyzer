@@ -12,14 +12,15 @@ from khm_analyzer.separators import (
 )
 
 if TYPE_CHECKING:
-    from click import File
+    from io import BufferedReader
+
     from lxml import etree
 
     from khm_analyzer.elements import Tale
 
 
 def render_tale(
-    source_file: File,
+    source_file: BufferedReader,
     tale_number: int,
     *,
     show_number: bool = False,
