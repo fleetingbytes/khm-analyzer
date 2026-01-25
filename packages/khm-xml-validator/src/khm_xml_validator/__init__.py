@@ -1,2 +1,3 @@
-def hello() -> str:
-    return "Hello from khm-xml-validator!"
+from khm_xml_validator.validation import check_xml
+
+__all__ = ("check_xml",)

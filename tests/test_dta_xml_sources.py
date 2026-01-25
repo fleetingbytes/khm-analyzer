@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from io import BytesIO
 
+from khm_downloader import get_download_link, get_source_document_as_raw_bytes
+from khm_enums import Edition, Volume
+from khm_xml_validator import check_xml
 from pytest import mark, param
-
-from khm_analyzer.download import get_download_link, get_source_document_as_raw_bytes
-from khm_analyzer.enums import Edition, Volume
-from khm_analyzer.validation import check_xml
 
 from .markers import xml_download
 

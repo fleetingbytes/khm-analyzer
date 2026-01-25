@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from warnings import catch_warnings
 
 from click import echo
-from khm_xml_validator.validation import check_xml
+from khm_xml_validator import check_xml
 from lxml import etree
 from readylog.decorators import debug_in
 
