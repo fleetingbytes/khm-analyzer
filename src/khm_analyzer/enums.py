@@ -16,3 +16,9 @@ class Edition(IntEnum):
     FIVE = auto()
     SIX = auto()
     SEVEN = auto()
+
+
+class ReturnCode(IntEnum):
+    OK = 0
+    ERROR = 1
+    INVALID_XML = 2

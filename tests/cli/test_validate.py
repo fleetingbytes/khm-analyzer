@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from pytest import mark, param
 
 from khm_analyzer.cli.cli import cli
-from khm_analyzer.return_code import ReturnCode
+from khm_analyzer.enums import ReturnCode
 
 if TYPE_CHECKING:
     from click.testing import CliRunner, Result

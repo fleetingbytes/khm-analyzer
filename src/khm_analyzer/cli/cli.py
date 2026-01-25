@@ -15,7 +15,7 @@ from khm_analyzer.cli.download_all_sources import download_all_sources
 from khm_analyzer.cli.download_source import download_source
 from khm_analyzer.cli.setup_logging import setup_logging
 from khm_analyzer.cli.validate import validate
-from khm_analyzer.return_code import ReturnCode
+from khm_analyzer.enums import ReturnCode
 
 if TYPE_CHECKING:
     from khm_analyzer.enums import Edition, Volume

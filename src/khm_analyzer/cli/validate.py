@@ -8,7 +8,7 @@ from click import echo
 from lxml import etree
 from readylog.decorators import debug_in
 
-from khm_analyzer.return_code import ReturnCode
+from khm_analyzer.enums import ReturnCode
 from khm_analyzer.validation import check_xml
 
 if TYPE_CHECKING:
