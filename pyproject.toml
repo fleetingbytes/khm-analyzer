@@ -14,6 +14,12 @@ dependencies = [
     "requests>=2.32.5",
     "readylog",
     "click>=8.3.1",
+    "khm-cli",
+    "khm-downloader",
+    "khm-enums",
+    "khm-parser",
+    "khm-renderer",
+    "khm-xml-validator",
 ]
 
 [tool.uv.workspace]
@@ -21,13 +27,15 @@ members = ["packages/*"]
 
 [tool.uv.sources]
 behave4khm-analyzer = { workspace = true }
+khm-cli = { workspace = true }
+khm-downloader = { workspace = true }
+khm-enums = { workspace = true }
 khm-parser = { workspace = true }
 khm-renderer = { workspace = true }
-khm-downloader = { workspace = true }
 khm-xml-validator = { workspace = true }
 
 [project.scripts]
-khm-analyzer = "khm_analyzer.cli:run"
+khm-analyzer = "khm_analyzer.run:run"
 
 [build-system]
 requires = ["uv_build>=0.9.0,<0.10.0"]

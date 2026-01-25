@@ -1,12 +1,12 @@
+from khm_enums import Edition, Volume
 from requests import Response, get
 
-from khm_analyzer.constants import (
+from khm_downloader.constants import (
     DOWNLOAD_LINK_BASE,
     EDITION_ONE_VOLUME_ONE_PUBLICATION_YEAR,
     EDITION_ONE_VOLUME_TWO_PUBLICATION_YEAR,
     EDITION_TO_PUBLICATION_YEAR_MAP,
 )
-from khm_analyzer.enums import Edition, Volume
 
 
 def get_source_document_as_raw_bytes(url: str) -> bytes:

@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 
 from click import echo
 
-from khm_analyzer.api import render_tale
-
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
@@ -19,12 +17,12 @@ def display(
 ) -> None:
     sentence_separator = "\n" if one_sentence_per_line else " "
 
-    kwargs = {
+    _kwargs = {
         "show_number": include_tale_number,
         "show_title": include_tale_title,
         "sentence_separator": sentence_separator,
     }
 
-    text: str = render_tale(source_file, tale_number, **kwargs)
+    text: str = "placeholder"
 
     echo(text)

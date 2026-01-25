@@ -1,29 +1,25 @@
 from __future__ import annotations
 
-from importlib.metadata import version as get_version
 from logging import getLogger
 from pathlib import Path
-from sys import modules
 from typing import TYPE_CHECKING
 
 from click import Context, File, argument, group, option, pass_context, version_option
 from click import Path as ClickPath
 
-from khm_analyzer.cli.callbacks import to_edition, to_volume
-from khm_analyzer.cli.display import display
-from khm_analyzer.cli.download_all_sources import download_all_sources
-from khm_analyzer.cli.download_source import download_source
-from khm_analyzer.cli.setup_logging import setup_logging
-from khm_analyzer.cli.validate import validate
-from khm_analyzer.enums import ReturnCode
+from khm_cli.callbacks import to_edition, to_volume
+from khm_cli.display import display
+from khm_cli.download_all_sources import download_all_sources
+from khm_cli.download_source import download_source
+from khm_cli.return_code import ReturnCode
+from khm_cli.validate import validate
 
 if TYPE_CHECKING:
-    from khm_analyzer.enums import Edition, Volume
+    from khm_enums import Edition, Volume
 
 MAX_HELP_CONTENT_WIDTH = 108
 
 logger = getLogger(__name__)
-setup_logging()
 
 
 @group(
@@ -72,10 +68,3 @@ def download_source_cli(edition: Edition, volume: Volume, file_path: Path) -> No
 @argument("directory", type=ClickPath(path_type=Path))
 def download_all_sources_cli(directory: Path) -> None:
     download_all_sources(directory)
-
-
-def run() -> None:
-    app_name = next(iter(modules[__name__].__spec__.parent.split(".")))
-    version = get_version(app_name)
-    logger.debug("Running %s version %s", app_name, version)
-    cli()

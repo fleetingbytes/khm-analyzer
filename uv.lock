@@ -6,8 +6,12 @@ requires-python = ">=3.13"
 members = [
     "behave4khm-analyzer",
     "khm-analyzer",
+    "khm-cli",
+    "khm-downloader",
+    "khm-enums",
     "khm-parser",
     "khm-renderer",
+    "khm-xml-validator",
 ]
 
 [[package]]
@@ -145,6 +149,12 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
+    { name = "khm-cli" },
+    { name = "khm-downloader" },
+    { name = "khm-enums" },
+    { name = "khm-parser" },
+    { name = "khm-renderer" },
+    { name = "khm-xml-validator" },
     { name = "lxml" },
     { name = "platformdirs" },
     { name = "readylog" },
@@ -164,6 +174,12 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.3.1" },
+    { name = "khm-cli", editable = "packages/khm-cli" },
+    { name = "khm-downloader", editable = "packages/khm-downloader" },
+    { name = "khm-enums", editable = "packages/khm-enums" },
+    { name = "khm-parser", editable = "packages/khm-parser" },
+    { name = "khm-renderer", editable = "packages/khm-renderer" },
+    { name = "khm-xml-validator", editable = "packages/khm-xml-validator" },
     { name = "lxml" },
     { name = "platformdirs", specifier = ">=4.3.8" },
     { name = "readylog" },
@@ -179,6 +195,21 @@ test = [
 ]
 
 [[package]]
+name = "khm-cli"
+version = "0.1.0"
+source = { editable = "packages/khm-cli" }
+
+[[package]]
+name = "khm-downloader"
+version = "0.1.0"
+source = { editable = "packages/khm-downloader" }
+
+[[package]]
+name = "khm-enums"
+version = "0.1.0"
+source = { editable = "packages/khm-enums" }
+
+[[package]]
 name = "khm-parser"
 version = "0.1.0"
 source = { editable = "packages/khm-parser" }
@@ -187,6 +218,11 @@ source = { editable = "packages/khm-parser" }
 name = "khm-renderer"
 version = "0.1.0"
 source = { editable = "packages/khm-renderer" }
+
+[[package]]
+name = "khm-xml-validator"
+version = "0.1.0"
+source = { editable = "packages/khm-xml-validator" }
 
 [[package]]
 name = "lxml"

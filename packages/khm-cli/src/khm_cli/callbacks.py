@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from khm_analyzer.enums import Edition, Volume
+from khm_enums import Edition, Volume
 
 if TYPE_CHECKING:
     from click import Context, Parameter

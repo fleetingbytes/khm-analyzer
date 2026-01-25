@@ -3,19 +3,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from click import open_file
+from khm_downloader import get_download_link, get_source_document_as_raw_bytes
 from readylog.decorators import debug_in
 
-from khm_analyzer.download import get_download_link, get_source_document_as_raw_bytes
+from khm_cli.utils import create_parent_dir_if_not_exists
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     from khm_analyzer.enums import Edition, Volume
-
-
-@debug_in
-def create_parent_dir_if_not_exists(file_path: Path) -> None:
-    file_path.parent.mkdir(parents=True, exist_ok=True)
 
 
 @debug_in

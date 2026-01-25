@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 from warnings import catch_warnings
 
 from click import echo
+from khm_xml_validator.validation import check_xml
 from lxml import etree
 from readylog.decorators import debug_in
 
-from khm_analyzer.enums import ReturnCode
-from khm_analyzer.validation import check_xml
+from khm_cli.return_code import ReturnCode
 
 if TYPE_CHECKING:
     from click import File
