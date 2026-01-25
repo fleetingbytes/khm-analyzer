@@ -23,6 +23,8 @@ members = ["packages/*"]
 behave4khm-analyzer = { workspace = true }
 khm-parser = { workspace = true }
 khm-renderer = { workspace = true }
+khm-downloader = { workspace = true }
+khm-xml-validator = { workspace = true }
 
 [project.scripts]
 khm-analyzer = "khm_analyzer.cli:run"
