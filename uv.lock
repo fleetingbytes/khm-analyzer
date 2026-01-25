@@ -7,6 +7,7 @@ members = [
     "behave4khm-analyzer",
     "khm-analyzer",
     "khm-parser",
+    "khm-renderer",
 ]
 
 [[package]]
@@ -181,6 +182,11 @@ test = [
 name = "khm-parser"
 version = "0.1.0"
 source = { editable = "packages/khm-parser" }
+
+[[package]]
+name = "khm-renderer"
+version = "0.1.0"
+source = { editable = "packages/khm-renderer" }
 
 [[package]]
 name = "lxml"
