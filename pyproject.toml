@@ -1,7 +1,7 @@
 [project]
 name = "khm-analyzer"
 version = "0.1.0"
-description = "Parse and render linguistically annotated editions of Grimm's Fairy Tales"
+description = "Helps you analyze linguistically annotated editions of Grimm's Fairy Tales"
 readme = "README.md"
 authors = [
     { name = "fleetingbytes", email = "7075397+fleetingbytes@users.noreply.github.com" }
@@ -21,6 +21,8 @@ members = ["packages/*"]
 
 [tool.uv.sources]
 behave4khm-analyzer = { workspace = true }
+khm-parser = { workspace = true }
+khm-renderer = { workspace = true }
 
 [project.scripts]
 khm-analyzer = "khm_analyzer.cli:run"
