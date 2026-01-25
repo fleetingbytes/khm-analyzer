@@ -1,7 +1,7 @@
 from itertools import product
 from pathlib import Path
 
-from khm_analyzer.enums import Edition, Volume
+from khm_enums import Edition, Volume
 
 
 def check_presence_of_source_files(directory: Path) -> None:

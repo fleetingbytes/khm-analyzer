@@ -10,8 +10,7 @@ from khm_analyzer.api import render_title
 
 if TYPE_CHECKING:
     from behave.runner import Context
-
-    from khm_analyzer.enums import Edition, Volume
+    from khm_enums import Edition, Volume
 
 
 register_type(**MATCHING_TYPES)

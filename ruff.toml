@@ -1,5 +1,7 @@
 line-length = 108
 
+src = [".", "src", "packages/*"]
+
 [format]
 line-ending = "lf"
 docstring-code-format = true

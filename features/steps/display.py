@@ -12,8 +12,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from behave.runner import Context
-
-    from khm_analyzer.enums import Edition, Volume
+    from khm_enums import Edition, Volume
 
 
 register_type(**MATCHING_TYPES)
