@@ -5,7 +5,7 @@ from os import SEEK_SET
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from khm_analyzer.constants import ELEMENTS_MAP
+from khm_parser.constants import ELEMENTS_MAP
 
 if TYPE_CHECKING:
     from io import IOBase, TextIOWrapper

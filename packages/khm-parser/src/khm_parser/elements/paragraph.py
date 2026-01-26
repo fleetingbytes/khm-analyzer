@@ -1,13 +1,21 @@
-from collections.abc import Iterable
-from io import StringIO
+from __future__ import annotations
 
-from ..bases import LineGroupBase, ParagraphBase, SentencePartBase
-from ..namespace import NAMESPACE_MAP
+from io import StringIO
+from typing import TYPE_CHECKING
+
+from khm_parser.bases import ParagraphBase
+from khm_parser.composites.sentence import Sentence
+from khm_parser.namespace import NAMESPACE_MAP
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from khm_parser.elements.linegroup import LineGroup
 
 
 class Paragraph(ParagraphBase):
     @property
-    def sentences_and_linegroups(self) -> Iterable[SentencePartBase | LineGroupBase]:
+    def sentences_and_linegroups(self) -> Iterable[Sentence | LineGroup]:
         xpath = ".//ns:s[not(ancestor::ns:lg)] | .//ns:lg"
         yield from self.xpath(xpath, namespaces=NAMESPACE_MAP)
 
@@ -16,7 +24,7 @@ class Paragraph(ParagraphBase):
         start_of_trailing_space_after_last_element: int = buffer.tell()
 
         for sentence_or_linegroup in self.sentences_and_linegroups:
-            if isinstance(sentence_or_linegroup, SentencePartBase):
+            if isinstance(sentence_or_linegroup, Sentence):
                 sentence = sentence_or_linegroup
                 start_of_trailing_space_after_last_element = self.write_element(
                     sentence, sentence_separator, buffer

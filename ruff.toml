@@ -1,6 +1,6 @@
 line-length = 108
 
-src = [".", "src", "packages/*"]
+src = [".", "src", "packages/*/src"]
 
 [format]
 line-ending = "lf"
@@ -42,14 +42,14 @@ extend-safe-fixes = [
 ]
 
 [lint.per-file-ignores]
-"src/khm_analyzer/cli/setup_logging.py" = [
+"src/khm_analyzer/setup_logging.py" = [
     "N813",  # camelcase-imported-as-lowercase
 ]
 "tests/cli/test_validate.py" = [
     "PLR0913",  # too-many-arguments-in-function-definition
     "PLR0917",  # too-many-positional-arguments
 ]
-"src/khm_analyzer/elements/tale.py" = [
+"packages/khm-parser/src/khm_parser/elements/tale.py" = [
     "PLR0913",  # too-many-arguments-in-function-definition
 ]
 "src/khm_analyzer/api/*.py" = [

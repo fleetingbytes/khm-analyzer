@@ -3,9 +3,10 @@ from __future__ import annotations
 from textwrap import dedent
 from typing import TYPE_CHECKING
 
+from pytest import mark, param
+
 from khm_cli.cli import cli
 from khm_cli.return_code import ReturnCode
-from pytest import mark, param
 
 if TYPE_CHECKING:
     from click.testing import CliRunner, Result

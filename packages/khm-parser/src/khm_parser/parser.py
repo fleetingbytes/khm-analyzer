@@ -5,13 +5,16 @@ from typing import TYPE_CHECKING
 
 from lxml import etree
 
-from .errors import DtaIdNotFoundError
-from .lookup import Lookup
-from .namespace import NAMESPACE_MAP
-from .utils import set_stream_position_to_the_start
+from khm_parser.errors import DtaIdNotFoundError
+from khm_parser.lookup import Lookup
+from khm_parser.namespace import NAMESPACE_MAP
+from khm_parser.utils import set_stream_position_to_the_start
 
 if TYPE_CHECKING:
     from io import BufferedReader
+    from pathlib import Path
+
+    from khm_parser.elements import Tale
 
 DTAID_REGEX = re.compile(rb"""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
 
@@ -47,3 +50,10 @@ def get_fairy_tale(root: etree.Element, n: int) -> etree.Element | None:
     results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
     tale = next(iter(results)) if results else None
     return tale
+
+
+def parse_tale(path: Path, tale_number: int) -> Tale:
+    with path.open("rb") as file:
+        root: etree.Element = parse(file)
+        tale: Tale = get_fairy_tale(root, tale_number)
+        return tale

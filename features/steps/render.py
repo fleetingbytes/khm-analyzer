@@ -2,22 +2,45 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from behave import register_type, when
-from behave4khm_analyzer.matching_types import MATCHING_TYPES
-from behave4khm_analyzer.utils import get_source_path
+from behave import given, register_type, then, when
 
-from khm_analyzer.api import render_title
+from behave4khm_analyzer.matching_types import MATCHING_TYPES
+from behave4khm_analyzer.utils import check_presence_of_source_files, get_source_path
+from khm_parser import parse_tale
+from khm_renderer import render_head
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from behave.runner import Context
+
     from khm_enums import Edition, Volume
+    from khm_parser.elements import Tale
 
 
 register_type(**MATCHING_TYPES)
 
 
-@when("I render the title of the tale {tale:d} from edition {edition:Edition}, volume {volume:Volume}")
-def render_title_of_tale(context: Context, tale: int, edition: Edition, volume: Volume) -> None:
+@given("source documents in directory {directory:Path}")
+def source_documents_in_directory(context: Context, directory: Path) -> None:
+    check_presence_of_source_files(directory)
+    context.source_directory = directory
+
+
+@given("I parse the tale {tale:d} from edition {edition:Edition}, volume {volume:Volume}")
+def parse_tale_impl(context: Context, tale: int, edition: Edition, volume: Volume) -> None:
     path = get_source_path(context.source_directory, edition, volume)
-    with path.open(mode="rb") as file:
-        context.output: str = render_title(file, tale)
+    context.tale: Tale = parse_tale(path, tale)
+
+
+@when("I render the head of the tale")
+def render_title_of_tale(context: Context) -> None:
+    tale: Tale = context.tale
+    context.output: str = render_head(tale)
+
+
+@then("the output starts with {out:Rest}")
+def output_starts_with(context: Context, out: str) -> None:
+    assert context.output.startswith(out), (
+        f'expected the displayed tale to start with "{out}", but found "{context.output[: len(out)]}"'
+    )

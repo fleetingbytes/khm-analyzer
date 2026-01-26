@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-from io import StringIO
 from typing import TYPE_CHECKING
 
-from ..bases import SentencePartBase, WordPartBase
-from ..composites import Word
-from ..corrections import CorrectionId, corrections
-from ..separators import DEFAULT_WORD_SEPARATOR
+from khm_parser.bases import SentencePartBase, WordPartBase
+from khm_parser.composites import Word
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Iterable
@@ -34,23 +31,3 @@ class SentencePart(SentencePartBase):
     def has_a_following_part(self) -> bool:
         following_part = self.get("next", None)
         return bool(following_part)
-
-    @property
-    def correction_id(self) -> CorrectionId:
-        return CorrectionId(self.DTAID, self.xmlid)
-
-    def make_arbitrary_correction(self, buffer: StringIO) -> StringIO:
-        correction_function = corrections.get(self.correction_id)
-        if correction_function:
-            buffer = correction_function(buffer)
-        return buffer
-
-    def render(self, word_separator: str | None = None, **kwargs) -> str:
-        if word_separator is None:
-            word_separator = DEFAULT_WORD_SEPARATOR
-
-        buffer = StringIO(word_separator.join(map(lambda word: word.render(**kwargs), self.words)))
-
-        corrected_buffer = self.make_arbitrary_correction(buffer)
-
-        return corrected_buffer.getvalue()

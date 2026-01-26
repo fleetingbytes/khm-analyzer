@@ -2,23 +2,18 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ..bases import TitleBase
-from ..composites import Sentence
-from ..separators import (
-    DEFAULT_SENTENCE_PART_SEPARATOR,
-    DEFAULT_WORD_PART_SEPARATOR,
-    DEFAULT_WORD_SEPARATOR,
-)
-from .sentence_part import SentencePart
+from khm_parser.bases import HeadBase
+from khm_parser.composites import Sentence
+from khm_parser.elements.sentence_part import SentencePart
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
 
-class Title(TitleBase):
+class Head(HeadBase):
     @property
     def sentence_parts(self) -> list[SentencePart]:
-        result = list(self.iterdescendants(tag=SentencePart.TAG))
+        result: list[SentencePart] = list(self.iterdescendants(tag=SentencePart.TAG))
         return result
 
     @property
@@ -48,26 +43,3 @@ class Title(TitleBase):
             return tale_number
         except TypeError:
             return None
-
-    def render(
-        self,
-        sentence_part_separator: str | None = None,
-        word_separator: str | None = None,
-        word_part_separator: str | None = None,
-    ) -> str:
-        sentence_part_separator = (
-            sentence_part_separator
-            if sentence_part_separator is not None
-            else DEFAULT_SENTENCE_PART_SEPARATOR
-        )
-        word_separator = word_separator if word_separator is not None else DEFAULT_WORD_SEPARATOR
-        word_part_separator = (
-            word_part_separator if word_part_separator is not None else DEFAULT_WORD_PART_SEPARATOR
-        )
-
-        sentence = Sentence(*self.title_sentence_parts)
-        return sentence.render(
-            sentence_part_separator=sentence_part_separator,
-            word_separator=word_separator,
-            word_part_separator=word_part_separator,
-        )

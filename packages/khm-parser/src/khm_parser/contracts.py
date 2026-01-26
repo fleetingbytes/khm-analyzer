@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-
-class Renderable(ABC):
-    @abstractmethod
-    def render(self, **kwargs) -> str: ...
+    from khm_parser.composites.sentence import Sentence
+    from khm_parser.composites.word import Word
+    from khm_parser.elements.line import Line
+    from khm_parser.elements.linegroup import LineGroup
 
 
 class CompositePart(ABC):
@@ -22,36 +22,39 @@ class CompositePart(ABC):
     def is_the_final_part(self) -> bool: ...
 
 
-class AbstractTale(Renderable):
+class AbstractTale(ABC):
     @abstractmethod
     def metadata(self, **kwargs) -> str: ...
 
 
-class AbstractTitle(Renderable):
+class AbstractHead(ABC):
     @property
     @abstractmethod
     def number(self): ...
 
 
-class AbstractParagraph(Renderable): ...
-
-
-class AbstractLineGroup(Renderable):
+class AbstractParagraph:
     @property
     @abstractmethod
-    def lines(self) -> Iterable[AbstractLine]: ...
+    def sentences_and_linegroups(self) -> Iterable[Sentence | LineGroup]: ...
 
 
-class AbstractLine(Renderable): ...
-
-
-class AbstractSentencePart(Renderable, CompositePart):
+class AbstractLineGroup(ABC):
     @property
     @abstractmethod
-    def words(self) -> Iterable[Renderable]: ...
+    def lines(self) -> Iterable[Line]: ...
 
 
-class AbstractWordPart(Renderable, CompositePart):
+class AbstractLine: ...
+
+
+class AbstractSentencePart(CompositePart):
+    @property
+    @abstractmethod
+    def words(self) -> Iterable[Word]: ...
+
+
+class AbstractWordPart(CompositePart):
     @property
     @abstractmethod
     def is_a_part_before_page_break(self) -> bool: ...

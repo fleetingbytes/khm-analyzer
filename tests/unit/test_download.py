@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from pytest import mark, param
+
 from khm_downloader.download import get_download_link, get_source_document_as_raw_bytes, publication_year
 from khm_enums import Edition, Volume
-from pytest import mark, param
 
 
 @mark.parametrize(

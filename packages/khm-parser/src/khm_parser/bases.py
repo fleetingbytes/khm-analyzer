@@ -5,17 +5,16 @@ from typing import TYPE_CHECKING, ClassVar
 
 from lxml import etree
 
-from .contracts import (
+from khm_parser.contracts import (
+    AbstractHead,
     AbstractLine,
     AbstractLineGroup,
     AbstractParagraph,
     AbstractSentencePart,
     AbstractTale,
-    AbstractTitle,
     AbstractWordPart,
-    Renderable,
 )
-from .namespace import any_namespace, xml_namespace
+from khm_parser.namespace import any_namespace, xml_namespace
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -70,51 +69,50 @@ class HasTrailingSpaceMixin:
         return cookie
 
 
-class KHMElement(PrettyPrintMixin, etree.ElementBase, ABC):
+class KhmElement(PrettyPrintMixin, etree.ElementBase, ABC):
     TAG: ClassVar[str] = abstractmethod(lambda cls: NotImplementedError)
 
 
-class TaleBase(KHMElement, AbstractTale):
+class TaleBase(KhmElement, AbstractTale):
     TAG = any_namespace("div")
 
 
-class TitleBase(KHMElement, AbstractTitle):
+class HeadBase(KhmElement, AbstractHead):
     TAG = any_namespace("head")
 
 
-class ParagraphBase(KHMElement, HasSentencesMixin, HasTrailingSpaceMixin, AbstractParagraph):
+class ParagraphBase(KhmElement, HasSentencesMixin, HasTrailingSpaceMixin, AbstractParagraph):
     TAG = any_namespace("p")
 
 
-class LineGroupBase(KHMElement, HasTrailingSpaceMixin, AbstractLineGroup):
+class LineGroupBase(KhmElement, HasTrailingSpaceMixin, AbstractLineGroup):
     TAG = any_namespace("lg")
 
 
-class LineBase(KHMElement, HasSentencesMixin, AbstractLine):
+class LineBase(KhmElement, HasSentencesMixin, AbstractLine):
     TAG = any_namespace("l")
 
 
-class CompositeBase[PartT](Renderable):
+class CompositeBase[PartT](KhmElement):
     def __init__(self, *args: PartT) -> None:
-        self.parts: tuple[PartT, ...] = tuple(args)
+        self._parts: tuple[PartT, ...] = tuple(args)
 
-    def render(self, *, part_separator: str | None = None, **kwargs) -> str:
-        if part_separator is None:
-            part_separator: str = " "
-        return part_separator.join(part.render() for part in self.parts)
+    @property
+    def parts(self) -> Iterable[PartT]:
+        return self._parts
 
 
 class SentenceBase(CompositeBase["SentencePart"]): ...
 
 
-class SentencePartBase(KHMElement, XmlIdMixin, AbstractSentencePart):
+class SentencePartBase(KhmElement, XmlIdMixin, AbstractSentencePart):
     TAG = any_namespace("s")
 
 
-class WordBase(CompositeBase["WordPart"], Renderable): ...
+class WordBase(CompositeBase["WordPart"]): ...
 
 
-class WordPartBase(KHMElement, XmlIdMixin, AbstractWordPart):
+class WordPartBase(KhmElement, XmlIdMixin, AbstractWordPart):
     TAG = any_namespace("w")
 
     @property
