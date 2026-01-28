@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from behave.runner import Context
 
     from khm_enums import Edition, Volume
-    from khm_parser.elements import Tale
+    from khm_parser.elements import Head, Tale
 
 
 register_type(**MATCHING_TYPES)
@@ -36,7 +36,8 @@ def parse_tale_impl(context: Context, tale: int, edition: Edition, volume: Volum
 @when("I render the head of the tale")
 def render_title_of_tale(context: Context) -> None:
     tale: Tale = context.tale
-    context.output: str = render_head(tale)
+    head: Head = tale.head
+    context.output: str = render_head(head)
 
 
 @then("the output starts with {out:Rest}")
