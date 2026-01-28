@@ -1,6 +1,6 @@
 from lxml import etree
 
-from .utils import get_class_with_dtaid
+from khm_parser.utils import get_class_with_dtaid
 
 
 class Lookup(etree.CustomElementClassLookup):

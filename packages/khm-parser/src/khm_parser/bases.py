@@ -18,7 +18,24 @@ from khm_parser.namespace import any_namespace, xml_namespace
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
-    from io import StringIO
+
+
+class CompositeBase[PartT]:
+    def __init__(self, *args: PartT) -> None:
+        self._parts: tuple[PartT, ...] = tuple(args)
+
+    @property
+    def parts(self) -> Iterable[PartT]:
+        return self._parts
+
+    def __len__(self) -> int:
+        return len(self.parts)
+
+
+class SentenceBase(CompositeBase["SentencePart"]): ...
+
+
+class WordBase(CompositeBase["WordPart"]): ...
 
 
 class PrettyPrintMixin:
@@ -34,41 +51,6 @@ class XmlIdMixin:
         return xml_id
 
 
-class HasSentencesMixin:
-    @property
-    def sentences(self) -> Iterable[SentencePartBase]:
-        yield from self.iterdescendants(tag=SentencePartBase.TAG)
-
-    @classmethod
-    def add_space_after_sentence(
-        cls, sentence: SentencePartBase, separator: str, buffer: StringIO
-    ) -> StringIO:
-        if not sentence.has_a_following_part:
-            buffer.write(separator)
-        return buffer
-
-
-class HasTrailingSpaceMixin:
-    @classmethod
-    def strip_trailing_space(
-        cls, start_of_trailing_space_after_last_element: int, buffer: StringIO
-    ) -> StringIO:
-        buffer.seek(start_of_trailing_space_after_last_element)
-        buffer.truncate()
-        return buffer
-
-    @classmethod
-    def write_element(
-        cls,
-        element: SentencePartBase | LineGroupBase | LineBase,
-        sentence_separator: str,
-        buffer: StringIO,
-    ) -> int:
-        buffer.write(element.render(sentence_separator=sentence_separator))
-        cookie = buffer.tell()
-        return cookie
-
-
 class KhmElement(PrettyPrintMixin, etree.ElementBase, ABC):
     TAG: ClassVar[str] = abstractmethod(lambda cls: NotImplementedError)
 
@@ -81,35 +63,20 @@ class HeadBase(KhmElement, AbstractHead):
     TAG = any_namespace("head")
 
 
-class ParagraphBase(KhmElement, HasSentencesMixin, HasTrailingSpaceMixin, AbstractParagraph):
+class ParagraphBase(KhmElement, AbstractParagraph):
     TAG = any_namespace("p")
 
 
-class LineGroupBase(KhmElement, HasTrailingSpaceMixin, AbstractLineGroup):
+class LineGroupBase(KhmElement, AbstractLineGroup):
     TAG = any_namespace("lg")
 
 
-class LineBase(KhmElement, HasSentencesMixin, AbstractLine):
+class LineBase(KhmElement, AbstractLine):
     TAG = any_namespace("l")
-
-
-class CompositeBase[PartT](KhmElement):
-    def __init__(self, *args: PartT) -> None:
-        self._parts: tuple[PartT, ...] = tuple(args)
-
-    @property
-    def parts(self) -> Iterable[PartT]:
-        return self._parts
-
-
-class SentenceBase(CompositeBase["SentencePart"]): ...
 
 
 class SentencePartBase(KhmElement, XmlIdMixin, AbstractSentencePart):
     TAG = any_namespace("s")
-
-
-class WordBase(CompositeBase["WordPart"]): ...
 
 
 class WordPartBase(KhmElement, XmlIdMixin, AbstractWordPart):

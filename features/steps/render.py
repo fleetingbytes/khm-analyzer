@@ -7,15 +7,17 @@ from behave import given, register_type, then, when
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
 from behave4khm_analyzer.utils import check_presence_of_source_files, get_source_path
 from khm_parser import parse_tale
-from khm_renderer import render_head
+from khm_renderer import render_tale_head, render_tale_number, render_tale_title
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
     from pathlib import Path
 
     from behave.runner import Context
 
     from khm_enums import Edition, Volume
-    from khm_parser.elements import Head, Tale
+    from khm_parser.composites import Sentence
+    from khm_parser.elements import Head, Tale, WordPart
 
 
 register_type(**MATCHING_TYPES)
@@ -33,15 +35,29 @@ def parse_tale_impl(context: Context, tale: int, edition: Edition, volume: Volum
     context.tale: Tale = parse_tale(path, tale)
 
 
-@when("I render the head of the tale")
+@when("I render the number of the tale")
+def render_number_of_tale(context: Context) -> None:
+    tale: Tale = context.tale
+    number: WordPart = tale.number
+    context.output: str = render_tale_number(number)
+
+
+@when("I render the title of the tale")
 def render_title_of_tale(context: Context) -> None:
     tale: Tale = context.tale
+    title: Generator[Sentence] = tale.title
+    context.output: str = render_tale_title(title)
+
+
+@when("I render the head of the tale")
+def render_head_of_tale(context: Context) -> None:
+    tale: Tale = context.tale
     head: Head = tale.head
-    context.output: str = render_head(head)
+    context.output: str = render_tale_head(head)
 
 
-@then("the output starts with {out:Rest}")
+@then("the output is {out:Rest}")
 def output_starts_with(context: Context, out: str) -> None:
-    assert context.output.startswith(out), (
-        f'expected the displayed tale to start with "{out}", but found "{context.output[: len(out)]}"'
+    assert context.output == out, (
+        f'expected the displayed tale to start with "{out}", but found "{context.output}"'
     )

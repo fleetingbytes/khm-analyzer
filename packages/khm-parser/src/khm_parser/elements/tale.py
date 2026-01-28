@@ -7,7 +7,8 @@ from khm_parser.bases import HeadBase, ParagraphBase, TaleBase
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from khm_parser.elements import Head, Paragraph
+    from khm_parser.composites import Sentence
+    from khm_parser.elements import Head, Paragraph, WordPart
 
 
 class Tale(TaleBase):
@@ -18,3 +19,11 @@ class Tale(TaleBase):
     @property
     def paragraphs(self) -> Generator[Paragraph]:
         yield from self.iter(tag=ParagraphBase.TAG)
+
+    @property
+    def number(self) -> WordPart:
+        return self.head.number
+
+    @property
+    def title(self) -> Generator[Sentence]:
+        yield from self.head.title

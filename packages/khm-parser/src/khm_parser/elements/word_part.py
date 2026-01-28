@@ -38,18 +38,14 @@ class WordPart(WordPartBase):
     @property
     def normalized_transcription(self) -> str:
         normalized = self.get("norm", default="")
-        return normalized
+        contracted = self.contract_final_es(normalized)
+        return contracted
 
     @staticmethod
     def contract_final_es(transcribed_word: str) -> str:
         if transcribed_word.endswith("_es"):
             return transcribed_word.replace("_e", "")
         return transcribed_word
-
-    def render(self) -> str:
-        normalized = self.normalized_transcription
-        contracted = self.contract_final_es(normalized)
-        return contracted
 
     @property
     def is_the_final_part(self) -> bool:

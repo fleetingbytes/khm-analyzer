@@ -4,12 +4,14 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Generator
 
     from khm_parser.composites.sentence import Sentence
     from khm_parser.composites.word import Word
+    from khm_parser.elements.head import Head
     from khm_parser.elements.line import Line
     from khm_parser.elements.linegroup import LineGroup
+    from khm_parser.elements.paragraph import Paragraph
 
 
 class CompositePart(ABC):
@@ -23,26 +25,43 @@ class CompositePart(ABC):
 
 
 class AbstractTale(ABC):
+    @property
     @abstractmethod
-    def metadata(self, **kwargs) -> str: ...
+    def head(self) -> Head: ...
+
+    @property
+    @abstractmethod
+    def paragraphs(self) -> Generator[Paragraph]: ...
+
+    @property
+    @abstractmethod
+    def number(self) -> int: ...
+
+    @property
+    @abstractmethod
+    def title(self) -> Generator[Sentence]: ...
 
 
 class AbstractHead(ABC):
     @property
     @abstractmethod
-    def number(self): ...
+    def number(self) -> Word: ...
+
+    @property
+    @abstractmethod
+    def title(self) -> Generator[Sentence]: ...
 
 
 class AbstractParagraph:
     @property
     @abstractmethod
-    def sentences_and_linegroups(self) -> Iterable[Sentence | LineGroup]: ...
+    def sentences_and_linegroups(self) -> Generator[Sentence | LineGroup]: ...
 
 
 class AbstractLineGroup(ABC):
     @property
     @abstractmethod
-    def lines(self) -> Iterable[Line]: ...
+    def lines(self) -> Generator[Line]: ...
 
 
 class AbstractLine: ...
@@ -51,7 +70,7 @@ class AbstractLine: ...
 class AbstractSentencePart(CompositePart):
     @property
     @abstractmethod
-    def words(self) -> Iterable[Word]: ...
+    def words(self) -> Generator[Word]: ...
 
 
 class AbstractWordPart(CompositePart):
