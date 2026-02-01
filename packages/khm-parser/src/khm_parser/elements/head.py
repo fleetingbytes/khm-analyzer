@@ -16,8 +16,8 @@ class Head(HeadBase):
     @property
     def number(self) -> WordPart:
         first_sentence_part: SentencePart = next(iter(self.sentence_parts))
-        first_word: Word = next(iter(first_sentence_part.words))
-        first_word_part: WordPart = next(iter(first_word.parts))
+        first_word: Word = next(first_sentence_part.words)
+        first_word_part: WordPart = next(iter(first_word))
         return first_word_part
 
     @property

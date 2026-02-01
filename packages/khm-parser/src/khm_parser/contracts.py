@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -67,10 +68,13 @@ class AbstractLineGroup(ABC):
 class AbstractLine: ...
 
 
-class AbstractSentencePart(CompositePart):
+class AbstractSentencePart(CompositePart, Iterable):
     @property
     @abstractmethod
     def words(self) -> Generator[Word]: ...
+
+    @abstractmethod
+    def __iter__(self) -> Iterator[Word]: ...
 
 
 class AbstractWordPart(CompositePart):
@@ -89,3 +93,11 @@ class AbstractWordPart(CompositePart):
     @property
     @abstractmethod
     def joins_word_right(self) -> bool: ...
+
+    @property
+    @abstractmethod
+    def is_the_final_part(self) -> bool: ...
+
+    @property
+    @abstractmethod
+    def normalized_transcription(self) -> str: ...

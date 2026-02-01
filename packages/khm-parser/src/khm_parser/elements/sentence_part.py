@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from khm_parser.bases import SentencePartBase, WordPartBase
-from khm_parser.composites import Word
+from khm_parser.composites import Word, compose
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Iterable
@@ -16,12 +16,7 @@ class SentencePart(SentencePartBase):
 
     @property
     def words(self) -> Generator[Word]:
-        parts = list()
-        for word_part in self.word_parts:
-            parts.append(word_part)
-            if word_part.is_the_final_part:
-                yield Word(*parts)
-                parts.clear()
+        yield from compose(Word, self.word_parts)
 
     @property
     def is_the_final_part(self) -> bool:

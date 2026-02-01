@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Callable
 from dataclasses import dataclass
 from io import StringIO
 
@@ -14,6 +17,8 @@ def add_space_at_the_end(buffer: StringIO):
     buffer.write(" ")
     return buffer
 
+
+Corrections = dict[CorrectionId, Callable[[StringIO], StringIO]]
 
 corrections = {
     CorrectionId(KHM_ED1_VOL1, "s112"): add_space_at_the_end,

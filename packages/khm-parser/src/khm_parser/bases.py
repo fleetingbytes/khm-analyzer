@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING, ClassVar
 
 from lxml import etree
@@ -17,19 +18,23 @@ from khm_parser.contracts import (
 from khm_parser.namespace import any_namespace, xml_namespace
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from khm_parser.composites.word import Word
+    from khm_parser.elements.paragraph import Paragraph
 
 
-class CompositeBase[PartT]:
+class CompositeBase[PartT](Iterable):
     def __init__(self, *args: PartT) -> None:
         self._parts: tuple[PartT, ...] = tuple(args)
 
     @property
-    def parts(self) -> Iterable[PartT]:
+    def parts(self) -> tuple[PartT]:
         return self._parts
 
     def __len__(self) -> int:
         return len(self.parts)
+
+    def __iter__(self) -> Iterator[PartT]:
+        return iter(self._parts)
 
 
 class SentenceBase(CompositeBase["SentencePart"]): ...
@@ -55,8 +60,11 @@ class KhmElement(PrettyPrintMixin, etree.ElementBase, ABC):
     TAG: ClassVar[str] = abstractmethod(lambda cls: NotImplementedError)
 
 
-class TaleBase(KhmElement, AbstractTale):
+class TaleBase(KhmElement, AbstractTale, Iterable):
     TAG = any_namespace("div")
+
+    def __iter__(self) -> Iterator[Paragraph]:
+        return iter(self.paragraphs)
 
 
 class HeadBase(KhmElement, AbstractHead):
@@ -78,10 +86,9 @@ class LineBase(KhmElement, AbstractLine):
 class SentencePartBase(KhmElement, XmlIdMixin, AbstractSentencePart):
     TAG = any_namespace("s")
 
+    def __iter__(self) -> Iterator[Word]:
+        yield from self.words
+
 
 class WordPartBase(KhmElement, XmlIdMixin, AbstractWordPart):
     TAG = any_namespace("w")
-
-    @property
-    @abstractmethod
-    def is_the_final_part(self) -> bool: ...

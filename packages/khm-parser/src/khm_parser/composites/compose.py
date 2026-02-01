@@ -13,5 +13,5 @@ def compose[ResultT, PartT](typ: type[CompositeBase[ResultT]], parts: Iterable[P
     for part in parts:
         parts_list.append(part)
         if part.is_the_final_part:
-            yield typ(*parts)
+            yield typ(*parts_list)
             parts_list.clear()
