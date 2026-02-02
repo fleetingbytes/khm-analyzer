@@ -31,10 +31,18 @@ class CompositeBase[PartT](Iterable):
         return self._parts
 
     def __len__(self) -> int:
-        return len(self.parts)
+        return len(self._parts)
 
     def __iter__(self) -> Iterator[PartT]:
         return iter(self._parts)
+
+    @property
+    def last_part(self) -> PartT:
+        return next(iter(reversed(self._parts)))
+
+    @property
+    def id(self) -> str:
+        return "-".join(part.xmlid for part in self)
 
 
 class SentenceBase(CompositeBase["SentencePart"]): ...

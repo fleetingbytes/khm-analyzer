@@ -58,6 +58,4 @@ def render_head_of_tale(context: Context) -> None:
 
 @then("the output is {out:Rest}")
 def output_starts_with(context: Context, out: str) -> None:
-    assert context.output == out, (
-        f'expected the displayed tale to start with "{out}", but found "{context.output}"'
-    )
+    assert context.output == out, f'expected the output to be "{out}", but found "{context.output}"'

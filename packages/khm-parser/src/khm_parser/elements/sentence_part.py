@@ -26,3 +26,7 @@ class SentencePart(SentencePartBase):
     def has_a_following_part(self) -> bool:
         following_part = self.get("next", None)
         return bool(following_part)
+
+    @property
+    def last_word(self) -> Word:
+        return next(reversed(tuple(self.words)))
