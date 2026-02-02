@@ -362,11 +362,11 @@ wheels = [
 
 [[package]]
 name = "readylog"
-version = "0.3.0"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a8/91/e6b36be88f27c08be5922309cb2f0d4c81de52a6072152d1e4ec0aa6e4e2/readylog-0.3.0.tar.gz", hash = "sha256:19e19e5d7a860e7a37d5c7e25e8e4720b21d65a15c311bdce760d0a610026050", size = 2667, upload-time = "2026-02-02T03:01:38.513Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/dd/30/50091d4fbb0495429e5d2895c9908ad5846067c16cb5fa05d41d653035bb/readylog-0.4.0.tar.gz", hash = "sha256:bbc88d0ae5526f3b6da81f7cfcf970f4d29652ab908e3d3db4cda08e0c27c803", size = 2658, upload-time = "2026-02-02T04:36:06.007Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/12/696727088262f07806b9625ae4821365e80c6588b083bd70a24501d2cd00/readylog-0.3.0-py3-none-any.whl", hash = "sha256:291c2bffdc32ed62cf4ef35f50493c195b967a113ae7a2eaf4548e0cb9de3d3a", size = 3779, upload-time = "2026-02-02T03:01:37.032Z" },
+    { url = "https://files.pythonhosted.org/packages/46/24/7f409bafc2dabb0847d799ade087f46f19db26382e58c8740a9df93a7750/readylog-0.4.0-py3-none-any.whl", hash = "sha256:7ecb7977fa222fb0c74b1017868fbb604a27c7e2b898fca6b5a7bd486d318e0b", size = 3771, upload-time = "2026-02-02T04:36:04.963Z" },
 ]
 
 [[package]]
