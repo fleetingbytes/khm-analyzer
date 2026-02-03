@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from io import StringIO
 from logging import getLogger
 
+from khm_parser.utils import shorten_stream_by
+
 from .dtaids import KHM_ED1_VOL1
 
 logger = getLogger(__name__)
@@ -21,10 +23,9 @@ def add_space_at_the_end(buffer: StringIO) -> StringIO:
     return buffer
 
 
-def remove_space_at_the_end(buffer: StringIO) -> StringIO:
-    logger.debug("Correction: Remove space at the end of the buffer")
-    position = buffer.tell()
-    buffer.truncate(position - 1)
+def remove_final_char(buffer: StringIO) -> StringIO:
+    logger.debug("Correction: Remove one character at the end of the buffer")
+    shorten_stream_by(1, buffer)
     return buffer
 
 
@@ -35,5 +36,5 @@ default_corrections = {
     CorrectionId(KHM_ED1_VOL1, "s112_2"): add_space_at_the_end,
     CorrectionId(KHM_ED1_VOL1, "s939"): add_space_at_the_end,
     CorrectionId(KHM_ED1_VOL1, "s939_2"): add_space_at_the_end,
-    CorrectionId(KHM_ED1_VOL1, "sffb_2"): remove_space_at_the_end,
+    CorrectionId(KHM_ED1_VOL1, "sffb_2"): remove_final_char,
 }

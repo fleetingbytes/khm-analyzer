@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from logging import getLogger
-from os import SEEK_SET
+from os import SEEK_END, SEEK_SET
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -22,9 +22,29 @@ def get_class_with_dtaid(tag_name: str, dtaid: int, default: None = None) -> KHM
     return cls
 
 
-def set_stream_position_to_the_start(buffer: IOBase) -> None:
-    logger.debug("Position reset to start in %s", get_file_name_from_buffer(buffer))
-    _ = buffer.seek(0, SEEK_SET)
+def set_stream_position_to_the_start(buffer: IOBase) -> int:
+    logger.debug("Position reset to start of %s", get_file_name_from_buffer(buffer))
+    new_position = buffer.seek(0, SEEK_SET)
+    return new_position
+
+
+def set_stream_position_to_the_end(buffer: IOBase) -> int:
+    logger.debug("Position reset to the end of %s", get_file_name_from_buffer(buffer))
+    new_position = buffer.seek(0, SEEK_END)
+    return new_position
+
+
+def set_stream_position(position: int, buffer: IOBase) -> int:
+    logger.debug("Position reset to %d in %s", position, get_file_name_from_buffer(buffer))
+    new_position = buffer.seek(position, SEEK_SET)
+    return new_position
+
+
+def shorten_stream_by(num: int, buffer: IOBase) -> None:
+    position = set_stream_position_to_the_end(buffer)
+    logger.debug("Truncating stream %s at position %d", get_file_name_from_buffer(buffer), num)
+    new_buffer_end_position = buffer.truncate(position - num)
+    set_stream_position(new_buffer_end_position, buffer)
 
 
 def get_file_name_from_buffer(buffer: TextIOWrapper) -> str:

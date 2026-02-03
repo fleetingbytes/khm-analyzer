@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+from io import StringIO
 from typing import TYPE_CHECKING
 
 from behave import given, register_type, then, when
 
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
-from behave4khm_analyzer.utils import check_presence_of_source_files, get_source_path
+from behave4khm_analyzer.utils import check_presence_of_source_files, get_source_path, read_string_buffer
 from khm_parser import parse_tale
 from khm_renderer import render_tale_head, render_tale_number, render_tale_title
 
@@ -46,16 +47,20 @@ def render_number_of_tale(context: Context) -> None:
 def render_title_of_tale(context: Context) -> None:
     tale: Tale = context.tale
     title: Generator[Sentence] = tale.title
-    context.output: str = render_tale_title(title)
+    buffer = StringIO()
+    buffer = render_tale_title(title, buffer)
+    context.output: str = read_string_buffer(buffer)
 
 
 @when("I render the head of the tale")
 def render_head_of_tale(context: Context) -> None:
     tale: Tale = context.tale
     head: Head = tale.head
-    context.output: str = render_tale_head(head)
+    buffer = StringIO()
+    buffer = render_tale_head(head, buffer)
+    context.output: str = read_string_buffer(buffer)
 
 
 @then("the output is {out:Rest}")
-def output_starts_with(context: Context, out: str) -> None:
-    assert context.output == out, f'expected the output to be "{out}", but found "{context.output}"'
+def output_is(context: Context, out: str) -> None:
+    assert context.output == out, f"expected the output to be {out!r}, but found {context.output!r}"

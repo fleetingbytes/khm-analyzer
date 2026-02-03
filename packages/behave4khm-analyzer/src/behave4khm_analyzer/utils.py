@@ -1,7 +1,14 @@
+from __future__ import annotations
+
 from itertools import product
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from khm_enums import Edition, Volume
+from khm_parser.utils import set_stream_position_to_the_start
+
+if TYPE_CHECKING:
+    from io import StringIO
+    from pathlib import Path
 
 
 def check_presence_of_source_files(directory: Path) -> None:
@@ -21,3 +28,8 @@ def check_presence_of_source_files(directory: Path) -> None:
 def get_source_path(directory: Path, edition: Edition, volume: Volume) -> Path:
     path = directory / f"khm-ed{edition.value}-vol{volume.value}.xml"
     return path
+
+
+def read_string_buffer(buffer: StringIO) -> str:
+    set_stream_position_to_the_start(buffer)
+    return buffer.read()
