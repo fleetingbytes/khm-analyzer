@@ -36,5 +36,4 @@ default_corrections = {
     CorrectionId(KHM_ED1_VOL1, "s112_2"): add_space_at_the_end,
     CorrectionId(KHM_ED1_VOL1, "s939"): add_space_at_the_end,
     CorrectionId(KHM_ED1_VOL1, "s939_2"): add_space_at_the_end,
-    CorrectionId(KHM_ED1_VOL1, "sffb_2"): remove_final_char,
 }

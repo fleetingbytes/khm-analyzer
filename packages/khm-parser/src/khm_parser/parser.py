@@ -18,6 +18,10 @@ if TYPE_CHECKING:
 
 DTAID_REGEX = re.compile(rb"""<idno\s+type="DTAID"\s*>(?P<dtaid>\d+)</idno>""")
 
+EXPECTED_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE = 31
+ACTUAL_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE = 30
+EXPECTED_NUMBER_OF_TALES_NUMBRERED_THIRTY_IN_KHM_ED1_VOL1 = 2
+
 
 def get_dtaid(fd: BufferedReader) -> int:
     """
@@ -49,6 +53,16 @@ def get_fairy_tale(root: etree.Element, n: int) -> etree.Element | None:
     xpath = f".//ns:div[ns:head//ns:w[@lemma='{n}.']]"
     results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
     tale = next(iter(results)) if results else None
+
+    # khm-ed1-vol1 tale 31 is misnumbered as 30 (even in the xml annotation, true to the misprint),
+    # so there is two tales with the number 30 and no tale with number 31
+    if tale is None and n == EXPECTED_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE:
+        xpath = f".//ns:div[ns:head//ns:w[@lemma='{ACTUAL_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE}.']]"
+        results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
+        if results and len(results) == EXPECTED_NUMBER_OF_TALES_NUMBRERED_THIRTY_IN_KHM_ED1_VOL1:
+            index_of_tale_31 = EXPECTED_NUMBER_OF_TALES_NUMBRERED_THIRTY_IN_KHM_ED1_VOL1 - 1
+            tale = results[index_of_tale_31]
+
     return tale
 
 
