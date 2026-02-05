@@ -44,5 +44,6 @@ Feature: Render Title
                 | 52   | 1       | 1      | 52. König Droßelbart                |
                 | 53   | 1       | 1      | 53. Schneewittchen (Schneeweißchen) |
                 | 30   | 1       | 1      | 30. Läuschen und Flöhchen           |
+                #  Tale number 31 is wrongly printed as 30. So it was transcribed and annotated as 30
                 | 31   | 1       | 1      | 30. Mädchen ohne Hände              |
                 # Add more later when CI goes full live and we download all source files
