@@ -12,5 +12,17 @@ def setup_logging() -> None:
     log_dir = Path(user_log_dir(app_name, author))
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    logging_config = create_dict_config(log_dir / "debug.log", app_name)
+    logging_config = create_dict_config(
+        log_dir / "debug.log",
+        app_name,
+        additional_logger_names=(
+            "behave4khm_analyzer",
+            "khm_cli",
+            "khm_downloader",
+            "khm_enums",
+            "khm_parser",
+            "khm_renderer",
+            "khm_xml_validator",
+        ),
+    )
     configure_logging(logging_config)
