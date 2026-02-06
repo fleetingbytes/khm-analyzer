@@ -182,7 +182,7 @@ requires-dist = [
     { name = "khm-xml-validator", editable = "packages/khm-xml-validator" },
     { name = "lxml" },
     { name = "platformdirs", specifier = ">=4.3.8" },
-    { name = "readylog" },
+    { name = "readylog", specifier = ">=0.6" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 
@@ -362,11 +362,11 @@ wheels = [
 
 [[package]]
 name = "readylog"
-version = "0.5.0"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c7/a1/73c6d509badd8be3ce4694d80253b84a51fc6f28e3021b024d6d088df6c3/readylog-0.5.0.tar.gz", hash = "sha256:f3e754eddb4f050f948f4869c5f2d1a28a593c92dfa8641367d5d7074e564cdd", size = 3550, upload-time = "2026-02-05T20:50:00.058Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/48/8064eedee9157810c4979dffa4fedb0994423259984e7c9386bc6f67ab90/readylog-0.6.0.tar.gz", hash = "sha256:d90c3b9c208d3db83793dacafced322bb4d8afcaa88753799fad5c985abbdc60", size = 3683, upload-time = "2026-02-06T06:20:59.79Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/52/28de0710209230d5b5d4c2e36a3402b9a16046eb4cb6079de2efcd40280e/readylog-0.5.0-py3-none-any.whl", hash = "sha256:7c58b910da307a7d80f207415bfa45a0377aa3dcf3510ead8b6ca974227aba48", size = 4713, upload-time = "2026-02-05T20:49:59.032Z" },
+    { url = "https://files.pythonhosted.org/packages/16/df/4180471361aa482beaf95a50f1b9e19ceaf65dde065dd222ec3fb59646ae/readylog-0.6.0-py3-none-any.whl", hash = "sha256:b69ecdc2fad9b87c3c41977bc59232233717a505301b04b0955a33c5ef0c40b7", size = 5128, upload-time = "2026-02-06T06:20:58.274Z" },
 ]
 
 [[package]]
