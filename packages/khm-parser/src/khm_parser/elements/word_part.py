@@ -49,7 +49,7 @@ class WordPart(WordPartBase):
 
     @property
     def is_the_final_part(self) -> bool:
-        return not self.joins_word_right or not self.has_a_following_part
+        return not self.joins_word_right and not self.has_a_following_part
 
     @property
     def following_words(self) -> Iterable[WordPartBase]:
