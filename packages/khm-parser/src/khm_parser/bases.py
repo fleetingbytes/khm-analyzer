@@ -18,8 +18,8 @@ from khm_parser.contracts import (
 from khm_parser.namespace import any_namespace, xml_namespace
 
 if TYPE_CHECKING:
-    from khm_parser.composites.word import Word
-    from khm_parser.elements.paragraph import Paragraph
+    from khm_parser.composites.word import Sentence, Word
+    from khm_parser.elements.paragraph import Line, Paragraph
 
 
 class CompositeBase[PartT](Iterable):
@@ -79,19 +79,25 @@ class HeadBase(KhmElement, AbstractHead):
     TAG = any_namespace("head")
 
 
-class ParagraphBase(KhmElement, AbstractParagraph):
+class ParagraphBase(KhmElement, AbstractParagraph, Iterable):
     TAG = any_namespace("p")
 
+    def __iter__(self) -> Iterator[Sentence]:
+        yield from self.sentences
 
-class LineGroupBase(KhmElement, AbstractLineGroup):
+
+class LineGroupBase(KhmElement, AbstractLineGroup, Iterable):
     TAG = any_namespace("lg")
 
+    def __iter__(self) -> Iterator[Line]:
+        return iter(self.lines)
 
-class LineBase(KhmElement, AbstractLine):
+
+class LineBase(KhmElement, AbstractLine, Iterable):
     TAG = any_namespace("l")
 
 
-class SentencePartBase(KhmElement, XmlIdMixin, AbstractSentencePart):
+class SentencePartBase(KhmElement, XmlIdMixin, AbstractSentencePart, Iterable):
     TAG = any_namespace("s")
 
     def __iter__(self) -> Iterator[Word]:

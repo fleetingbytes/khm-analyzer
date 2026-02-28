@@ -8,7 +8,13 @@ from behave import given, register_type, then, when
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
 from behave4khm_analyzer.utils import check_presence_of_source_files, get_source_path, read_string_buffer
 from khm_parser import parse_tale
-from khm_renderer import render_tale_head, render_tale_number, render_tale_title
+from khm_renderer import (
+    render_tale_head,
+    render_tale_number,
+    render_tale_title,
+    render_word,
+    render_word_part,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -64,3 +70,35 @@ def render_head_of_tale(context: Context) -> None:
 @then("the output is {out:Rest}")
 def output_is(context: Context, out: str) -> None:
     assert context.output == out, f"expected the output to be {out!r}, but found {context.output!r}"
+
+
+@then("the output is ")
+def output_is_empty(context: Context) -> None:
+    assert context.output == "", f"expected the output to be an empty string, but found {context.output!r}"
+
+
+@when("I render the word part {word_part_id}")
+def render_word_part_impl(context: Context, word_part_id: str) -> None:
+    context.output = None
+
+    tale: Tale = context.tale
+    for paragraph in tale:
+        for sentence in paragraph:
+            for word in sentence.words:
+                for word_part in word:
+                    if word_part.xmlid == word_part_id:
+                        context.output = render_word_part(word_part)
+
+
+@when("I render the word {word_id}")
+def render_word_impl(context: Context, word_id: str) -> None:
+    context.output = None
+    buffer = StringIO()
+
+    tale: Tale = context.tale
+    for paragraph in tale:
+        for sentence in paragraph:
+            for word in sentence.words:
+                if word.id == word_id:
+                    buffer = render_word(word, buffer)
+                    context.output = read_string_buffer(buffer)

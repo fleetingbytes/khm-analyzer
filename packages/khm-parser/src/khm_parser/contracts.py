@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from khm_parser.elements.paragraph import Paragraph
 
 
-class CompositePart(ABC):
+class CompositePart(ABC, Iterable):
     @property
     @abstractmethod
     def has_a_following_part(self) -> bool: ...
@@ -25,7 +25,7 @@ class CompositePart(ABC):
     def is_the_final_part(self) -> bool: ...
 
 
-class AbstractTale(ABC):
+class AbstractTale(ABC, Iterable):
     @property
     @abstractmethod
     def head(self) -> Head: ...
@@ -53,28 +53,29 @@ class AbstractHead(ABC):
     def title(self) -> Generator[Sentence]: ...
 
 
-class AbstractParagraph:
+class AbstractParagraph(ABC, Iterable):
     @property
     @abstractmethod
     def sentences_and_linegroups(self) -> Generator[Sentence | LineGroup]: ...
 
+    @property
+    @abstractmethod
+    def sentences(self) -> Generator[Sentence]: ...
 
-class AbstractLineGroup(ABC):
+
+class AbstractLineGroup(ABC, Iterable):
     @property
     @abstractmethod
     def lines(self) -> Generator[Line]: ...
 
 
-class AbstractLine: ...
+class AbstractLine(Iterable): ...
 
 
 class AbstractSentencePart(CompositePart, Iterable):
     @property
     @abstractmethod
     def words(self) -> Generator[Word]: ...
-
-    @abstractmethod
-    def __iter__(self) -> Iterator[Word]: ...
 
 
 class AbstractWordPart(CompositePart):

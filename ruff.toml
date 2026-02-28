@@ -55,6 +55,10 @@ extend-safe-fixes = [
 "src/khm_analyzer/api/*.py" = [
     "PLR0913",  # too-many-arguments-in-function-definition
 ]
+"features/steps/render.py" = [
+    "C901",    # complex-structure
+    "PLC1901", # compare-to-empty-string
+]
 
 [lint.mccabe]
 max-complexity = 5
