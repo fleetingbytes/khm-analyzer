@@ -30,8 +30,8 @@ Feature: Render Word
 
             Examples:
                 | tale | edition | volume | word_id         | output   |
-                | 53   | 1       | 1      | wf9be        | Es       |
+                | 53   | 1       | 1      | wf9be           | Es       |
                 | 53   | 1       | 1      | wfc50           | einander |
                 | 53   | 1       | 1      | wfc50_1-wfc50_2 |          |
                 | 53   | 1       | 1      | w1043b-w1043b_1 | toten    |
-                | 58   | 1       | 1      | w11bd7       | Mann     |
+                | 58   | 1       | 1      | w11bd7          | Mann     |
