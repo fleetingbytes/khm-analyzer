@@ -25,7 +25,7 @@ def inject_default_corrections[R](
     func: Callable[..., R] | None = None, *, kwarg_name: str = "corrections"
 ) -> Callable[..., R]:
     if func is None:
-        return partial(inject_default_separators, kwarg_name=kwarg_name)
+        return partial(inject_default_corrections, kwarg_name=kwarg_name)
 
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> R:
