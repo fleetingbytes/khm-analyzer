@@ -81,10 +81,6 @@ class AbstractSentencePart(CompositePart, Iterable):
 class AbstractWordPart(CompositePart):
     @property
     @abstractmethod
-    def is_a_part_before_page_break(self) -> bool: ...
-
-    @property
-    @abstractmethod
     def is_last_in_sentencepart(self) -> bool: ...
 
     @property

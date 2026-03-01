@@ -7,7 +7,7 @@ DEFAULT_SENTENCE_SEPARATOR = " "
 DEFAULT_PARAGRAPH_SEPARATOR = "\n\n"
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)
 class Separators:
     word_part: str = DEFAULT_WORD_PART_SEPARATOR
     word: str = DEFAULT_WORD_SEPARATOR

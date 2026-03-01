@@ -16,7 +16,6 @@ Feature: Render Title
                 | 31   | 1       | 1      | 30     |
                 # Add more later when CI goes full live and we download all source files
 
-        @debug
         Scenario Outline: Render Title
             Given I parse the tale <tale> from edition <edition>, volume <volume>
             When I render the title of the tale
