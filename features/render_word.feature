@@ -38,7 +38,7 @@ Feature: Render Word
 
         Scenario Outline: Render Word With Custom Separators
             Given I parse the tale <tale> from edition <edition>, volume <volume>
-            Given the word part separator ☼
+            Given the word part separator •
             When I render the word <word_id>
             Then the output is <output>
 
@@ -46,6 +46,6 @@ Feature: Render Word
                 | tale | edition | volume | word_id         | output   |
                 | 53   | 1       | 1      | wf9be           | Es       |
                 | 53   | 1       | 1      | wfc50           | einander |
-                | 53   | 1       | 1      | wfc50_1-wfc50_2 | ☼        |
-                | 53   | 1       | 1      | w1043b-w1043b_1 | toten☼   |
+                | 53   | 1       | 1      | wfc50_1-wfc50_2 | •        |
+                | 53   | 1       | 1      | w1043b-w1043b_1 | toten•   |
                 | 58   | 1       | 1      | w11bd7          | Mann     |
