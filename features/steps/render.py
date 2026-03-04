@@ -8,6 +8,8 @@ from behave import given, register_type, then, when
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
 from behave4khm_analyzer.utils import (
     check_presence_of_source_files,
+    find_and_render_sentence,
+    find_and_render_sentence_part,
     find_and_render_word,
     find_and_render_word_part,
     get_source_path,
@@ -49,6 +51,11 @@ def parse_tale_impl(context: Context, tale: int, edition: Edition, volume: Volum
 @given("the word part separator {word_part_sep}")
 def set_word_part_sep(context: Context, word_part_sep: str) -> None:
     context.sep.word_part = word_part_sep
+
+
+@given("the word separator {word_sep}")
+def set_word_sep(context: Context, word_sep: str) -> None:
+    context.sep.word = word_sep
 
 
 @when("I render the number of the tale")
@@ -101,4 +108,24 @@ def render_word_impl(context: Context, word_id: str) -> None:
     sep = context.sep
 
     buffer = find_and_render_word(tale, buffer, word_id, sep=sep)
+    context.output = read_string_buffer(buffer)
+
+
+@when("I render the sentence part {sentence_part_id}")
+def render_sentence_part_impl(context: Context, sentence_part_id: str) -> None:
+    tale: Tale = context.tale
+    buffer = StringIO()
+    sep = context.sep
+
+    buffer = find_and_render_sentence_part(tale, buffer, sentence_part_id, sep=sep)
+    context.output = read_string_buffer(buffer)
+
+
+@when("I render the sentence {sentence_part_id}")
+def render_sentence_impl(context: Context, sentence_part_id: str) -> None:
+    tale: Tale = context.tale
+    buffer = StringIO()
+    sep = context.sep
+
+    buffer = find_and_render_sentence(tale, buffer, sentence_part_id, sep=sep)
     context.output = read_string_buffer(buffer)

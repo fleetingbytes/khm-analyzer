@@ -100,11 +100,14 @@ def should_write_sentence_part_separator(sentence_part: SentencePart, sentence: 
     parent = sentence_part.getparent()
     parent_is_highlight = parent.tag == tei_namespace("hi")
     parent_has_space_in_tail = parent.tail == " "
+    parent_is_line = parent.tag == tei_namespace("l")
+    parent_has_eleven_spaces_in_tail = parent.tail == "           "
 
     result = any(
         (
             has_space_in_tags_tail,
             not has_space_in_tags_tail and parent_is_highlight and parent_has_space_in_tail,
+            not has_space_in_tags_tail and parent_is_line and parent_has_eleven_spaces_in_tail,
         )
     )
 

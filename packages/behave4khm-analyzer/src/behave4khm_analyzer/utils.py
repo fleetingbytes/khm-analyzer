@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from khm_enums import Edition, Volume
 from khm_parser.utils import set_stream_position_to_the_start
-from khm_renderer import render_word, render_word_part
+from khm_renderer import render_sentence, render_sentence_part, render_word, render_word_part
 from khm_renderer.decorators import inject_default_separators
 
 if TYPE_CHECKING:
@@ -59,3 +59,26 @@ def find_and_render_word(
             for word in sentence.words:
                 if word.id == word_id:
                     return render_word(word, buffer, sep=sep)
+
+
+@inject_default_separators
+def find_and_render_sentence_part(
+    tale: Tale, buffer: StringIO, sentence_part_id: str, *, sep: Separators | None = None
+) -> StringIO:
+    for paragraph in tale:
+        for sentence in paragraph:
+            for sentence_part in sentence:
+                if sentence_part.xmlid == sentence_part_id:
+                    return render_sentence_part(sentence_part, buffer, sep=sep)
+
+
+@inject_default_separators
+def find_and_render_sentence(
+    tale: Tale, buffer: StringIO, sentence_id: str, *, sep: Separators | None = None
+) -> StringIO:
+    for paragraph in tale:
+        for sentence in paragraph:
+            if paragraph.xmlid:
+                breakpoint()
+            if sentence.id == sentence_id:
+                return render_sentence(sentence, buffer, sep=sep)

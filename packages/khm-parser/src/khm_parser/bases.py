@@ -79,7 +79,7 @@ class HeadBase(KhmElement, AbstractHead):
     TAG = any_namespace("head")
 
 
-class ParagraphBase(KhmElement, AbstractParagraph, Iterable):
+class ParagraphBase(KhmElement, XmlIdMixin, AbstractParagraph, Iterable):
     TAG = any_namespace("p")
 
     def __iter__(self) -> Iterator[Sentence]:

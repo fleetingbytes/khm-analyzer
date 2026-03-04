@@ -23,20 +23,20 @@ def get_class_with_dtaid(tag_name: str, dtaid: int, default: None = None) -> KHM
 
 
 def set_stream_position_to_the_start(buffer: IOBase) -> int:
-    logger.debug("Position reset to start of %s", get_file_name_from_buffer(buffer))
     new_position = buffer.seek(0, SEEK_SET)
+    logger.debug("Position reset to start of %s", get_file_name_from_buffer(buffer))
     return new_position
 
 
 def set_stream_position_to_the_end(buffer: IOBase) -> int:
-    logger.debug("Position reset to the end of %s", get_file_name_from_buffer(buffer))
     new_position = buffer.seek(0, SEEK_END)
+    logger.debug("Position reset to the end of %s", get_file_name_from_buffer(buffer))
     return new_position
 
 
 def set_stream_position(position: int, buffer: IOBase) -> int:
-    logger.debug("Position reset to %d in %s", position, get_file_name_from_buffer(buffer))
     new_position = buffer.seek(position, SEEK_SET)
+    logger.debug("Position reset to %d in %s", position, get_file_name_from_buffer(buffer))
     return new_position
 
 
