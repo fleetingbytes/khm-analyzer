@@ -203,7 +203,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-lint = [{ name = "ruff", specifier = ">=0.15.2" }]
+lint = [{ name = "ruff", specifier = ">=0.15.7" }]
 test = [
     { name = "behave", specifier = ">=1.3.3" },
     { name = "behave4khm-analyzer", editable = "packages/behave4khm-analyzer" },
