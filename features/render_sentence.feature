@@ -15,7 +15,6 @@ Feature: Render Sentence
                 | 2    | 1       | 1      | s115_3           | " -- "Halbaus? was du sagst! den Namen habe ich gar noch nicht gehört, der steht gewiß nicht im Kalender." |
                 | 53   | 1       | 1      | s8f4             | "Spieglein, Spieglein an der Wand:                                                                         |
 
-        @wip
         Scenario Outline: Render Sentence
             Given I parse the tale <tale> from edition <edition>, volume <volume>
             When I render the sentence <sentence_id>
@@ -25,7 +24,9 @@ Feature: Render Sentence
                 | tale | edition | volume | sentence_id        | output                                                                                                                |
                 | 2    | 1       | 1      | s115-s115_2-s115_3 | -- "Halbaus" -- "Halbaus? was du sagst! den Namen habe ich gar noch nicht gehört, der steht gewiß nicht im Kalender." |
                 | 53   | 1       | 1      | s8f4-s8f4_2        | "Spieglein, Spieglein an der Wand: wer ist die schönste Frau in dem ganzen Land?"                                     |
+                # Inside line group inside paragraph
                 | 11   | 1       | 1      | s215-s215_2        | was macht mein Reh? nun komme ich noch zweimal und dann nimmermehr."                                                  |
+                # Inside line group outside paragraph
                 | 30   | 1       | 1      | s531               | "was schreist du Flöhchen?" --                                                                                        |
 
         Scenario Outline: Render Sentence With Custom Separators

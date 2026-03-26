@@ -65,20 +65,16 @@ def find_and_render_word(
 def find_and_render_sentence_part(
     tale: Tale, buffer: StringIO, sentence_part_id: str, *, sep: Separators | None = None
 ) -> StringIO:
-    for paragraph in tale:
-        for sentence in paragraph:
-            for sentence_part in sentence:
-                if sentence_part.xmlid == sentence_part_id:
-                    return render_sentence_part(sentence_part, buffer, sep=sep)
+    for sentence in tale.sentences:
+        for sentence_part in sentence:
+            if sentence_part.xmlid == sentence_part_id:
+                return render_sentence_part(sentence_part, buffer, sep=sep)
 
 
 @inject_default_separators
 def find_and_render_sentence(
     tale: Tale, buffer: StringIO, sentence_id: str, *, sep: Separators | None = None
 ) -> StringIO:
-    for paragraph in tale:
-        for sentence in paragraph:
-            if paragraph.xmlid:
-                breakpoint()
-            if sentence.id == sentence_id:
-                return render_sentence(sentence, buffer, sep=sep)
+    for sentence in tale.sentences:
+        if sentence.id == sentence_id:
+            return render_sentence(sentence, buffer, sep=sep)

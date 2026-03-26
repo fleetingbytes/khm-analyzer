@@ -42,6 +42,10 @@ class AbstractTale(ABC, Iterable):
     @abstractmethod
     def title(self) -> Generator[Sentence]: ...
 
+    @property
+    @abstractmethod
+    def sentences(self) -> Generator[Sentence]: ...
+
 
 class AbstractHead(ABC):
     @property
