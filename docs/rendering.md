@@ -29,6 +29,12 @@
 - `prev`: this sentence is just a part of a longer sentence. The previous content is in the sentenceID given here (usually the previous sibling)
 - `xml:id`: if this is a continuation of a split sentence, it has the regex format `#s[0-9a-f]+_[0-9a-f]+`, else `#s[0-9a-f]+`
 
+### w
+
+#### pos
+
+[Parts of speech][pos] follow the [Stuttgart-Tübingen Tag Set][stts]
+
 ## Sources
 
 - [DTA Basisformat][dta-basisformat]
@@ -36,3 +42,5 @@
 
 [dta-basisformat]: https://www.deutschestextarchiv.de/doku/basisformat/uebersichtText.html
 [tei-elements]: https://guidelines.teipublisher.com/p5.xml/?id=REF-ELEMENTS
+[pos]: https://www.deutschestextarchiv.de/doku/DDC-suche_hilfe#pos-sensitive_s
+[stts]: https://www.ims.uni-stuttgart.de/documents/ressourcen/lexika/tagsets/stts-1999.pdf
