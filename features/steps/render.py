@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from behave import given, register_type, then, when
 
+from behave4khm_analyzer.custom_renderers import render_first_letter_of_word_part
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
 from behave4khm_analyzer.utils import (
     check_presence_of_source_files,
@@ -16,7 +17,7 @@ from behave4khm_analyzer.utils import (
     read_string_buffer,
 )
 from khm_parser import parse_tale
-from khm_renderer import (
+from khm_renderer.render import (
     render_tale_head,
     render_tale_number,
     render_tale_title,
@@ -58,20 +59,27 @@ def set_word_sep(context: Context, word_sep: str) -> None:
     context.sep.word = word_sep
 
 
+@given("the word part renderer renders only the first letter")
+def set_word_renderer(context: Context) -> None:
+    context.renderers.word_part = render_first_letter_of_word_part
+
+
 @when("I render the number of the tale")
 def render_number_of_tale(context: Context) -> None:
     tale: Tale = context.tale
+    renderers = context.renderers
     number: WordPart = tale.number
-    context.output: str = render_tale_number(number)
+    context.output: str = render_tale_number(number, renderers)
 
 
 @when("I render the title of the tale")
 def render_title_of_tale(context: Context) -> None:
     tale: Tale = context.tale
     title: Generator[Sentence] = tale.title
+    renderers = context.renderers
     buffer = StringIO()
 
-    buffer = render_tale_title(title, buffer)
+    buffer = render_tale_title(title, buffer, renderers)
     context.output: str = read_string_buffer(buffer)
 
 
@@ -79,9 +87,10 @@ def render_title_of_tale(context: Context) -> None:
 def render_head_of_tale(context: Context) -> None:
     tale: Tale = context.tale
     head: Head = tale.head
+    renderers = context.renderers
     buffer = StringIO()
 
-    buffer = render_tale_head(head, buffer)
+    buffer = render_tale_head(head, buffer, renderers)
     context.output: str = read_string_buffer(buffer)
 
 
@@ -98,16 +107,17 @@ def output_is_empty(context: Context) -> None:
 @when("I render the word part {word_part_id}")
 def render_word_part_impl(context: Context, word_part_id: str) -> None:
     tale: Tale = context.tale
-    context.output: str | None = find_and_render_word_part(tale, word_part_id)
+    renderers = context.renderers
+    context.output: str | None = find_and_render_word_part(tale, word_part_id, renderers=renderers)
 
 
 @when("I render the word {word_id}")
 def render_word_impl(context: Context, word_id: str) -> None:
     tale: Tale = context.tale
     buffer = StringIO()
-    sep = context.sep
+    params = {"sep": context.sep, "renderers": context.renderers}
 
-    buffer = find_and_render_word(tale, buffer, word_id, sep=sep)
+    buffer = find_and_render_word(tale, buffer, word_id, **params)
     context.output = read_string_buffer(buffer)
 
 
@@ -115,9 +125,9 @@ def render_word_impl(context: Context, word_id: str) -> None:
 def render_sentence_part_impl(context: Context, sentence_part_id: str) -> None:
     tale: Tale = context.tale
     buffer = StringIO()
-    sep = context.sep
+    params = {"sep": context.sep, "renderers": context.renderers}
 
-    buffer = find_and_render_sentence_part(tale, buffer, sentence_part_id, sep=sep)
+    buffer = find_and_render_sentence_part(tale, buffer, sentence_part_id, **params)
     context.output = read_string_buffer(buffer)
 
 
@@ -125,7 +135,7 @@ def render_sentence_part_impl(context: Context, sentence_part_id: str) -> None:
 def render_sentence_impl(context: Context, sentence_part_id: str) -> None:
     tale: Tale = context.tale
     buffer = StringIO()
-    sep = context.sep
+    params = {"sep": context.sep, "renderers": context.renderers}
 
-    buffer = find_and_render_sentence(tale, buffer, sentence_part_id, sep=sep)
+    buffer = find_and_render_sentence(tale, buffer, sentence_part_id, **params)
     context.output = read_string_buffer(buffer)

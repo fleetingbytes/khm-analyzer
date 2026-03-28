@@ -1,9 +1,13 @@
-from collections.abc import Callable
+from __future__ import annotations
+
 from functools import partial, wraps
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from khm_renderer.corrections import default_corrections
 from khm_renderer.separators import Separators
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def inject_default_separators[R](

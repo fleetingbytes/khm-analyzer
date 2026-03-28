@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from khm_parser.composites import Sentence, Word
     from khm_parser.elements import Head, SentencePart, WordPart
     from khm_renderer.corrections import Corrections
+    from khm_renderer.renderers import Renderers
     from khm_renderer.separators import Separators
 
 logger = getLogger(__name__)
@@ -27,21 +28,22 @@ logger = getLogger(__name__)
 def render_tale_head(
     head: Head,
     buffer: StringIO,
+    renderers: Renderers,
     *,
     sep: Separators | None = None,
     corrections: Corrections | None = None,
 ) -> StringIO:
-    number: str = render_tale_number(head.number)
+    number: str = render_tale_number(head.number, renderers)
     buffer.write(number)
     buffer.write(".")
     buffer.write(sep.sentence)
-    buffer = render_tale_title(head.title, buffer, sep=sep, corrections=corrections)
+    buffer = render_tale_title(head.title, buffer, renderers, sep=sep, corrections=corrections)
 
     return buffer
 
 
-def render_tale_number(word_part: WordPart) -> str:
-    transcription: str = render_word_part(word_part)
+def render_tale_number(word_part: WordPart, renderers: Renderers) -> str:
+    transcription: str = renderers.word_part(word_part)
     number: str = transcription.removesuffix(".")
     return number
 
@@ -52,13 +54,14 @@ def render_tale_number(word_part: WordPart) -> str:
 def render_tale_title(
     title: Generator[Sentence],
     buffer: StringIO,
+    renderers: Renderers,
     *,
     sep: Separators | None = None,
     corrections: Corrections | None = None,
 ) -> StringIO:
     for num, sentence in enumerate(title, start=1):
         logger.debug("Rendering tale title Sentence %d, id: %s", num, sentence.id)
-        buffer = render_sentence(sentence, buffer, sep=sep, corrections=corrections)
+        buffer = render_sentence(sentence, buffer, renderers, sep=sep, corrections=corrections)
 
     logger.debug("Removing '.' at the end of the title")
     shorten_stream_by(1, buffer)
@@ -71,13 +74,14 @@ def render_tale_title(
 def render_sentence(
     sentence: Sentence,
     buffer: StringIO,
+    renderers: Renderers,
     *,
     sep: Separators | None = None,
     corrections: Corrections | None = None,
 ) -> StringIO:
     for num, sentence_part in enumerate(sentence, start=1):
         logger.debug("Rendering SentencePart %d, id: %s", num, sentence_part.xmlid)
-        buffer = render_sentence_part(sentence_part, buffer, sep=sep)
+        buffer = render_sentence_part(sentence_part, buffer, renderers, sep=sep)
 
         if should_write_sentence_part_separator(sentence_part, sentence):
             logger.debug("Writing sentence part separator")
@@ -116,11 +120,15 @@ def should_write_sentence_part_separator(sentence_part: SentencePart, sentence: 
 
 @inject_default_separators
 def render_sentence_part(
-    sentence_part: SentencePart, buffer: StringIO, *, sep: Separators | None = None
+    sentence_part: SentencePart,
+    buffer: StringIO,
+    renderers: Renderers,
+    *,
+    sep: Separators | None = None,
 ) -> StringIO:
     for num, word in enumerate(sentence_part, start=1):
         logger.debug("Rendering Word %d, id: %s", num, word.id)
-        buffer = render_word(word, buffer, sep=sep)
+        buffer = render_word(word, buffer, renderers, sep=sep)
 
         if should_write_word_separator(word, sentence_part):
             logger.debug("Writing word separator")
@@ -146,8 +154,10 @@ def should_write_word_separator(word: Word, sentence_part: SentencePart) -> bool
 
 
 @inject_default_separators
-def render_word(word: Word, buffer: StringIO, *, sep: Separators | None = None) -> StringIO:
-    to_write = sep.word_part.join(render_word_part(word_part) for word_part in word)
+def render_word(
+    word: Word, buffer: StringIO, renderers: Renderers, *, sep: Separators | None = None
+) -> StringIO:
+    to_write = sep.word_part.join(renderers.word_part(word_part) for word_part in word)
 
     logger.debug("Writing %s", to_write)
     buffer.write(to_write)

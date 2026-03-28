@@ -29,12 +29,15 @@ Feature: Render Word
             Then the output is <output>
 
             Examples:
-                | tale | edition | volume | word_id         | output   |
-                | 53   | 1       | 1      | wf9be           | Es       |
-                | 53   | 1       | 1      | wfc50           | einander |
-                | 53   | 1       | 1      | wfc50_1-wfc50_2 |          |
-                | 53   | 1       | 1      | w1043b-w1043b_1 | toten    |
-                | 58   | 1       | 1      | w11bd7          | Mann     |
+                | tale | edition | volume | word_id           | output      |
+                | 53   | 1       | 1      | wf9be             | Es          |
+                | 53   | 1       | 1      | wf9c3-wf9c4       | Winter,     |
+                | 53   | 1       | 1      | wfa45-wfa46       | genannt.    |
+                | 53   | 1       | 1      | wfa66-wfa67-wfa68 | "Spieglein, |
+                | 53   | 1       | 1      | wfc50             | einander    |
+                | 53   | 1       | 1      | wfc50_1-wfc50_2   |             |
+                | 53   | 1       | 1      | w1043b-w1043b_1   | toten       |
+                | 58   | 1       | 1      | w11bd7            | Mann        |
 
         Scenario Outline: Render Word With Custom Separators
             Given I parse the tale <tale> from edition <edition>, volume <volume>
@@ -49,3 +52,39 @@ Feature: Render Word
                 | 53   | 1       | 1      | wfc50_1-wfc50_2 | •        |
                 | 53   | 1       | 1      | w1043b-w1043b_1 | toten•   |
                 | 58   | 1       | 1      | w11bd7          | Mann     |
+
+        Scenario Outline: Render First Letter of Word Part
+            Given I parse the tale <tale> from edition <edition>, volume <volume>
+            Given the word part renderer renders only the first letter
+            When I render the word <word_id>
+            Then the output is <output>
+
+            Examples:
+                | tale | edition | volume | word_id           | output |
+                | 53   | 1       | 1      | wf9be             | E      |
+                | 53   | 1       | 1      | wf9c3-wf9c4       | W,     |
+                | 53   | 1       | 1      | wfa45-wfa46       | g.     |
+                | 53   | 1       | 1      | wfa66-wfa67-wfa68 | "S,    |
+                | 53   | 1       | 1      | wfc50             | e      |
+                | 53   | 1       | 1      | wfc50_1-wfc50_2   |        |
+                | 53   | 1       | 1      | w1043b-w1043b_1   | t      |
+                | 58   | 1       | 1      | w11bd7            | M      |
+
+        Scenario Outline: Render First Letter of Word Part With Custom Separators
+            Given I parse the tale <tale> from edition <edition>, volume <volume>
+            Given the word part renderer renders only the first letter
+            Given the word part separator •
+            When I render the word <word_id>
+            Then the output is <output>
+
+            Examples:
+                | tale | edition | volume | word_id           | output |
+                | 53   | 1       | 1      | wf9be             | E      |
+                | 53   | 1       | 1      | wf9c3-wf9c4       | W•,    |
+                | 53   | 1       | 1      | wfa45-wfa46       | g•.    |
+                | 53   | 1       | 1      | wfa66-wfa67-wfa68 | "•S•,  |
+                | 53   | 1       | 1      | wfc50             | e      |
+                | 53   | 1       | 1      | wfc50_1-wfc50_2   | •      |
+                | 53   | 1       | 1      | w1043b-w1043b_1   | t•     |
+                | 58   | 1       | 1      | w11bd7            | M      |
+
