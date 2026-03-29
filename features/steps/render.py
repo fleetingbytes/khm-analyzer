@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from io import StringIO
 from typing import TYPE_CHECKING
 
 from behave import given, register_type, then, when
 
-from behave4khm_analyzer.custom_renderers import render_first_letter_of_word_part
+from behave4khm_analyzer.custom_render_functions import get_first_letter_of_word_part
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
 from behave4khm_analyzer.utils import (
     check_presence_of_source_files,
@@ -17,11 +16,6 @@ from behave4khm_analyzer.utils import (
     read_string_buffer,
 )
 from khm_parser import parse_tale
-from khm_renderer.render import (
-    render_tale_head,
-    render_tale_number,
-    render_tale_title,
-)
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -32,6 +26,7 @@ if TYPE_CHECKING:
     from khm_enums import Edition, Volume
     from khm_parser.composites import Sentence
     from khm_parser.elements import Head, Tale, WordPart
+    from khm_renderer import KhmRenderer
 
 
 register_type(**MATCHING_TYPES)
@@ -45,41 +40,45 @@ def source_documents_in_directory(context: Context, directory: Path) -> None:
 
 @given("I parse the tale {tale:d} from edition {edition:Edition}, volume {volume:Volume}")
 def parse_tale_impl(context: Context, tale: int, edition: Edition, volume: Volume) -> None:
-    path = get_source_path(context.source_directory, edition, volume)
+    source_directory = context.source_directory
+    path = get_source_path(source_directory, edition, volume)
     context.tale: Tale = parse_tale(path, tale)
 
 
 @given("the word part separator {word_part_sep}")
 def set_word_part_sep(context: Context, word_part_sep: str) -> None:
-    context.sep.word_part = word_part_sep
+    context.renderer.sep.word_part = word_part_sep
 
 
 @given("the word separator {word_sep}")
 def set_word_sep(context: Context, word_sep: str) -> None:
-    context.sep.word = word_sep
+    context.renderer.sep.word = word_sep
 
 
 @given("the word part renderer renders only the first letter")
 def set_word_renderer(context: Context) -> None:
-    context.renderers.word_part = render_first_letter_of_word_part
+    context.renderer.renderers.render_word_part = get_first_letter_of_word_part
 
 
 @when("I render the number of the tale")
 def render_number_of_tale(context: Context) -> None:
     tale: Tale = context.tale
-    renderers = context.renderers
-    number: WordPart = tale.number
-    context.output: str = render_tale_number(number, renderers)
+    tale_number: WordPart = tale.number
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
+
+    buffer = renderer.render_tale_number(tale_number, buffer)
+    context.output: str = read_string_buffer(buffer)
 
 
 @when("I render the title of the tale")
 def render_title_of_tale(context: Context) -> None:
     tale: Tale = context.tale
     title: Generator[Sentence] = tale.title
-    renderers = context.renderers
-    buffer = StringIO()
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
 
-    buffer = render_tale_title(title, buffer, renderers)
+    buffer = renderer.render_tale_title(title, buffer)
     context.output: str = read_string_buffer(buffer)
 
 
@@ -87,10 +86,10 @@ def render_title_of_tale(context: Context) -> None:
 def render_head_of_tale(context: Context) -> None:
     tale: Tale = context.tale
     head: Head = tale.head
-    renderers = context.renderers
-    buffer = StringIO()
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
 
-    buffer = render_tale_head(head, buffer, renderers)
+    buffer = renderer.render_tale_head(head, buffer)
     context.output: str = read_string_buffer(buffer)
 
 
@@ -107,35 +106,38 @@ def output_is_empty(context: Context) -> None:
 @when("I render the word part {word_part_id}")
 def render_word_part_impl(context: Context, word_part_id: str) -> None:
     tale: Tale = context.tale
-    renderers = context.renderers
-    context.output: str | None = find_and_render_word_part(tale, word_part_id, renderers=renderers)
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
+
+    buffer = find_and_render_word_part(tale, word_part_id, renderer, buffer)
+    context.output: str = read_string_buffer(buffer)
 
 
 @when("I render the word {word_id}")
 def render_word_impl(context: Context, word_id: str) -> None:
     tale: Tale = context.tale
-    buffer = StringIO()
-    params = {"sep": context.sep, "renderers": context.renderers}
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
 
-    buffer = find_and_render_word(tale, buffer, word_id, **params)
+    buffer = find_and_render_word(tale, word_id, renderer, buffer)
     context.output = read_string_buffer(buffer)
 
 
 @when("I render the sentence part {sentence_part_id}")
 def render_sentence_part_impl(context: Context, sentence_part_id: str) -> None:
     tale: Tale = context.tale
-    buffer = StringIO()
-    params = {"sep": context.sep, "renderers": context.renderers}
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
 
-    buffer = find_and_render_sentence_part(tale, buffer, sentence_part_id, **params)
+    buffer = find_and_render_sentence_part(tale, sentence_part_id, renderer, buffer)
     context.output = read_string_buffer(buffer)
 
 
-@when("I render the sentence {sentence_part_id}")
-def render_sentence_impl(context: Context, sentence_part_id: str) -> None:
+@when("I render the sentence {sentence_id}")
+def render_sentence_impl(context: Context, sentence_id: str) -> None:
     tale: Tale = context.tale
-    buffer = StringIO()
-    params = {"sep": context.sep, "renderers": context.renderers}
+    renderer: KhmRenderer = context.renderer
+    buffer = context.buffer
 
-    buffer = find_and_render_sentence(tale, buffer, sentence_part_id, **params)
+    buffer = find_and_render_sentence(tale, sentence_id, renderer, buffer)
     context.output = read_string_buffer(buffer)

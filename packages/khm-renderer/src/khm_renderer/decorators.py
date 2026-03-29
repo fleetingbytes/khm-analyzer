@@ -38,3 +38,20 @@ def inject_default_corrections[R](
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def inject_default_render_functions[R](
+    func: Callable[..., R] | None = None, *, kwarg_name: str = "render_functions"
+) -> Callable[..., R]:
+    if func is None:
+        return partial(inject_default_render_functions, kwarg_name=kwarg_name)
+
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> R:
+        if kwargs.get(kwarg_name) is None:
+            from khm_renderer.render_functions import RenderFunctions
+
+            kwargs[kwarg_name] = RenderFunctions()
+        return func(*args, **kwargs)
+
+    return wrapper

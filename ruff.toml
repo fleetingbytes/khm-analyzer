@@ -61,6 +61,9 @@ extend-safe-fixes = [
 "packages/behave4khm-analyzer/src/behave4khm_analyzer/utils.py" = [
     "C901",    # complex-structure
 ]
+"packages/khm-renderer/src/khm_renderer/decorators.py" = [
+    "PLC0415",  # import-outside-top-level
+]
 
 [lint.mccabe]
 max-complexity = 5

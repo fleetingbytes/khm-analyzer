@@ -6,16 +6,13 @@ from typing import TYPE_CHECKING
 
 from khm_enums import Edition, Volume
 from khm_parser.utils import set_stream_position_to_the_start
-from khm_renderer.decorators import inject_default_separators
-from khm_renderer.render import render_sentence, render_sentence_part
 
 if TYPE_CHECKING:
     from io import StringIO
     from pathlib import Path
 
     from khm_parser.elements import Tale
-    from khm_renderer.renderers import Renderers
-    from khm_renderer.separators import Separators
+    from khm_renderer import KhmRenderer
 
 
 def check_presence_of_source_files(directory: Path) -> None:
@@ -42,53 +39,46 @@ def read_string_buffer(buffer: StringIO) -> str:
     return buffer.read()
 
 
-def find_and_render_word_part(tale: Tale, word_part_id: str, renderers: Renderers) -> str | None:
+def find_and_render_word_part(
+    tale: Tale, word_part_id: str, renderer: KhmRenderer, buffer: StringIO
+) -> StringIO:
     for sentence in tale.sentences:
         for word in sentence.words:
             for word_part in word:
                 if word_part.xmlid == word_part_id:
-                    return renderers.word_part(word_part)
+                    return renderer.render_word_part(word_part, buffer)
 
 
-@inject_default_separators
 def find_and_render_word(
     tale: Tale,
-    buffer: StringIO,
     word_id: str,
-    renderers: Renderers,
-    *,
-    sep: Separators | None = None,
+    renderer: KhmRenderer,
+    buffer: StringIO,
 ) -> StringIO:
     for sentence in tale.sentences:
         for word in sentence.words:
             if word.id == word_id:
-                return renderers.word(word, buffer, renderers, sep=sep)
+                return renderer.render_word(word, buffer)
 
 
-@inject_default_separators
 def find_and_render_sentence_part(
     tale: Tale,
-    buffer: StringIO,
     sentence_part_id: str,
-    renderers: Renderers,
-    *,
-    sep: Separators | None = None,
+    renderer: KhmRenderer,
+    buffer: StringIO,
 ) -> StringIO:
     for sentence in tale.sentences:
         for sentence_part in sentence:
             if sentence_part.xmlid == sentence_part_id:
-                return render_sentence_part(sentence_part, buffer, renderers, sep=sep)
+                return renderer.render_sentence_part(sentence_part, buffer)
 
 
-@inject_default_separators
 def find_and_render_sentence(
     tale: Tale,
-    buffer: StringIO,
     sentence_id: str,
-    renderers: Renderers,
-    *,
-    sep: Separators | None = None,
+    renderer: KhmRenderer,
+    buffer: StringIO,
 ) -> StringIO:
     for sentence in tale.sentences:
         if sentence.id == sentence_id:
-            return render_sentence(sentence, buffer, renderers, sep=sep)
+            return renderer.render_sentence(sentence, buffer)

@@ -6,5 +6,5 @@ if TYPE_CHECKING:
     from khm_parser.elements import WordPart
 
 
-def render_first_letter_of_word_part(word_part: WordPart) -> str:
+def get_first_letter_of_word_part(word_part: WordPart) -> str:
     return next(iter(word_part.normalized_transcription), "")
