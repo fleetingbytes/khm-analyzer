@@ -7,40 +7,47 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Check out project
-        uses: actions/checkout@v4
+      - !step
+        name: Setup | Check out project
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
-      - name: Run ruff
-        uses: astral-sh/ruff-action@v3
+      - !step
+        name: Lint
+        uses: astral-sh/ruff-action@4919ec5cf1f49eff0871dbcea0da843445b837e6  # v3.6.1
 
 
   upload-artifacts:
     name: Upload KHM Source Texts as Artifacts
     runs-on: ubuntu-latest
     steps:
-      - name: Check out project
-        uses: actions/checkout@v4
+      - !step
+        name: Setup | Check out project
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - !step
+        name: Setup | Install Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version-file: "pyproject.toml"
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
+      - !step
+        name: Setup | Install uv
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78  # v7.6.0
 
-      - name: Install the project
+      - name: Setup | Install Project
         run: uv sync --locked
 
-      - name: Download files from the DTA server
+      - name: Setup | Download files from the DTA server
         #run: uv run khm-analyzer download-all-sources "khm-sources/khm.xml"
         run: uv run khm-analyzer download-source 1 1 "khm-sources/khm-ed1-vol1.xml"
 
-      - name: Upload files as artifacts
-        uses: actions/upload-artifact@v4
+      - !step
+      - name: Upload KHM source XML files
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
           name: artifacts
           path: khm-sources
+          if-no-files-found: error
 
   test:
     needs: upload-artifacts
@@ -52,22 +59,24 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout Project
-        uses: actions/checkout@v4
+      - !step
+        name: Setup | Check out project
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v5
+      - !step
+      - name: Setup | Download KHM souce XML files
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
           name: artifacts
           path: khm-sources
 
-      - name: Test the Presence of Artifacts
+      - name: Setup | Test the Presence of XML files
         if: runner.os == 'Linux'
         run: |
           [ 1 -eq $(find . -type f -name "khm-*" | sort | tee file_list.txt | wc -l) ]
           cat file_list.txt && rm file_list.txt
 
-      - name: Test the Presence of Artifacts
+      - name: Setup | Test the Presence of XML files
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
@@ -77,17 +86,19 @@ jobs:
           Get-Content file_list.txt
           Remove-Item file_list.txt
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - !step
+        name: Setup | Install Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
+      - !step
+        name: Setup | Install uv
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78  # v7.6.0
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install the project
+      - name: Setup | Install the project
         run: uv sync --locked --group test
 
       - name: Unit Test
@@ -121,11 +132,13 @@ jobs:
         freebsd-release: ['14.2', '14.3', '15.0']
         python-data: ${{ fromJSON(needs.python-pkg-and-versions.outputs.py-data) }}
     steps:
-      - name: Check out project
-        uses: actions/checkout@v4
+      - !step
+        name: Setup | Check out project
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v5
+      - !step
+      - name: Setup | Download KHM souce XML files
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
           name: artifacts
           path: khm-sources
