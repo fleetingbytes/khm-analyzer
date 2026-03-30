@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from khm_parser.namespace import tei_namespace
 from khm_parser.utils import shorten_stream_by
 from khm_renderer.corrections import CorrectionId
+from khm_renderer.separators import DEFAULT_TALE_NUMBER_SUFFIX
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -32,7 +33,7 @@ def render_tale_head(
     number: str = num_buffer.getvalue()
 
     buffer.write(number)
-    buffer.write(".")
+    buffer.write(sep.tale_number_suffix)
     buffer.write(sep.sentence)
     buffer = render_functions.render_tale_title(head.title, buffer, render_functions, sep, corrections)
 
@@ -43,7 +44,7 @@ def render_tale_number(
     word_part: WordPart, buffer: StringIO, render_functions: RenderFunctions
 ) -> StringIO:
     number: str = render_functions.render_word_part(word_part)
-    number: str = number.removesuffix(".")
+    number: str = number.removesuffix(DEFAULT_TALE_NUMBER_SUFFIX)
 
     buffer.write(number)
     return buffer
@@ -58,11 +59,9 @@ def render_tale_title(
 ) -> StringIO:
     for num, sentence in enumerate(title, start=1):
         logger.debug("Rendering tale title Sentence %d, id: %s", num, sentence.id)
-        buffer = render_functions.render_sentence(
-            sentence, buffer, render_functions=render_functions, sep=sep, corrections=corrections
-        )
+        buffer = render_functions.render_sentence(sentence, buffer, render_functions, sep, corrections)
 
-    logger.debug("Removing '.' at the end of the title")
+    logger.debug("Removing assumed '.' at the end of the title")
     shorten_stream_by(1, buffer)
 
     return buffer
