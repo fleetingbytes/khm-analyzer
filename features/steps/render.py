@@ -4,7 +4,10 @@ from typing import TYPE_CHECKING
 
 from behave import given, register_type, then, when
 
-from behave4khm_analyzer.custom_render_functions import get_first_letter_of_word_part
+from behave4khm_analyzer.custom_render_functions import (
+    get_first_letter_of_word_part,
+    render_sentence_part_xmlid,
+)
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
 from behave4khm_analyzer.utils import (
     check_presence_of_source_files,
@@ -56,8 +59,13 @@ def set_word_sep(context: Context, word_sep: str) -> None:
 
 
 @given("the word part renderer renders only the first letter")
-def set_word_renderer(context: Context) -> None:
+def set_word_renderer_for_first_letter(context: Context) -> None:
     context.renderer.renderers.render_word_part = get_first_letter_of_word_part
+
+
+@given("the sentece part renderer renders only the xmlid")
+def set_sentence_renderer_for_xmlid(context: Context) -> None:
+    context.renderer.renderers.render_sentence_part = render_sentence_part_xmlid
 
 
 @when("I render the number of the tale")

@@ -15,6 +15,20 @@ Feature: Render Sentence
                 | 2    | 1       | 1      | s115_3           | " -- "Halbaus? was du sagst! den Namen habe ich gar noch nicht gehört, der steht gewiß nicht im Kalender." |
                 | 53   | 1       | 1      | s8f4             | "Spieglein, Spieglein an der Wand:                                                                         |
 
+        @wip
+        Scenario Outline: Render Sentence Part as XML ID
+            Given I parse the tale <tale> from edition <edition>, volume <volume>
+            Given the sentece part renderer renders only the xmlid
+            When I render the sentence part <sentence_part_id>
+            Then the output is <output>
+
+            Examples:
+                | tale | edition | volume | sentence_part_id | output |
+                | 2    | 1       | 1      | s115             | s115   |
+                | 2    | 1       | 1      | s115_2           | s115_2 |
+                | 2    | 1       | 1      | s115_3           | s115_3 |
+                | 53   | 1       | 1      | s8f4             | s8f4   |
+
         Scenario Outline: Render Sentence
             Given I parse the tale <tale> from edition <edition>, volume <volume>
             When I render the sentence <sentence_id>
