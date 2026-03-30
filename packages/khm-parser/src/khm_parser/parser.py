@@ -49,13 +49,30 @@ def parse(fd: BufferedReader) -> etree.Element:
     return root
 
 
-def get_fairy_tale(root: etree.Element, n: int) -> etree.Element | None:
+def parse_tale(path: Path, tale_number: int) -> Tale:
+    with path.open("rb") as file:
+        root: etree.Element = parse(file)
+        tale: Tale = get_fairy_tale(root, tale_number)
+        return tale
+
+
+def get_fairy_tale(root: etree.Element, n: int) -> Tale | None:
     xpath = f".//ns:div[ns:head//ns:w[@lemma='{n}.']]"
     results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
     tale = next(iter(results)) if results else None
 
-    # khm-ed1-vol1 tale 31 is misnumbered as 30 (even in the xml annotation, true to the misprint),
-    # so there is two tales with the number 30 and no tale with number 31
+    tale = correct_anomaly_with_khm_ed1_vol1_tale_31(tale, n, root)
+
+    return tale
+
+
+def correct_anomaly_with_khm_ed1_vol1_tale_31(
+    tale: Tale | None, n: int, root: etree.Element
+) -> Tale | None:
+    """
+    khm-ed1-vol1 tale 31 is misnumbered as 30 (even in the xml annotation, true to the misprint),
+    so there is two tales with the number 30 and no tale with number 31
+    """
     if tale is None and n == EXPECTED_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE:
         xpath = f".//ns:div[ns:head//ns:w[@lemma='{ACTUAL_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE}.']]"
         results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
@@ -64,10 +81,3 @@ def get_fairy_tale(root: etree.Element, n: int) -> etree.Element | None:
             tale = results[index_of_tale_31]
 
     return tale
-
-
-def parse_tale(path: Path, tale_number: int) -> Tale:
-    with path.open("rb") as file:
-        root: etree.Element = parse(file)
-        tale: Tale = get_fairy_tale(root, tale_number)
-        return tale
