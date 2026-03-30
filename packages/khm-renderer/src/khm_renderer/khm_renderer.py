@@ -26,41 +26,25 @@ class KhmRenderer:
         self.sep: Separators = sep
         self.corrections: Corrections = corrections
 
+    def render_tale_head(self, head: Head, buffer: StringIO) -> StringIO:
+        return self.renderers.render_tale_head(head, buffer, self.renderers, self.sep, self.corrections)
+
+    def render_tale_number(self, number: WordPart, buffer: StringIO) -> StringIO:
+        return self.renderers.render_tale_number(number, buffer, self.renderers)
+
+    def render_tale_title(self, title: Generator[Sentence], buffer: StringIO) -> StringIO:
+        return self.renderers.render_tale_title(title, buffer, self.renderers, self.sep, self.corrections)
+
+    def render_sentence(self, sentence: Sentence, buffer: StringIO) -> StringIO:
+        return self.renderers.render_sentence(sentence, buffer, self.renderers, self.sep, self.corrections)
+
+    def render_sentence_part(self, sentence_part: SentencePart, buffer: StringIO) -> StringIO:
+        return self.renderers.render_sentence_part(sentence_part, buffer, self.renderers, self.sep)
+
+    def render_word(self, word: Word, buffer: StringIO) -> StringIO:
+        return self.renderers.render_word(word, buffer, self.renderers, self.sep)
+
     def render_word_part(self, word_part: WordPart, buffer: StringIO) -> StringIO:
         rendered_word_part = self.renderers.render_word_part(word_part)
         buffer.write(rendered_word_part)
         return buffer
-
-    def render_word(self, word: Word, buffer: StringIO) -> StringIO:
-        return self.renderers.render_word(word, buffer, render_functions=self.renderers, sep=self.sep)
-
-    def render_sentence_part(self, sentence_part: SentencePart, buffer: StringIO) -> StringIO:
-        return self.renderers.render_sentence_part(
-            sentence_part, buffer, render_functions=self.renderers, sep=self.sep
-        )
-
-    def render_sentence(self, sentence: Sentence, buffer: StringIO) -> StringIO:
-        return self.renderers.render_sentence(
-            sentence,
-            buffer,
-            render_functions=self.renderers,
-            sep=self.sep,
-            corrections=self.corrections,
-        )
-
-    def render_tale_title(self, title: Generator[Sentence], buffer: StringIO) -> StringIO:
-        return self.renderers.render_tale_title(
-            title,
-            buffer,
-            render_functions=self.renderers,
-            sep=self.sep,
-            corrections=self.corrections,
-        )
-
-    def render_tale_number(self, number: WordPart, buffer: StringIO) -> StringIO:
-        return self.renderers.render_tale_number(number, buffer, render_functions=self.renderers)
-
-    def render_tale_head(self, head: Head, buffer: StringIO) -> StringIO:
-        return self.renderers.render_tale_head(
-            head, buffer, render_functions=self.renderers, sep=self.sep, corrections=self.corrections
-        )
