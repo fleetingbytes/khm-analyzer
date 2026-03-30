@@ -42,15 +42,11 @@ def render_tale_head(
 def render_tale_number(
     word_part: WordPart, buffer: StringIO, render_functions: RenderFunctions
 ) -> StringIO:
-    tale_number = render_functions.render_word_part(word_part)
-
-    temp_buffer = StringIO(buffer.getvalue())
-    temp_buffer.write(tale_number)
-
-    number: str = temp_buffer.getvalue()
+    number: str = render_functions.render_word_part(word_part)
     number: str = number.removesuffix(".")
 
-    return StringIO(number)
+    buffer.write(number)
+    return buffer
 
 
 def render_tale_title(
