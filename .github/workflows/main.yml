@@ -10,12 +10,9 @@ jobs:
       - !step
         name: Setup | Check out project
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-
       - !step
         name: Lint
-        uses: astral-sh/ruff-action@4919ec5cf1f49eff0871dbcea0da843445b837e6  # v3.6.1
-
-
+        uses: astral-sh/ruff-action@0ce1b0bf8b818ef400413f810f8a11cdbda0034b  # v4.0.0
   upload-artifacts:
     name: Upload KHM Source Texts as Artifacts
     runs-on: ubuntu-latest
@@ -23,7 +20,6 @@ jobs:
       - !step
         name: Setup | Check out project
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-
       - !step
         name: Setup | Install Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
@@ -32,8 +28,7 @@ jobs:
 
       - !step
         name: Setup | Install uv
-        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78  # v7.6.0
-
+        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57  # v8.0.0
       - name: Setup | Install Project
         run: uv sync --locked
 
@@ -43,7 +38,7 @@ jobs:
 
       - !step
         name: Upload KHM source XML files
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
           name: artifacts
           path: khm-sources
@@ -62,7 +57,6 @@ jobs:
       - !step
         name: Setup | Check out project
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-
       - !step
         name: Setup | Download KHM souce XML files
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
@@ -94,7 +88,7 @@ jobs:
 
       - !step
         name: Setup | Install uv
-        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78  # v7.6.0
+        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57  # v8.0.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -135,7 +129,6 @@ jobs:
       - !step
         name: Setup | Check out project
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-
       - !step
         name: Setup | Download KHM souce XML files
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
