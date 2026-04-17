@@ -96,7 +96,7 @@ jobs:
         run: uv sync --locked --group test
 
       - name: Unit Test
-        run: uv run -- pytest -v --capture=tee-sys
+        run: uv run -- pytest -v
 
       - name: Behave Test
         run: uv run -- behave -f plain
@@ -154,5 +154,5 @@ jobs:
             echo "===== Install the project ====="
             uv sync --group test --python ${{ matrix.python-data.version }}
             echo "===== Test the code ====="
-            uv run --python ${{ matrix.python-data.version }} -- pytest -v --capture=tee-sys
+            uv run --python ${{ matrix.python-data.version }} -- pytest -v
             uv run --python ${{ matrix.python-data.version }} -- behave -f plain
