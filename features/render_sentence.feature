@@ -42,7 +42,7 @@ Feature: Render Sentence
                 # Inside line group outside paragraph
                 | 30   | 1       | 1      | s531               | "was schreist du Flöhchen?" --                                                                                        |
 
-        Scenario Outline: Render Sentence as XML IDs
+        Scenario Outline: Render Sentence as Sentence Part XML IDs
             Given I parse the tale <tale> from edition <edition>, volume <volume>
             Given the sentece part renderer renders only the xmlid
             When I render the sentence <sentence_id>
@@ -58,7 +58,7 @@ Feature: Render Sentence
                 # Inside line group outside paragraph
                 | 30   | 1       | 1      | s531               | s531             |
 
-        Scenario Outline: Render Sentence With Custom Separators
+        Scenario Outline: Render Sentence With Custom Word Separators
             Given I parse the tale <tale> from edition <edition>, volume <volume>
             Given the word separator ¦
             When I render the sentence <sentence_id>
@@ -67,3 +67,19 @@ Feature: Render Sentence
             Examples:
                 | tale | edition | volume | sentence_id | output                                             |
                 | 30   | 1       | 1      | s538        | Da¦fing¦der¦kleine¦Besen¦an¦entsetzlich¦zu¦kehren. |
+
+        Scenario Outline: Render Sentence as s or S
+            Given I parse the tale <tale> from edition <edition>, volume <volume>
+            Given the sentece renderer s_or_S
+            When I render the sentence <sentence_id>
+            Then the output is <output>
+
+            Examples:
+                | tale | edition | volume | sentence_id        | output |
+                # sentence split into parts because of rendition and no separators at rendition boundary
+                | 2    | 1       | 1      | s115-s115_2-s115_3 | S      |
+                # Inside line group inside paragraph, sentence split into parts because it spans over multiple verse lines
+                | 11   | 1       | 1      | s215-s215_2        | S      |
+                | 53   | 1       | 1      | s8f4-s8f4_2        | S      |
+                # Inside line group outside paragraph
+                | 30   | 1       | 1      | s531               | s      |

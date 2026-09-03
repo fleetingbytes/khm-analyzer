@@ -6,6 +6,7 @@ from behave import given, register_type, then, when
 
 from behave4khm_analyzer.custom_render_functions import (
     get_first_letter_of_word_part,
+    render_sentence_as_s,
     render_sentence_part_xmlid,
 )
 from behave4khm_analyzer.matching_types import MATCHING_TYPES
@@ -66,6 +67,11 @@ def set_word_renderer_for_first_letter(context: Context) -> None:
 @given("the sentece part renderer renders only the xmlid")
 def set_sentence_renderer_for_xmlid(context: Context) -> None:
     context.renderer.renderers.render_sentence_part = render_sentence_part_xmlid
+
+
+@given("the sentece renderer s_or_S")
+def set_sentence_renderer_s_or_s(context: Context) -> None:
+    context.renderer.renderers.render_sentence = render_sentence_as_s
 
 
 @when("I render the number of the tale")

@@ -44,6 +44,10 @@ class CompositeBase[PartT](Iterable):
     def id(self) -> str:
         return "-".join(part.xmlid for part in self)
 
+    @property
+    def has_multiple_parts(self) -> bool:
+        return len(self._parts) > 1
+
 
 class SentenceBase(CompositeBase["SentencePart"]): ...
 
