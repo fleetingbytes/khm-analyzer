@@ -33,6 +33,9 @@ select = [
     "UP",      # pyupgrade
     "W",       # pycodestyle warnings
 ]
+ignore = [
+    "RUF070"   # unnecessary-assign-before-yield
+]
 
 extend-safe-fixes = [
     "TC001",  # typing-only-first-party-import

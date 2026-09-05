@@ -11,6 +11,7 @@ from khm_parser.namespace import NAMESPACE_MAP
 from khm_parser.utils import set_stream_position_to_the_start
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
     from io import BufferedReader
     from pathlib import Path
 
@@ -57,7 +58,7 @@ def parse_tale(path: Path, tale_number: int) -> Tale:
 
 
 def get_fairy_tale(root: etree.Element, n: int) -> Tale | None:
-    xpath = f".//ns:div[ns:head//ns:w[@lemma='{n}.']]"
+    xpath = f".//ns:div[@n='1' and ns:head//ns:w[@lemma='{n}.']]"
     results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
     tale = next(iter(results)) if results else None
 
@@ -74,10 +75,23 @@ def correct_anomaly_with_khm_ed1_vol1_tale_31(
     so there is two tales with the number 30 and no tale with number 31
     """
     if tale is None and n == EXPECTED_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE:
-        xpath = f".//ns:div[ns:head//ns:w[@lemma='{ACTUAL_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE}.']]"
+        xpath = (
+            ".//ns:div[@n='1' and "
+            f"ns:head//ns:w[@lemma='{ACTUAL_NUMBER_OF_KHM_ED1_VOL1_TALE_THIRTY_ONE}.']]"
+        )
         results = root.xpath(xpath, namespaces=NAMESPACE_MAP)
         if results and len(results) == EXPECTED_NUMBER_OF_TALES_NUMBRERED_THIRTY_IN_KHM_ED1_VOL1:
             index_of_tale_31 = EXPECTED_NUMBER_OF_TALES_NUMBRERED_THIRTY_IN_KHM_ED1_VOL1 - 1
             tale = results[index_of_tale_31]
 
     return tale
+
+
+def get_all_fairy_tales(path: Path) -> Generator[Tale]:
+    with path.open("rb") as file:
+        root: etree.Element = parse(file)
+
+    xpath = r".//ns:div[@n='1' and ns:head//ns:w[exslt:test(@lemma, '^\d+\.$')]]"
+    tales = root.xpath(xpath, namespaces=NAMESPACE_MAP)
+
+    yield from tales

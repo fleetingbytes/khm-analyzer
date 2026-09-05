@@ -1,3 +1,3 @@
-from khm_parser.parser import parse_tale
+from khm_parser.parser import get_all_fairy_tales, parse_tale
 
-__all__ = ("parse_tale",)
+__all__ = ("get_all_fairy_tales", "parse_tale")
